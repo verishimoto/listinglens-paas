@@ -1,150 +1,218 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/features/lab/drag_drop_zone.dart';
+import 'package:listing_lens_paas/shared/theme/obsidian_theme.dart';
 
-class AuditReportPage extends StatelessWidget {
+class AuditReportPage extends StatefulWidget {
   const AuditReportPage({super.key});
+
+  @override
+  State<AuditReportPage> createState() => _AuditReportPageState();
+}
+
+class _AuditReportPageState extends State<AuditReportPage>
+    with SingleTickerProviderStateMixin {
+  bool _scanning = false;
+  bool _showReport = false;
+  late AnimationController _scannerController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scannerController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    );
+  }
+
+  @override
+  void dispose() {
+    _scannerController.dispose();
+    super.dispose();
+  }
+
+  void _startScan() {
+    setState(() {
+      _scanning = true;
+      _showReport = false;
+    });
+    _scannerController.forward().then((_) {
+       // Loop complete
+       setState(() {
+         _scanning = false;
+         _showReport = true;
+       });
+       _scannerController.reset();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF09090b),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text(
-          'LISTINGLENS',
-          style: TextStyle(
-            letterSpacing: 2.0,
-            fontWeight: FontWeight.w900,
-            fontSize: 16,
+        title: Text(
+          'OBSIDIAN // LENS',
+          style: ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
+             letterSpacing: 3.0,
           ),
         ),
-        backgroundColor: const Color(0xFF09090b),
+        centerTitle: true,
+        backgroundColor: Colors.transparent, // Glass AppBar handled by system or blur if needed
         elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
-          child: Container(
-            color: const Color(0xFF27272a), // Zinc-800 border
-            height: 1.0,
-          ),
-        ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // INTRO SECTION
-              const Text(
-                'HEURISTIC AUDIT PROTOCOL v2.0',
-                style: TextStyle(
-                  color: Color(0xFF71717a), // Zinc-400
-                  fontSize: 12,
-                  letterSpacing: 1.5,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 24),
+      body: Stack(
+        children: [
+          // Cyberpunk Grid Background (Optional, keeping it simple black for now)
+          Container(color: Colors.black),
 
-              // DRAG DROP ZONE
-              DragDropZone(
-                onFileDropped: (file) {
-                  // TODO: Implement file processing
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Processing ${file.name}...')),
-                  );
-                },
-              ),
-              
-              const SizedBox(height: 48),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 100, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                   DragDropZone(onFileDropped: (file) => _startScan()),
+                   
+                   const SizedBox(height: 48),
 
-              // PLACEHOLDER REPORT
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF18181b), // Zinc-900
-                  border: Border.all(color: const Color(0xFF27272a)),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'SIGNAL INTEGRITY',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.0,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.1),
-                            border: Border.all(color: Colors.red.withOpacity(0.5)),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: const Text(
-                            'NOT DETECTED',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    _buildAntiMetricRow('VISUAL TENSION', '---'),
-                    const SizedBox(height: 12),
-                    _buildAntiMetricRow('COGNITIVE LOAD', '---'),
-                    const SizedBox(height: 12),
-                    _buildAntiMetricRow('CONVERSION DRAG', '---'),
-                    
-                    const SizedBox(height: 24),
-                    const Divider(color: Color(0xFF27272a)),
-                    const SizedBox(height: 12),
-                    
-                    const Text(
-                      '* Awaiting Input Source',
-                      style: TextStyle(
-                         color: Color(0xFF52525b), // Zinc-600
-                         fontSize: 12,
-                         fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
-                ),
+                   if (_showReport) _buildRefractiveReport(),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+
+          // SCANNING OVERLAY (The "Hollow Loop")
+          if (_scanning)
+             Positioned.fill(
+               child: IgnorePointer(
+                 child: Stack(
+                   children: [
+                     // Dark Glass Overlay
+                     BackdropFilter(
+                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                       child: Container(color: Colors.black.withOpacity(0.6)),
+                     ),
+                     
+                     // Scanning Line
+                     AnimatedBuilder(
+                       animation: _scannerController,
+                       builder: (context, child) {
+                         return Positioned(
+                           top: MediaQuery.of(context).size.height * _scannerController.value,
+                           left: 0,
+                           right: 0,
+                           child: Container(
+                             height: 2,
+                             decoration: BoxDecoration(
+                               gradient: LinearGradient(
+                                 colors: [
+                                   Colors.transparent,
+                                   Colors.white.withOpacity(0.8),
+                                   Colors.transparent
+                                 ],
+                               ),
+                               boxShadow: [
+                                 BoxShadow(
+                                   color: Colors.white.withOpacity(0.5),
+                                   blurRadius: 10,
+                                   spreadRadius: 2,
+                                 )
+                               ]
+                             ),
+                           ),
+                         );
+                       },
+                     ),
+                     
+                     Center(
+                       child: Text(
+                         'ALIGNING SIGNAL...',
+                         style: ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
+                           letterSpacing: 4.0,
+                           color: Colors.white.withOpacity(0.8),
+                         ),
+                       ),
+                     ),
+                   ],
+                 ),
+               ),
+             ),
+        ],
       ),
     );
   }
 
-  Widget _buildAntiMetricRow(String label, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _buildRefractiveReport() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
-          style: const TextStyle(
-            color: Color(0xFFa1a1aa), // Zinc-500
-            fontSize: 14,
+          'ANALYSIS COMPLETE',
+          style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
+            color: Colors.white.withOpacity(0.5),
+            letterSpacing: 2.0,
           ),
         ),
-        Text(
-          value,
-          style: const TextStyle(
-            color: Color(0xFF71717a), // Zinc-400
-            fontFamily: 'monospace',
+        const SizedBox(height: 16),
+        
+        // MOCK AUDIT CARD (Glass)
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: ObsidianTheme.glassDecoration,
+              child: Row(
+                children: [
+                  // SCORE CIRCLE
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.2),
+                          blurRadius: 20,
+                          spreadRadius: 5,
+                        )
+                      ]
+                    ),
+                    child: Center(
+                      child: Text(
+                        '42',
+                        style: ObsidianTheme.themeData.textTheme.displayMedium,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 24),
+                  
+                  // CRITIQUE
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'VISUAL NOISE DETECTED',
+                          style: ObsidianTheme.themeData.textTheme.labelLarge,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Background texture competes with product signal. Reduction recommended.',
+                          style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
+                             color: Colors.white.withOpacity(0.7),
+                             height: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ],
