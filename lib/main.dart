@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:listing_lens_paas/features/lab/audit_report_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // TODO: Run `flutterfire configure` to generate firebase_options.dart
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  // For now, we skip actual init to prevent crash until configured
   runApp(const ListingLensApp());
 }
 
@@ -21,15 +29,7 @@ class ListingLensApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF09090b),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        backgroundColor: Color(0xFF09090b),
-        body: Center(
-          child: Text(
-            'ListingLens PaaS',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
+      home: const AuditReportPage(),
     );
   }
 }
