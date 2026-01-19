@@ -18,8 +18,8 @@ class GlassTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.voidColor.withOpacity(0.3),
-        border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.05))),
+        color: AppColors.voidColor.withOpacity(0.6), // Increased opacity for "Frosted Glass" feel
+        border: const Border(bottom: BorderSide(color: AppColors.borderColor)),
       ),
       child: ClipRRect(
         child: BackdropFilter(
@@ -107,9 +107,10 @@ class GlassTabBar extends StatelessWidget {
                         fontSize: 12,
                         fontWeight: isActive ? FontWeight.w900 : FontWeight.w500,
                         letterSpacing: 1.5,
-                        color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
+                        color: isActive ? AppColors.textMain : AppColors.textMute, 
                         shadows: isActive ? [
-                          Shadow(color: Colors.white.withOpacity(0.5), blurRadius: 4),
+                          // "Crystal" requires a subtle colorful glow, not just white
+                          Shadow(color: const Color(0xFFE0E7FF), blurRadius: 8), 
                         ] : [],
                       ),
                     ),

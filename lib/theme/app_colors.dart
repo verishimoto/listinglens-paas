@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 abstract class AppColors {
-  // --- SOLID FUSION PALETTE ---
+  // --- GOOGLE CRYSTAL PALETTE (GEMINI ERA) ---
   
-  // The Quiet Room
-  static const Color voidColor = Color(0xFF09090B);      // Zinc-950
-  static const Color structureColor = Color(0xFF18181B); // Zinc-900
-  static const Color borderColor = Color(0xFF27272A);    // Zinc-800
+  // The Prismatic Lab (Light Mode)
+  static const Color voidColor = Color(0xFFF9FAFB);      // Zinc-50 (Main Background)
+  static const Color structureColor = Color(0xFFFFFFFF); // White (Cards/Structure)
+  static const Color borderColor = Color(0xFFE4E4E7);    // Zinc-200 (Soft Borders)
   
   // The Guide
-  static const Color signalColor = Color(0xFFF97316);    // Orange-500
-  static const Color signalDim = Color(0xFF9A3412);      // Orange-900 (for backgrounds)
+  static const Color signalColor = Color(0xFFF97316);    // Orange-500 (Kept as accent)
+  static const Color signalDim = Color(0xFFFFF7ED);      // Orange-50 (Light Tint for backgrounds)
   
-  // Text
-  static const Color textMain = Color(0xFFFAFAFA);       // Zinc-50
-  static const Color textMute = Color(0xFFA1A1AA);       // Zinc-400
-  static const Color textDark = Color(0xFF52525B);       // Zinc-600
+  // Text (Inverted for Light Mode)
+  static const Color textMain = Color(0xFF09090B);       // Zinc-950 (Deep Black)
+  static const Color textMute = Color(0xFF71717A);       // Zinc-500 (Mid Gray)
+  static const Color textDark = Color(0xFFA1A1AA);       // Zinc-400 (Light Gray)
 
-  // Interaction
-  static const Color hoverOverlay = Color(0x1FFFFFFF);   // White 12% opacity
+  // Interaction (Crystal)
+  static const Color hoverOverlay = Color(0x0A000000);   // Black 4% opacity (Subtle shadow)
 }
