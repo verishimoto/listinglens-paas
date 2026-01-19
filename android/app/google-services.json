@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "453535154350",
+    "project_id": "listinglens-paas",
+    "storage_bucket": "listinglens-paas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453535154350:android:a2a07ccc0cdbd97e82ad3f",
+        "android_client_info": {
+          "package_name": "com.example.listing_lens_paas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE2lHtXcT-11dy94ILmUxJHNvO4rH9eyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
