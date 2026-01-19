@@ -4,6 +4,7 @@ import 'package:listing_lens_paas/theme/fluid_background.dart';
 import 'package:listing_lens_paas/layout/meniscus_tab.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
 import 'package:listing_lens_paas/features/hub/hub_view.dart';
+import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
 
 class SolidFusionLayout extends StatefulWidget {
   const SolidFusionLayout({super.key});
@@ -62,63 +63,52 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
               // HEADER (Translucent)
               _buildHeader(),
 
+              // LAB TABS (Visible only in Lab View)
+              if (_activeView == 'lab')
+                GlassTabBar(
+                  tabs: _slides,
+                  activeIndex: _activeSlide,
+                  onTabSelected: (index) => setState(() => _activeSlide = index),
+                ),
+
               // WORKSPACE
               Expanded(
                 child: Row(
                   children: [
-                    // LEFT SIDEBAR (Meniscus)
-                    SizedBox(
-                      width: 400,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // View Toggles
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(40, 32, 40, 32),
-                            child: Row(
-                              children: [
-                                _buildViewToggle('The Lab', 'lab'),
-                                const SizedBox(width: 16),
-                                _buildViewToggle('Performance Hub', 'hub'),
-                              ],
-                            ),
-                          ),
-
-                          // SIDEBAR CONTENT
-                          Expanded(
-                            child: _activeView == 'lab' 
-                              ? _buildLabSidebar()
-                              : _buildHubSidebar(),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // RIGHT CONTENT CANVAS (Solid Panel)
+                    // LEFT SIDEBAR (Only for HUB now, or if we want the toggle separate)
+                    // We need a place to toggle between LAB and HUB if the top bar is only for Lab slides.
+                    // The design request asked for Horizontal Tabs for 'The Lab'.
+                    // Let's put the View Toggle in the Header or keep a small sidebar?
+                    // "The tab panel ... isn't quite as I intended ... should be horizontal"
+                    // I will move the "Lab/Hub" toggle to the Header to be cleaner, 
+                    // and make the main view full width. 
+                    
+                    // Actually, let's keep the sidebar GONE for Lab, but we need a way to get back to Hub.
+                    // I'll add the View Switcher to the Header.
+                    
+                    // MAIN CONTENT CANVAS
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.only(left: _activeView == 'lab' ? 0 : 24),
-                        decoration: const BoxDecoration(
-                          color: AppColors.structureColor, // Solid Fusion Panel
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            bottomLeft: Radius.circular(40),
-                          ),
-                          boxShadow: [
-                            BoxShadow(color: Colors.black54, blurRadius: 40, offset: Offset(-10, 0))
-                          ],
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: _activeView == 'lab'
-                            ? LabView(
-                                slide: _slides[_activeSlide],
-                                isPassed: _slideStatus[_activeSlide],
-                                mountedImage: _mountedImage,
-                                onMount: _mountImage,
-                                onAudit: () => _onSlideComplete(_activeSlide),
-                              )
-                            : const HubView(),
-                      ),
+                         // No margin needed if full width, but let's keep some breathing room or glass effect
+                         margin: const EdgeInsets.all(0),
+                         decoration: BoxDecoration(
+                           color: _activeView == 'lab' ? Colors.transparent : AppColors.structureColor, 
+                           // Lab view has its own container logic in LabView? 
+                           // LabView had glass borders. simple container is fine.
+                         ),
+                         child: _activeView == 'lab'
+                             ? Padding(
+                                 padding: const EdgeInsets.only(top: 24), // Space below tabs
+                                 child: LabView(
+                                     slide: _slides[_activeSlide],
+                                     isPassed: _slideStatus[_activeSlide],
+                                     mountedImage: _mountedImage,
+                                     onMount: _mountImage,
+                                     onAudit: () => _onSlideComplete(_activeSlide),
+                                   ),
+                               )
+                             : _buildHubView(),
+                       ),
                     ),
                   ],
                 ),
@@ -132,125 +122,89 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
 
   Widget _buildHeader() {
     return Container(
-      height: 100,
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      height: 80,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.05))),
         color: AppColors.voidColor.withOpacity(0.5), // Semi-transparent
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // LOGO AREA
-          Row(
-            children: [
-               Container(
-                 width: 40, height: 40,
-                 decoration: BoxDecoration(
-                   border: Border(
-                     left: const BorderSide(color: AppColors.signalColor, width: 8),
-                     bottom: const BorderSide(color: AppColors.signalColor, width: 8),
-                     top: BorderSide(color: AppColors.signalColor.withOpacity(0), width: 0), // transparent
-                     right: BorderSide(color: AppColors.signalColor.withOpacity(0), width: 0),
-                   )
-                 ),
-               ),
-               const SizedBox(width: 24),
-               Column(
-                 mainAxisAlignment: MainAxisAlignment.center,
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: const [
-                   Text('LISTINGLENS', style: TextStyle(fontFamily: 'Agency FB', fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 1, color: AppColors.signalColor)),
-                   Text('HIGH FIDELITY PROTOTYPE 3.0', style: TextStyle(fontSize: 10, letterSpacing: 3, fontWeight: FontWeight.bold, color: AppColors.textMute)),
-                 ],
-               )
-            ],
+          // LOGO
+          Container(
+            width: 32, height: 32,
+            decoration: BoxDecoration(
+              border: Border(
+                left: const BorderSide(color: AppColors.signalColor, width: 4),
+                bottom: const BorderSide(color: AppColors.signalColor, width: 4),
+              )
+            ),
           ),
+          const SizedBox(width: 16),
+          const Text('LISTINGLENS', style: TextStyle(fontFamily: 'Agency FB', fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 1, color: AppColors.signalColor)),
+          
+          const SizedBox(width: 80),
+
+          // TOP NAVIGATION (The Detective "View Toggles")
+          _buildNavBarItem('THE LAB', 'lab', Icons.science),
+          const SizedBox(width: 24),
+          _buildNavBarItem('HUB', 'hub', Icons.grid_view),
+
+          const Spacer(),
           
           // UTILS
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withOpacity(0.05)),
-                ),
-                child: Row(
-                  children: [
-                    Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF1CFF00), shape: BoxShape.circle)),
-                    const SizedBox(width: 8),
-                    const Text('PRO PLAN ACTIVE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF1CFF00))),
-                  ],
-                ),
-              )
-            ],
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1CFF00).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFF1CFF00).withOpacity(0.3)),
+            ),
+            child: Row(
+              children: [
+                Container(width: 6, height: 6, decoration: const BoxDecoration(color: Color(0xFF1CFF00), shape: BoxShape.circle)),
+                const SizedBox(width: 8),
+                const Text('PRO SYSTEM', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w900, color: Color(0xFF1CFF00))),
+              ],
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget _buildViewToggle(String label, String viewKey) {
-    final isActive = _activeView == viewKey;
+  Widget _buildNavBarItem(String label, String key, IconData icon) {
+    final isActive = _activeView == key;
     return GestureDetector(
-      onTap: () => _toggleView(viewKey),
-      child: Container(
-        padding: const EdgeInsets.only(bottom: 8),
+      onTap: () => _toggleView(key),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: isActive ? AppColors.signalColor : Colors.transparent, width: 2))
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 2,
-            color: isActive ? Colors.white : Colors.white.withOpacity(0.3),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLabSidebar() {
-    return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 40),
-      itemCount: _slides.length,
-      itemBuilder: (context, index) {
-        return MeniscusTab(
-          index: index,
-          label: _slides[index]['title'],
-          isActive: _activeSlide == index,
-          passed: _slideStatus[index],
-          onTap: () => setState(() => _activeSlide = index),
-        );
-      },
-    );
-  }
-
-  Widget _buildHubSidebar() {
-    // Simplified menu for Hub
-    final items = ['Market Pulse', 'Portfolio', 'Intelligence Log', 'Settings'];
-    return Padding(
-      padding: const EdgeInsets.only(right: 32),
-      child: Container(
-        padding: const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: isActive ? Colors.white.withOpacity(0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withOpacity(0.1)),
         ),
-        child: Column(
-          children: items.map((item) => ListTile(
-            title: Text(item, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
-            trailing: const Icon(Icons.chevron_right, color: Colors.white24, size: 16),
-            contentPadding: EdgeInsets.zero,
-            onTap: () {},
-          )).toList(),
+        child: Row(
+          children: [
+            Icon(icon, size: 16, color: isActive ? Colors.white : Colors.white54),
+            const SizedBox(width: 8),
+            Text(
+              label, 
+              style: TextStyle(
+                fontSize: 12, 
+                fontWeight: FontWeight.w900, 
+                letterSpacing: 1,
+                color: isActive ? Colors.white : Colors.white54,
+              )
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Widget _buildHubView() {
+    return const HubView();
+  }
+
 }

@@ -47,7 +47,7 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCNLZ5eTqq18Ml6Wbb5BTaC2eos-UJZ_Vs',
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY_WEB', defaultValue: 'INSERT_API_KEY_HERE'),
     appId: '1:453535154350:web:844d5d613818e19e82ad3f',
     messagingSenderId: '453535154350',
     projectId: 'listinglens-paas',
@@ -56,7 +56,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAE2lHtXcT-11dy94ILmUxJHNvO4rH9eyE',
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY_ANDROID', defaultValue: 'INSERT_API_KEY_HERE'),
     appId: '1:453535154350:android:a2a07ccc0cdbd97e82ad3f',
     messagingSenderId: '453535154350',
     projectId: 'listinglens-paas',
@@ -64,7 +64,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDI4y_GN7LmjulpPOkPLIdVZ3fFTpTN2R4',
+    apiKey: String.fromEnvironment('FIREBASE_API_KEY_IOS', defaultValue: 'INSERT_API_KEY_HERE'),
     appId: '1:453535154350:ios:448c139932d99c7382ad3f',
     messagingSenderId: '453535154350',
     projectId: 'listinglens-paas',
