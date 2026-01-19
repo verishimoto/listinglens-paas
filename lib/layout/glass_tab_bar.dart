@@ -45,44 +45,79 @@ class GlassTabBar extends StatelessWidget {
   }
 
   Widget _buildTab(BuildContext context, int index, bool isActive) {
+    // Detective's Iridescent Palette
+    final gradient = LinearGradient(
+      colors: const [
+        Color(0xFFFFDAB9), // Soft Peach
+        Color(0xFFE6E6FA), // Lavender
+        Color(0xFF87CEEB), // Sky Blue
+        Color(0xFFF0FFF0), // Mint Shimmer
+      ],
+      stops: const [0.0, 0.3, 0.6, 1.0],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    );
+
     return GestureDetector(
       onTap: () => onTabSelected(index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: isActive ? AppColors.signalColor : Colors.transparent,
-              width: 3,
-            ),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
+            border: isActive ? null : const Border(bottom: BorderSide(color: Colors.transparent, width: 2)), 
           ),
-          color: isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
-        ),
-        alignment: Alignment.center,
-        child: Row(
-          children: [
-            // Slide Number
-            Text(
-              '0${index + 1}',
-              style: TextStyle(
-                fontFamily: 'Agency FB', // Assuming available or fallback
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: isActive ? AppColors.signalColor : AppColors.textMute,
+          child: Stack(
+            children: [
+              // 1. Apple-style 1px Border (Clamped) with Iridescent Shader if Active
+              if (isActive)
+                Positioned.fill(
+                  child: ShaderMask(
+                    shaderCallback: (bounds) => gradient.createShader(bounds),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.white, width: 2), // Shader applies to this white border
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              
+              // 2. Content
+              Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '0${index + 1}',
+                      style: TextStyle(
+                        fontFamily: 'Agency FB', 
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: isActive ? AppColors.signalColor : AppColors.textMute,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      tabs[index]['title'].toString().toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: isActive ? FontWeight.w900 : FontWeight.w500,
+                        letterSpacing: 1.5,
+                        color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
+                        shadows: isActive ? [
+                          Shadow(color: Colors.white.withOpacity(0.5), blurRadius: 4),
+                        ] : [],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            // Label
-            Text(
-              tabs[index]['title'].toString().toUpperCase(),
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: isActive ? FontWeight.w900 : FontWeight.w500,
-                letterSpacing: 1.5,
-                color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
