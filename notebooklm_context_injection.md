@@ -1,13 +1,12 @@
 # NotebookLM Context Injection - Cycle: "Opal Fixer-Upper"
 
-## 1. Status Report: "Where are we at?"
 **Current Phase:** Prototyping / Visual Refinement (Liquid Glass + Agent Control Room).
-**Condition:** "Live Fixer-Upper". The UI is implemented but requires polish and integration.
+**Condition:** "Build Fixed / Interactive Graph". The Control Room logic is refined with interactive nodes.
 **Recent Changes:**
-- **Visuals:** Implemented `LiquidGlass` component for premium "Apple/Glassmorphism" feel.
-- **Workflow:** Integrated "Opal-style" Agent Workflow Visualization (`WorkflowScreen`).
-- **Architecture:** Created standalone "Control Room" app (`main_dashboard.dart`) to keep debug tools separating from the main `SolidFusionLayout`.
-- **Navigation:** Updated `SolidFusionLayout` to be cleaner, removing the user-facing debug link.
+- **Visuals:** Refined `LiquidGlass` usage in Control Room.
+- **Workflow:** `WorkflowScreen` now features **Interactive** nodes (FruchtermanReingold layout) and SnackBar feedback.
+- **Architecture:** Fixed build errors in `AppTheme` and `SolidFusionLayout`.
+- **Navigation:** Updated `SolidFusionLayout` clean-up verified.
 
 ## 2. The Detective's Mission (Cove Analysis)
 **Objective:** Analyze the current "Fixer-Upper" state and determine the best media strategy to communicate progress and gaps.
@@ -36,7 +35,8 @@
 
 ### `lib/features/workflow_viz/workflow_screen.dart`
 ```dart
-// (The new Node-based Agent Visualization)
+// (The new Node-based Agent Visualization with Interactivity)
+// Features: FruchtermanReingoldAlgorithm, GestureDetector on nodes, SnackBar feedback.
 // ...
 ```
 
