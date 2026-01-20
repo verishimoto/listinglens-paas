@@ -5,6 +5,8 @@ import 'package:listing_lens_paas/layout/meniscus_tab.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
 import 'package:listing_lens_paas/features/hub/hub_view.dart';
 import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
+import 'package:listing_lens_paas/components/liquid_glass.dart';
+import 'package:listing_lens_paas/features/workflow_viz/workflow_screen.dart';
 
 class SolidFusionLayout extends StatefulWidget {
   const SolidFusionLayout({super.key});
@@ -121,14 +123,18 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
   }
 
   Widget _buildHeader() {
-    return Container(
-      height: 80,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.05))),
-        color: AppColors.voidColor.withOpacity(0.5), // Semi-transparent
-      ),
-      child: Row(
+    return LiquidGlass(
+      borderRadius: 0,
+      blurSigma: 20,
+      frostOpacity: 0.02,
+      hasBorder: false,
+      child: Container(
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.05))),
+        ),
+        child: Row(
         children: [
           // LOGO
           Container(

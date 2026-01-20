@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
+import 'package:listing_lens_paas/components/liquid_glass.dart';
 
 class LabView extends StatelessWidget {
   final Map<String, dynamic> slide;
@@ -21,52 +22,56 @@ class LabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // 1. PROTOCOL HEADER (Glass Border Bottom)
-        Container(
-          padding: const EdgeInsets.all(40),
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.white10)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        // 1. PROTOCOL HEADER (Liquid Glass)
+        Padding(
+          padding: const EdgeInsets.all(24),
+          child: LiquidGlass(
+            borderRadius: 24,
+            child: Container(
+              padding: const EdgeInsets.all(32),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Text(
-                     slide['role'].toString().toUpperCase(),
-                     style: const TextStyle(
-                       color: AppColors.textMain, 
-                       fontWeight: FontWeight.w900,
-                       letterSpacing: 2,
-                       fontSize: 12,
-                     ),
-                   ),
-                   const SizedBox(width: 16),
-                   Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.signalColor, shape: BoxShape.circle)), // Dot
-                   const SizedBox(width: 16),
-                   Text(
-                     'PROTOCOL 0${slide['id']}',
-                     style: const TextStyle(
-                       color: AppColors.textMute,
-                       fontWeight: FontWeight.bold,
-                       letterSpacing: 2,
-                       fontSize: 12,
-                     ),
-                   ),
+                  Row(
+                    children: [
+                       Text(
+                         slide['role'].toString().toUpperCase(),
+                         style: const TextStyle(
+                           color: AppColors.textMain, 
+                           fontWeight: FontWeight.w900,
+                           letterSpacing: 2,
+                           fontSize: 12,
+                         ),
+                       ),
+                       const SizedBox(width: 16),
+                       Container(width: 6, height: 6, decoration: const BoxDecoration(color: AppColors.signalColor, shape: BoxShape.circle)), // Dot
+                       const SizedBox(width: 16),
+                       Text(
+                         'PROTOCOL 0${slide['id']}',
+                         style: const TextStyle(
+                           color: AppColors.textMute,
+                           fontWeight: FontWeight.bold,
+                           letterSpacing: 2,
+                           fontSize: 12,
+                         ),
+                       ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    slide['check'],
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      height: 1.1,
+                      letterSpacing: -1,
+                      color: AppColors.textMain,
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 16),
-              Text(
-                slide['check'],
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                  height: 1.1,
-                  letterSpacing: -1,
-                  color: AppColors.textMain,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
 
@@ -79,24 +84,28 @@ class LabView extends StatelessWidget {
           ),
         ),
 
-        // 3. ACTION FOOTER (Glass Border Top)
-        Container(
-          padding: const EdgeInsets.all(40),
-          decoration: const BoxDecoration(
-            border: Border(top: BorderSide(color: Colors.white10)),
+        // 3. ACTION FOOTER (Liquid Glass)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: LiquidGlass(
+             borderRadius: 24,
+             child: Container(
+               padding: const EdgeInsets.all(24),
+               width: double.infinity,
+               alignment: Alignment.centerRight,
+               child: mountedImage != null ? ElevatedButton.icon(
+                 onPressed: isPassed ? null : onAudit,
+                 icon: isPassed ? const Icon(Icons.check) : const Icon(Icons.flash_on),
+                 label: Text(isPassed ? 'PROTOCOL VERIFIED' : 'RUN HEURISTIC AUDIT'),
+                 style: ElevatedButton.styleFrom(
+                   backgroundColor: isPassed ? AppColors.structureColor : AppColors.signalColor,
+                   foregroundColor: isPassed ? AppColors.signalColor : Colors.white,
+                   padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+                   textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2),
+                 ),
+               ) : const SizedBox(height: 50), 
+             ),
           ),
-          alignment: Alignment.centerRight,
-          child: mountedImage != null ? ElevatedButton.icon(
-            onPressed: isPassed ? null : onAudit,
-            icon: isPassed ? const Icon(Icons.check) : const Icon(Icons.flash_on),
-            label: Text(isPassed ? 'PROTOCOL VERIFIED' : 'RUN HEURISTIC AUDIT'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isPassed ? AppColors.structureColor : AppColors.signalColor,
-              foregroundColor: isPassed ? AppColors.signalColor : Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
-              textStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900, letterSpacing: 2),
-            ),
-          ) : const SizedBox(), // Hidden if no asset
         ),
       ],
     );

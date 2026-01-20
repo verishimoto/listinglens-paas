@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
+import 'package:listing_lens_paas/components/liquid_glass.dart';
 
 class HubView extends StatelessWidget {
   const HubView({super.key});
@@ -39,61 +40,58 @@ class HubView extends StatelessWidget {
           
           const SizedBox(height: 48),
 
-          // ROI WIDGET (Glass + Gradient)
-          Container(
-            padding: const EdgeInsets.all(40),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(32),
-              border: Border.all(color: Colors.white10),
-              gradient: LinearGradient(
-                colors: [const Color(0xFF18181B).withOpacity(0.8), const Color(0xFF18181B).withOpacity(0.4)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Column(
-                       crossAxisAlignment: CrossAxisAlignment.start,
-                       children: const [
-                         Text('ACTIVE ROI PREDICTION', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 2, color: AppColors.signalColor)),
-                         SizedBox(height: 8),
-                         Text('95.2%', style: TextStyle(fontSize: 64, fontWeight: FontWeight.w100, color: Colors.white, height: 1)),
-                       ],
-                     ),
-                     Column(
-                       children: const [
-                         Text('CONFIDENCE LEVEL', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 2, color: AppColors.textMute)),
-                         SizedBox(height: 4),
-                         Text('High', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1CFF00))),
-                       ],
-                     )
-                  ],
-                ),
-                const SizedBox(height: 24),
-                // Progress Bar
-                Container(
-                  height: 16,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(8),
+          // ROI WIDGET (Liquid Glass Upgrade)
+          LiquidGlass(
+            borderRadius: 32,
+            blurSigma: 40,
+            frostOpacity: 0.08,
+            child: Container(
+              padding: const EdgeInsets.all(40),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                       Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: const [
+                           Text('ACTIVE ROI PREDICTION', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 2, color: AppColors.signalColor)),
+                           SizedBox(height: 8),
+                           Text('95.2%', style: TextStyle(fontSize: 64, fontWeight: FontWeight.w100, color: Colors.white, height: 1)),
+                         ],
+                       ),
+                       Column(
+                         children: const [
+                           Text('CONFIDENCE LEVEL', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 2, color: AppColors.textMute)),
+                           SizedBox(height: 4),
+                           Text('High', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF1CFF00))),
+                         ],
+                       )
+                    ],
                   ),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: 0.952,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        gradient: const LinearGradient(colors: [AppColors.signalColor, Color(0xFF1CFF00)])
+                  const SizedBox(height: 24),
+                  // Progress Bar
+                  Container(
+                    height: 16,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.2), // Darker trough for contrast
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: 0.952,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: const LinearGradient(colors: [AppColors.signalColor, Color(0xFF1CFF00)])
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
           
