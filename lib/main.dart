@@ -14,7 +14,7 @@ class ListingLensApp extends StatelessWidget {
     return MaterialApp(
       title: 'ListingLens PaaS',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightIridescent,
       home: const SolidFusionLayout(),
     );
   }

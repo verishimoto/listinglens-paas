@@ -17,7 +17,10 @@ class LiquidGlass extends StatelessWidget {
     this.borderRadius = 24.0,
     this.hasBorder = true,
     this.borderGradient,
+    this.isIridescent = false,
   });
+
+  final bool isIridescent;
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +43,32 @@ class LiquidGlass extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [
-                  Colors.white.withOpacity(frostOpacity + 0.05), // Top-left highlight
-                  Colors.white.withOpacity(frostOpacity),        // Center
-                  Colors.white.withOpacity(frostOpacity - 0.02), // Bottom-right shadow
-                ],
-                stops: const [0.0, 0.4, 1.0],
+                colors: isIridescent
+                    ? [
+                        Colors.white.withOpacity(0.4),
+                        Colors.blueAccent.withOpacity(0.05),
+                        Colors.purpleAccent.withOpacity(0.05),
+                        Colors.white.withOpacity(0.1),
+                      ]
+                    : [
+                        Colors.white.withOpacity(frostOpacity + 0.05),
+                        Colors.white.withOpacity(frostOpacity),
+                        Colors.black.withOpacity(
+                            0.02), // Slight darkening for light mode depth
+                      ],
+                stops: isIridescent
+                    ? const [0.0, 0.4, 0.6, 1.0]
+                    : const [0.0, 0.4, 1.0],
               ),
+              boxShadow: isIridescent
+                  ? [
+                      BoxShadow(
+                        color: Colors.blue.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: -2,
+                      ),
+                    ]
+                  : null,
             ),
           ),
 
@@ -57,24 +79,34 @@ class LiquidGlass extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(borderRadius),
                   border: Border.all(color: Colors.transparent), // Placeholder
-                  gradient: borderGradient != null 
-                    ? null // If standard gradient provided (not supported directly in Border) - see replacement below
-                    : null,
+                  gradient: borderGradient != null
+                      ? null // If standard gradient provided (not supported directly in Border) - see replacement below
+                      : null,
                 ),
                 child: CustomPaint(
                   painter: _GlassBorderPainter(
                     radius: borderRadius,
-                    gradient: borderGradient ?? LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.white.withOpacity(0.4),
-                        Colors.white.withOpacity(0.05),
-                        Colors.white.withOpacity(0.05),
-                        Colors.white.withOpacity(0.1),
-                      ],
-                      stops: const [0.0, 0.4, 0.6, 1.0],
-                    ),
+                    gradient: borderGradient ??
+                        LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: isIridescent
+                              ? [
+                                  Colors.cyanAccent.withOpacity(0.5),
+                                  Colors.purpleAccent.withOpacity(0.3),
+                                  Colors.pinkAccent.withOpacity(0.3),
+                                  Colors.white.withOpacity(0.4),
+                                ]
+                              : [
+                                  Colors.black.withOpacity(
+                                      0.1), // Darker border for light theme
+                                  Colors.black.withOpacity(0.02),
+                                  Colors.white.withOpacity(
+                                      0.5), // Specular highlight still white
+                                  Colors.black.withOpacity(0.05),
+                                ],
+                          stops: const [0.0, 0.4, 0.6, 1.0],
+                        ),
                   ),
                 ),
               ),

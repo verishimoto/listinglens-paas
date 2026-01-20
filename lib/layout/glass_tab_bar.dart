@@ -18,8 +18,9 @@ class GlassTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.voidColor.withOpacity(0.6), // Increased opacity for "Frosted Glass" feel
-        border: const Border(bottom: BorderSide(color: AppColors.borderColor)),
+        color: Colors.transparent,
+        border: const Border(
+            bottom: BorderSide(color: Color(0xFFE0E0E0))), // Panel boundary
       ),
       child: ClipRRect(
         child: BackdropFilter(
@@ -66,26 +67,55 @@ class GlassTabBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
-            border: isActive ? null : const Border(bottom: BorderSide(color: Colors.transparent, width: 2)), 
+            color:
+                isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
+            border: isActive
+                ? null
+                : const Border(
+                    bottom: BorderSide(color: Colors.transparent, width: 2)),
           ),
           child: Stack(
             children: [
               // 1. Apple-style 1px Border (Clamped) with Iridescent Shader if Active
+              // 1. BOOTSTRAP LOGIC: Active Tab has borders on Top/Left/Right but NO Bottom
+              // This makes it visually "merge" with the panel content below.
               if (isActive)
                 Positioned.fill(
-                  child: ShaderMask(
-                    shaderCallback: (bounds) => gradient.createShader(bounds),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: Colors.white, width: 2), // Shader applies to this white border
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(
+                          0xFFF5F5FA), // Match Scaffold Background (merged)
+                      border: Border(
+                        top: BorderSide.none, // Handled by gradient
+                        left: BorderSide(color: Colors.black.withOpacity(0.05)),
+                        right:
+                            BorderSide(color: Colors.black.withOpacity(0.05)),
+                        bottom: BorderSide.none, // SEAMLESS MERGE
+                      ),
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(8)),
+                    ),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        height: 3,
+                        decoration: BoxDecoration(
+                          gradient: gradient,
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(8)),
                         ),
                       ),
                     ),
                   ),
+                )
+              else
+                // Inactive tabs just hover
+                Positioned(
+                  bottom: 0, left: 0, right: 0,
+                  child: Container(
+                      height: 1, color: Colors.transparent), // Placeholder
                 ),
-              
+
               // 2. Content
               Center(
                 child: Row(
@@ -94,10 +124,12 @@ class GlassTabBar extends StatelessWidget {
                     Text(
                       '0${index + 1}',
                       style: TextStyle(
-                        fontFamily: 'Agency FB', 
+                        fontFamily: 'Agency FB',
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: isActive ? AppColors.signalColor : AppColors.textMute,
+                        color: isActive
+                            ? AppColors.signalColor
+                            : AppColors.textMute,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -105,13 +137,19 @@ class GlassTabBar extends StatelessWidget {
                       tabs[index]['title'].toString().toUpperCase(),
                       style: TextStyle(
                         fontSize: 12,
-                        fontWeight: isActive ? FontWeight.w900 : FontWeight.w500,
+                        fontWeight:
+                            isActive ? FontWeight.w900 : FontWeight.w500,
                         letterSpacing: 1.5,
-                        color: isActive ? AppColors.textMain : AppColors.textMute, 
-                        shadows: isActive ? [
-                          // "Crystal" requires a subtle colorful glow, not just white
-                          Shadow(color: const Color(0xFFE0E7FF), blurRadius: 8), 
-                        ] : [],
+                        color:
+                            isActive ? AppColors.textMain : AppColors.textMute,
+                        shadows: isActive
+                            ? [
+                                // "Crystal" requires a subtle colorful glow, not just white
+                                Shadow(
+                                    color: const Color(0xFFE0E7FF),
+                                    blurRadius: 8),
+                              ]
+                            : [],
                       ),
                     ),
                   ],

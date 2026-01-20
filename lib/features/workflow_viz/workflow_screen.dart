@@ -18,16 +18,9 @@ class _WorkflowScreenState extends State<WorkflowScreen> {
   void initState() {
     super.initState();
     // Use FruchtermanReingoldAlgorithm for a more organic, force-directed layout (Opal-like)
-    // or BuchheimWalkerAlgorithm for strict hierarchy.
-    // Opal usually has a central node or organic clusters.
-    // Let's try Buchheim for clarity first, but Tree false.
-    final config = BuchheimWalkerConfiguration()
-      ..siblingSeparation = 100
-      ..levelSeparation = 150
-      ..subtreeSeparation = 150
-      ..orientation = BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM;
-
-    builder = BuchheimWalkerAlgorithm(config, TreeEdgeRenderer(config));
+    builder = FruchtermanReingoldAlgorithm(
+      iterations: 1000, // More iterations for stability
+    );
 
     // -- BUILD THE GRAPH --
     final nodeUser = Node.Id("USER"); // 1
@@ -73,7 +66,7 @@ class _WorkflowScreenState extends State<WorkflowScreen> {
     ..color = Colors.purpleAccent.withOpacity(0.6)
     ..strokeWidth = 1.5
     ..style = PaintingStyle.stroke;
-    
+
   Paint get _monitorPaint => Paint()
     ..color = Colors.greenAccent.withOpacity(0.4)
     ..strokeWidth = 1.5
@@ -117,30 +110,39 @@ class _WorkflowScreenState extends State<WorkflowScreen> {
     if (label.contains("INJECTOR")) glowColor = Colors.purpleAccent;
     if (label.contains("REPO")) glowColor = Colors.amber;
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        boxShadow: [
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Accessing ${label.replaceAll('\n', ' ')}..."),
+            backgroundColor: glowColor.withOpacity(0.8),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(boxShadow: [
           BoxShadow(
             color: glowColor.withOpacity(0.2),
             blurRadius: 40,
             spreadRadius: 5,
           )
-        ]
-      ),
-      child: LiquidGlass(
-        borderRadius: 50, // Circular/Oval
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          constraints: const BoxConstraints(minWidth: 120),
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white, 
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+        ]),
+        child: LiquidGlass(
+          borderRadius: 50, // Circular/Oval
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            constraints: const BoxConstraints(minWidth: 120),
+            alignment: Alignment.center,
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
             ),
           ),
         ),
