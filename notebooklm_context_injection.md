@@ -17,6 +17,9 @@
 3.  **Perform "Cove Analysis" (Media Coverage Strategy):**
     -   Ask: *What is the best format to brainstorm/present this specific update?*
     -   *Options:* Audio Overview (Podcast), Mind Map, Slide Deck, Animated Video Script, or Technical Report.
+    -   **Specific Request (The Watcher):** Perform a **"20x Troubleshoot Cove Analysis"**. 
+        -   Identify **20 potential failure points**, regret scenarios, or technical debt traps in the current "Control Room" and "Liquid Glass" implementation.
+        -   *Goal:* Prevent regret by foreseeing integration clashes or aesthetic inconsistencies before they solidify.
 4.  **Generate Prompts:** Based on the chosen format, generate the specific prompts I should use (with you or other tools) to create that media.
 
 ## 3. Critical Source Code

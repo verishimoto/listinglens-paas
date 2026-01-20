@@ -101,70 +101,63 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
       backgroundColor: Colors.transparent, // Let FluidBackground show
       body: Stack(
         children: [
-          // 1. FLUID MOTION BACKGROUND
+          // 1. FLUID MOTION BACKGROUND (Full Screen)
           const Positioned.fill(child: FluidBackground()),
 
-          // 2. MAIN LAYOUT GRID
-          Column(
-            children: [
-              // HEADER (Translucent)
-              _buildHeader(),
+          // 2. MAIN LAYOUT GRID (Centered & Constrained)
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1400),
+              child: Column(
+                children: [
+                  // HEADER (Translucent)
+                  _buildHeader(),
 
-              // LAB TABS (Visible only in Lab View)
-              if (_activeView == 'lab')
-                GlassTabBar(
-                  tabs: _slides,
-                  activeIndex: _activeSlide,
-                  onTabSelected: (index) =>
-                      setState(() => _activeSlide = index),
-                ),
-
-              // WORKSPACE
-              Expanded(
-                child: Row(
-                  children: [
-                    // LEFT SIDEBAR (Only for HUB now, or if we want the toggle separate)
-                    // We need a place to toggle between LAB and HUB if the top bar is only for Lab slides.
-                    // The design request asked for Horizontal Tabs for 'The Lab'.
-                    // Let's put the View Toggle in the Header or keep a small sidebar?
-                    // "The tab panel ... isn't quite as I intended ... should be horizontal"
-                    // I will move the "Lab/Hub" toggle to the Header to be cleaner,
-                    // and make the main view full width.
-
-                    // Actually, let's keep the sidebar GONE for Lab, but we need a way to get back to Hub.
-                    // I'll add the View Switcher to the Header.
-
-                    // MAIN CONTENT CANVAS
-                    Expanded(
-                      child: Container(
-                        // No margin needed if full width, but let's keep some breathing room or glass effect
-                        margin: const EdgeInsets.all(0),
-                        decoration: BoxDecoration(
-                          color: _activeView == 'lab'
-                              ? Colors.transparent
-                              : AppColors.structureColor,
-                          // Lab view has its own container logic in LabView?
-                          // LabView had glass borders. simple container is fine.
-                        ),
-                        child: _activeView == 'lab'
-                            ? Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 24), // Space below tabs
-                                child: LabView(
-                                  slide: _slides[_activeSlide],
-                                  isPassed: _slideStatus[_activeSlide],
-                                  mountedImage: _mountedImage,
-                                  onMount: _mountImage,
-                                  onAudit: () => _onSlideComplete(_activeSlide),
-                                ),
-                              )
-                            : _buildHubView(),
-                      ),
+                  // LAB TABS (Visible only in Lab View)
+                  if (_activeView == 'lab')
+                    GlassTabBar(
+                      tabs: _slides,
+                      activeIndex: _activeSlide,
+                      onTabSelected: (index) =>
+                          setState(() => _activeSlide = index),
                     ),
-                  ],
-                ),
+
+                  // WORKSPACE
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // MAIN CONTENT CANVAS
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                                top: 0), // Merge with tabs
+                            decoration: BoxDecoration(
+                              color: _activeView == 'lab'
+                                  ? Colors.transparent
+                                  : AppColors.structureColor,
+                            ),
+                            child: _activeView == 'lab'
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 24), // Space inside the panel
+                                    child: LabView(
+                                      slide: _slides[_activeSlide],
+                                      isPassed: _slideStatus[_activeSlide],
+                                      mountedImage: _mountedImage,
+                                      onMount: _mountImage,
+                                      onAudit: () =>
+                                          _onSlideComplete(_activeSlide),
+                                    ),
+                                  )
+                                : _buildHubView(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
@@ -244,33 +237,49 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
               )
             ],
           ),
-    );
+        ));
   }
 
   Widget _buildNavBarItem(String label, String key, IconData icon) {
     final isActive = _activeView == key;
-    return GestureDetector(
-      onTap: () => _toggleView(key),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isActive ? Colors.white.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            Icon(icon,
-                size: 16, color: isActive ? Colors.white : Colors.white54),
-            const SizedBox(width: 8),
-            Text(label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1,
-                  color: isActive ? Colors.white : Colors.white54,
-                )),
-          ],
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => _toggleView(key),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color:
+                isActive ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            border: isActive
+                ? Border.all(color: Colors.white.withOpacity(0.2))
+                : null,
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: Colors.white.withOpacity(0.1),
+                      blurRadius: 10,
+                      spreadRadius: 2,
+                    )
+                  ]
+                : null,
+          ),
+          child: Row(
+            children: [
+              Icon(icon,
+                  size: 16, color: isActive ? Colors.white : Colors.white54),
+              const SizedBox(width: 8),
+              Text(label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1,
+                    color: isActive ? Colors.white : Colors.white54,
+                  )),
+            ],
+          ),
         ),
       ),
     );
