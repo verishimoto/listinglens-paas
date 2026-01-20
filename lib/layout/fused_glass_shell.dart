@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
+import 'package:listing_lens_paas/components/liquid_glass.dart';
 
 class FusedGlassShell extends StatefulWidget {
   final Widget sidebar;
@@ -38,20 +39,14 @@ class _FusedGlassShellState extends State<FusedGlassShell> {
               padding: EdgeInsets.only(
                   left: widget.sidebarWidth - 1.5), // -1.5px overlap for fusion
               child: Container(
+                // SOLAR REFRACTION (Glow follows mouse opposite)
+                // We keep this separate from the Glass surface itself
                 decoration: BoxDecoration(
-                  color:
-                      const Color(0xFF0C0C12).withOpacity(0.85), // Dark Glass
                   borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                    bottomLeft: Radius.circular(
-                        16), // Rounded everywhere except top-left join?
+                    topRight: Radius.circular(24), // Increased to match Apple
+                    bottomRight: Radius.circular(24),
+                    bottomLeft: Radius.circular(24),
                   ),
-                  border: Border.all(
-                    color: Colors.white.withOpacity(0.1),
-                    width: 1.5,
-                  ),
-                  // SOLAR REFRACTION (Glow follows mouse opposite)
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.5),
@@ -73,12 +68,11 @@ class _FusedGlassShellState extends State<FusedGlassShell> {
                     )
                   ],
                 ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                    bottomLeft: Radius.circular(16),
-                  ),
+                child: LiquidGlass(
+                  borderRadius: 24,
+                  blurSigma: 40, // Deeper Apple blur
+                  frostOpacity: 0.1, // Solid enough for text
+                  isIridescent: false, // Keep content clean
                   child: widget.content, // THE ACTUAL PAGE CONTENT
                 ),
               ),

@@ -39,10 +39,20 @@ We have migrated from "Obsidian" (Dark) to "White Deep" (Iridescent Light).
 2. **The "White Deep" Contrast**: Is the #F5F5FA background too close to the #FFFFFF cards? Is there enough depth separation without heavy drop shadows?
 3. **The "Piano" Gap**: We have a 2px gap between keys. Does this break the "Liquid" feel? Should they be flush?
 
-## 3. Socratic Prompt (Copy-Paste to NotebookLM)
->
-> "Act as a Critical UX Researcher. precise and ruthless. Review the 'Visual State Dossier' above.
+## 3. Deep Research Sources (For Detective Analysis)
+
+*NotebookLM, please add this link as a Source and analyze it:*
+
+- **Source**: [WWDC 2025 - Designing for visionOS](https://developer.apple.com/videos/play/wwdc2025/219/)
+- **Extraction Goal**:
+  1. What are the exact `blur` radius values for "Glass" materials?
+  2. How does the "Luminance" border behave on interaction?
+  3. What is the "focal scale" animation curve?
+
+## 4. Socratic Prompt (Copy-Paste to NotebookLM)
+
+> "Act as a Critical UX Researcher. precise and ruthless. Review the 'Visual State Dossier' and the 'Deep Research Sources'.
 >
 > 1. Evaluate the 'Piano Key' tab metaphor. Does the 'Seamless Merge' logic hold up in a glass UI?
 > 2. Critique the color palette (Peach/Lavender/Sky). Is it too 'Pastel/Childish' for a 'Pro PaaS'?
-> 3. Give me 3 specific CSS/Flutter changes to make this look more like [Framer.com](https://framer.com)."
+> 3. Based on the WWDC video source, give me 3 specific CSS/Flutter changes to make 'LiquidGlass' match the official specs."
