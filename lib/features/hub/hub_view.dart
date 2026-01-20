@@ -300,24 +300,31 @@ class HubView extends StatelessWidget {
   }
 
   Widget _buildBar(double heightFactor, {bool isActive = false}) {
-    return Container(
-      width: 12,
-      height: 150 * heightFactor,
-      decoration: BoxDecoration(
-        color: isActive
-            ? AppColors.leverage1
-            : AppColors.leverage2
-                .withOpacity(0.2), // Purple active, Cyan passive
-        borderRadius: BorderRadius.circular(4),
-        boxShadow: isActive
-            ? [
-                BoxShadow(
-                    color: AppColors.leverage1.withOpacity(0.4),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2))
-              ]
-            : [],
-      ),
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: heightFactor),
+      duration: const Duration(milliseconds: 1500),
+      curve: Curves.elasticOut,
+      builder: (context, value, child) {
+        return Container(
+          width: 12,
+          height: 150 * value,
+          decoration: BoxDecoration(
+            color: isActive
+                ? AppColors.leverage1
+                : AppColors.leverage2
+                    .withOpacity(0.2), // Purple active, Cyan passive
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                        color: AppColors.leverage1.withOpacity(0.4),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2))
+                  ]
+                : [],
+          ),
+        );
+      },
     );
   }
 
