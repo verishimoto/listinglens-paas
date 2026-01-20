@@ -42,6 +42,9 @@ abstract class AppColors {
 
   static const Color glassBorder = Color(0xFF2C2C2E);
 
-  // Legacy
+  // Legacy / Mapped
   static const Color signalColor = mellowOrange;
+  static const Color voidColor = deepSpace;
+  static const Color textDark = textMute;
+  static const Color borderColor = glassBorder;
 }
