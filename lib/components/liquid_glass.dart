@@ -1,96 +1,127 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-class LiquidGlass extends StatelessWidget {
+class LiquidGlass extends StatefulWidget {
   final Widget child;
   final double blurSigma;
   final double frostOpacity;
   final double borderRadius;
   final bool hasBorder;
   final LinearGradient? borderGradient;
+  final bool isIridescent;
 
   const LiquidGlass({
     super.key,
     required this.child,
-    this.blurSigma = 30.0, // Deep blur for "Liquid" feel
-    this.frostOpacity = 0.05, // Very subtle surface tint
+    this.blurSigma = 30.0,
+    this.frostOpacity = 0.05,
     this.borderRadius = 24.0,
     this.hasBorder = true,
     this.borderGradient,
     this.isIridescent = false,
   });
 
-  final bool isIridescent;
+  @override
+  State<LiquidGlass> createState() => _LiquidGlassState();
+}
+
+class _LiquidGlassState extends State<LiquidGlass>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 4))
+          ..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
+      borderRadius: BorderRadius.circular(widget.borderRadius),
       child: Stack(
         children: [
           // 1. BACKDROP FILTER (The Blur)
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: blurSigma, sigmaY: blurSigma),
+            filter: ImageFilter.blur(
+                sigmaX: widget.blurSigma, sigmaY: widget.blurSigma),
             child: Container(
               color: Colors.transparent,
             ),
           ),
 
-          // 2. SURFACE TINT & NOISE SIMULATION (Gradient Overlay)
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(borderRadius),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: isIridescent
-                    ? [
-                        Colors.white.withOpacity(0.4),
-                        Colors.blueAccent.withOpacity(0.05),
-                        Colors.purpleAccent.withOpacity(0.05),
-                        Colors.white.withOpacity(0.1),
-                      ]
-                    : [
-                        Colors.white.withOpacity(frostOpacity + 0.05),
-                        Colors.white.withOpacity(frostOpacity),
-                        Colors.black.withOpacity(
-                            0.02), // Slight darkening for light mode depth
-                      ],
-                stops: isIridescent
-                    ? const [0.0, 0.4, 0.6, 1.0]
-                    : const [0.0, 0.4, 1.0],
-              ),
-              boxShadow: isIridescent
-                  ? [
-                      BoxShadow(
-                        color: Colors.blue.withOpacity(0.1),
-                        blurRadius: 10,
-                        spreadRadius: -2,
-                      ),
-                    ]
-                  : null,
-            ),
+          // 2. SURFACE TINT & ANIMATED SHIMMER
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) {
+              final shimmerOffset = _controller.value * 0.2; // Subtle shift
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: widget.isIridescent
+                        ? [
+                            Colors.white.withOpacity(0.4),
+                            Colors.blueAccent.withOpacity(0.05),
+                            Colors.purpleAccent.withOpacity(0.05),
+                            Colors.white.withOpacity(0.1),
+                          ]
+                        : [
+                            Colors.white
+                                .withOpacity(widget.frostOpacity + 0.05),
+                            Colors.white.withOpacity(widget.frostOpacity),
+                            Colors.black.withOpacity(0.02),
+                          ],
+                    stops: widget.isIridescent
+                        ? [
+                            0.0 - shimmerOffset,
+                            0.4 + shimmerOffset,
+                            0.6 - shimmerOffset,
+                            1.0 + shimmerOffset
+                          ]
+                        : [0.0, 0.4, 1.0],
+                  ),
+                  boxShadow: widget.isIridescent
+                      ? [
+                          BoxShadow(
+                            color: Colors.blue
+                                .withOpacity(0.1 + (0.05 * _controller.value)),
+                            blurRadius: 10 + (5 * _controller.value),
+                            spreadRadius: -2,
+                          ),
+                        ]
+                      : null,
+                ),
+              );
+            },
           ),
 
           // 3. REFRACTIVE BORDER
-          if (hasBorder)
+          if (widget.hasBorder)
             IgnorePointer(
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                  border: Border.all(color: Colors.transparent), // Placeholder
-                  gradient: borderGradient != null
-                      ? null // If standard gradient provided (not supported directly in Border) - see replacement below
-                      : null,
+                  borderRadius: BorderRadius.circular(widget.borderRadius),
+                  border: Border.all(color: Colors.transparent),
                 ),
                 child: CustomPaint(
                   painter: _GlassBorderPainter(
-                    radius: borderRadius,
-                    gradient: borderGradient ??
+                    radius: widget.borderRadius,
+                    gradient: widget.borderGradient ??
                         LinearGradient(
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
-                          colors: isIridescent
+                          colors: widget.isIridescent
                               ? [
                                   Colors.cyanAccent.withOpacity(0.5),
                                   Colors.purpleAccent.withOpacity(0.3),
@@ -98,11 +129,9 @@ class LiquidGlass extends StatelessWidget {
                                   Colors.white.withOpacity(0.4),
                                 ]
                               : [
-                                  Colors.black.withOpacity(
-                                      0.1), // Darker border for light theme
+                                  Colors.black.withOpacity(0.1),
                                   Colors.black.withOpacity(0.02),
-                                  Colors.white.withOpacity(
-                                      0.5), // Specular highlight still white
+                                  Colors.white.withOpacity(0.5),
                                   Colors.black.withOpacity(0.05),
                                 ],
                           stops: const [0.0, 0.4, 0.6, 1.0],
@@ -113,7 +142,7 @@ class LiquidGlass extends StatelessWidget {
             ),
 
           // 4. CONTENT
-          child,
+          widget.child,
         ],
       ),
     );
@@ -133,7 +162,7 @@ class _GlassBorderPainter extends CustomPainter {
     final paint = Paint()
       ..shader = gradient.createShader(rect)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0; // Thin, crisp border
+      ..strokeWidth = 1.0;
 
     canvas.drawRRect(rrect, paint);
   }

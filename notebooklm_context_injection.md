@@ -1,50 +1,48 @@
-# NotebookLM Context Injection - Cycle: "Opal Fixer-Upper"
+# PROJ: PROJECT GLASS - VISUAL STATE DOSSIER
 
-**Current Phase:** Prototyping / Visual Refinement (Liquid Glass + Agent Control Room).
-**Condition:** "Build Fixed / Interactive Graph". The Control Room logic is refined with interactive nodes.
-**Recent Changes:**
-- **Visuals:** Refined `LiquidGlass` usage in Control Room.
-- **Workflow:** `WorkflowScreen` now features **Interactive** nodes (FruchtermanReingold layout) and SnackBar feedback.
-- **Architecture:** Fixed build errors in `AppTheme` and `SolidFusionLayout`.
-- **Navigation:** Updated `SolidFusionLayout` clean-up verified.
+**Agent**: UX Designer ("The Artisan")
+**Date**: 2026-01-20
+**Subject**: Heuristic Analysis of "Crystal UI" Prototype
 
-## 2. The Detective's Mission (Cove Analysis)
-**Objective:** Analyze the current "Fixer-Upper" state and determine the best media strategy to communicate progress and gaps.
+## 1. Visual Physiology (Current State)
 
-**Instructions for NotebookLM:**
-1.  **Ingest** this document and the attached code snippets.
-2.  **Revisit** the live GitHub repository (if available) to cross-reference.
-3.  **Perform "Cove Analysis" (Media Coverage Strategy):**
-    -   Ask: *What is the best format to brainstorm/present this specific update?*
-    -   *Options:* Audio Overview (Podcast), Mind Map, Slide Deck, Animated Video Script, or Technical Report.
-    -   **Specific Request (The Watcher):** Perform a **"20x Troubleshoot Cove Analysis"**. 
-        -   Identify **20 potential failure points**, regret scenarios, or technical debt traps in the current "Control Room" and "Liquid Glass" implementation.
-        -   *Goal:* Prevent regret by foreseeing integration clashes or aesthetic inconsistencies before they solidify.
-4.  **Generate Prompts:** Based on the chosen format, generate the specific prompts I should use (with you or other tools) to create that media.
+We have migrated from "Obsidian" (Dark) to "White Deep" (Iridescent Light).
 
-## 3. Critical Source Code
+### A. The "Solid Fusion" Layout
 
-### `lib/layout/solid_fusion_layout.dart`
-```dart
-// (Key layout logic showing the new cleaned up navigation)
-// ... [Code is actually in the file, placeholder for context]
-```
+- **Max Width**: Constrained to 1400px (Centered). No longer edge-to-edge sprawl.
+- **Background**: `FluidBackground` (Animated mesh) hidden behind a translucent `AppColors.structureColor`.
+- **Header**:
+  - **Type**: Unified `GlassTabBar` ("Piano Keys") for "The Lab" & "Hub".
+  - **Interaction**: Keys press *down* into the surface (Active state merges).
+  - **Logo**: "AGENCY FB" (Condensed) with `LiquidGlass` container.
+  - **Pro Badge**: Neon Green (#1CFF00) indicator.
 
-### `lib/components/liquid_glass.dart`
-```dart
-// (The visual core of the new aesthetic)
-// ...
-```
+### B. The "Piano Key" Interaction
 
-### `lib/features/workflow_viz/workflow_screen.dart`
-```dart
-// (The new Node-based Agent Visualization with Interactivity)
-// Features: FruchtermanReingoldAlgorithm, GestureDetector on nodes, SnackBar feedback.
-// ...
-```
+- **Metaphor**: Physical piano keys made of glass.
+- **Locations**: Sidebar (Vertical) and Header (Horizontal).
+- **Physics**:
+  - **Idle**: Transparent, showing the "Rail" line beneath.
+  - **Hover**: White (50% Opacity) glint. Cursor `SystemMouseCursors.click`.
+  - **Active**: Deep White (#F5F5FA) - **Totally Opaque**.
+  - **The Merge**: Active tab overlaps the border (-1.5px margin), creating a seamless connection.
+- **Iridescence**:
+  - **Animation**: `LiquidGlass` surfaces now "breathe" (4s loop) with shifting gradients.
+  - **Shadow**: Solar glow (Orange/Cyan) on active states.
 
-### `lib/main_dashboard.dart`
-```dart
-// (The standalone entry point for the Control Room)
-// ...
-```
+## 2. Heuristic Friction Points (For Detective Analysis)
+
+*NotebookLM, please critique the following potential issues:*
+
+1. **The "Agency FB" Legibility**: Is condensed type too hard to read for the main navigation? Does it feel "Premium" or "Dated 2010s Sci-Fi"?
+2. **The "White Deep" Contrast**: Is the #F5F5FA background too close to the #FFFFFF cards? Is there enough depth separation without heavy drop shadows?
+3. **The "Piano" Gap**: We have a 2px gap between keys. Does this break the "Liquid" feel? Should they be flush?
+
+## 3. Socratic Prompt (Copy-Paste to NotebookLM)
+>
+> "Act as a Critical UX Researcher. precise and ruthless. Review the 'Visual State Dossier' above.
+>
+> 1. Evaluate the 'Piano Key' tab metaphor. Does the 'Seamless Merge' logic hold up in a glass UI?
+> 2. Critique the color palette (Peach/Lavender/Sky). Is it too 'Pastel/Childish' for a 'Pro PaaS'?
+> 3. Give me 3 specific CSS/Flutter changes to make this look more like [Framer.com](https://framer.com)."

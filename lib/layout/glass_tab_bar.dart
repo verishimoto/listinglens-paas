@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
 
@@ -6,13 +5,18 @@ class GlassTabBar extends StatefulWidget {
   final List<Map<String, dynamic>> tabs;
   final int activeIndex;
   final Function(int) onTabSelected;
+  final bool isVertical;
 
   const GlassTabBar({
     super.key,
     required this.tabs,
     required this.activeIndex,
     required this.onTabSelected,
+    this.isVertical = false,
+    this.showIndex = true,
   });
+
+  final bool showIndex;
 
   @override
   State<GlassTabBar> createState() => _GlassTabBarState();
@@ -24,31 +28,35 @@ class _GlassTabBarState extends State<GlassTabBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
+      width: widget.isVertical ? 260 : null,
+      height: widget.isVertical ? double.infinity : 60,
       decoration: const BoxDecoration(
         color: Colors.transparent,
       ),
       child: Stack(
-        alignment: Alignment.bottomCenter,
+        alignment:
+            widget.isVertical ? Alignment.centerRight : Alignment.bottomCenter,
         children: [
-          // 1. THE RAIL (Panel Border Line)
-          // Placed at the bottom. Active tabs will sit ON TOP of this z-index to hide it.
+          // No Rail needed if we are fusing?
+          // Actually, keeping a faint rail helps define the "spine".
           Positioned(
-            left: 0,
-            right: 0,
+            right: widget.isVertical ? 0 : 0,
+            top: widget.isVertical ? 0 : null,
             bottom: 0,
+            left: widget.isVertical ? null : 0,
             child: Container(
-              height: 1,
-              color: const Color(0xFFE0E0E0),
+              width: widget.isVertical ? 1 : null,
+              height: widget.isVertical ? null : 1,
+              color: Colors.white.withOpacity(0.1), // Subtle rail
             ),
           ),
 
-          // 2. THE TABS (Piano Keys)
-          // We use a ListView to allow scrolling if needed, but centering is better for "Piano" feel.
-          // Let's stick to ListView for safety but centered.
           ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            scrollDirection:
+                widget.isVertical ? Axis.vertical : Axis.horizontal,
+            padding: widget.isVertical
+                ? const EdgeInsets.symmetric(vertical: 24)
+                : const EdgeInsets.symmetric(horizontal: 24),
             itemCount: widget.tabs.length,
             itemBuilder: (context, index) {
               final isActive = widget.activeIndex == index;
@@ -62,128 +70,129 @@ class _GlassTabBarState extends State<GlassTabBar> {
   }
 
   Widget _buildTab(int index, bool isActive, bool isHovering) {
-    // Detective's Iridescent Palette (Subtle & Premium)
-    final gradient = LinearGradient(
-      colors: const [
-        Color(0xFFFFDAB9), // Peach
-        Color(0xFFE6E6FA), // Lavender
-        Color(0xFF87CEEB), // Sky
-        Color(0xFFF0FFF0), // Mint
-      ],
-      stops: const [0.0, 0.3, 0.6, 1.0],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    );
+    // 1. FUSION LOGIC
+    // The Active Tab must be the EXACT same color as the Content Panel.
+    final fusionColor =
+        AppColors.structureColor.withOpacity(0.85); // Matches FusedGlassShell
+
+    final hasIcon = widget.tabs[index].containsKey('icon');
+    final IconData? icon =
+        hasIcon ? widget.tabs[index]['icon'] as IconData : null;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hoverIndex = index),
       onExit: (_) => setState(() => _hoverIndex = null),
-      cursor: SystemMouseCursors.click, // "Click" cursor requested
+      cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () => widget.onTabSelected(index),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           curve: Curves.easeOutCubic,
-          margin: const EdgeInsets.only(right: 2), // Tiny gap between "keys"
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          alignment: Alignment.center,
+
+          // FUSION GEOMETRY
+          margin: widget.isVertical
+              ? EdgeInsets.only(
+                  bottom: 8,
+                  right:
+                      isActive ? -1.5 : 0, // Vertical: Push RIGHT over border
+                )
+              : EdgeInsets.only(
+                  right: 8,
+                  bottom:
+                      isActive ? -1.5 : 0, // Horizontal: Push DOWN over border
+                ),
+
+          height: widget.isVertical ? 56 : null,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          alignment:
+              widget.isVertical ? Alignment.centerLeft : Alignment.center,
           decoration: BoxDecoration(
-            // Active: Opaque to cover the rail. Hover: Glassy. Inactive: Transparent.
             color: isActive
-                ? const Color(0xFFF5F5FA) // Matches Panel Background
+                ? fusionColor // SEAMLESS MATCH
                 : isHovering
-                    ? Colors.white.withOpacity(0.5)
+                    ? Colors.white.withOpacity(0.05)
                     : Colors.transparent,
 
-            // Border Logic:
-            // Active: Top/Left/Right defined, Bottom REMOVED (Seamless).
             border: isActive
                 ? Border(
-                    top: BorderSide(color: Colors.black.withOpacity(0.05)),
-                    left: BorderSide(color: Colors.black.withOpacity(0.05)),
-                    right: BorderSide(color: Colors.black.withOpacity(0.05)),
-                    bottom: BorderSide.none, // HIDDEN -> Merges with Panel
+                    top: BorderSide(color: Colors.white.withOpacity(0.1)),
+                    left: BorderSide(color: Colors.white.withOpacity(0.1)),
+                    right: widget.isVertical
+                        ? BorderSide.none // Vertical: No Right Border
+                        : BorderSide(color: Colors.white.withOpacity(0.1)),
+                    bottom: widget.isVertical
+                        ? BorderSide(color: Colors.white.withOpacity(0.1))
+                        : BorderSide.none, // Horizontal: No Bottom Border
                   )
-                : Border(
-                    // Inactive: No border, or maybe a subtle bottom one to match rail?
-                    // Transparent lets the Rail show through.
-                    bottom: BorderSide(color: Colors.transparent, width: 1),
-                  ),
+                : Border.all(color: Colors.transparent),
 
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+            borderRadius: widget.isVertical
+                ? const BorderRadius.horizontal(
+                    left: Radius.circular(12)) // Smoother radius for side tabs
+                : const BorderRadius.vertical(
+                    top: Radius.circular(12)), // Rounded top for piano keys
 
-            // Hover Glow (Framer Style)
-            boxShadow: isHovering && !isActive
+            // Solar Glow
+            boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: const Color(0xFF87CEEB).withOpacity(0.1),
-                      blurRadius: 12,
-                      offset: const Offset(0, -4),
-                    )
+                      color: AppColors.mellowOrange.withOpacity(0.2),
+                      blurRadius: 20,
+                      offset: widget.isVertical
+                          ? const Offset(-5, 0) // Glows LEFT (Solar)
+                          : const Offset(0, -5), // Glows UP
+                    ),
                   ]
                 : [],
           ),
-          child: Stack(
-            clipBehavior: Clip.none,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // Active Indicator (Iridescent Line)
-              if (isActive)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    height: 3,
-                    decoration: BoxDecoration(
-                      gradient: gradient,
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(8)),
-                    ),
-                  ),
+              // Indicator Dot (MellowPen Style)
+              if (isActive && widget.showIndex)
+                Container(
+                  width: 6,
+                  height: 6,
+                  margin: const EdgeInsets.only(right: 12),
+                  decoration: const BoxDecoration(
+                      color: AppColors.mellowCyan, // Cyan Dot
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(color: AppColors.mellowCyan, blurRadius: 8)
+                      ]),
                 ),
 
-              // Tab Label
-              Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Index Number
-                    Text(
-                      '0${index + 1}',
-                      style: TextStyle(
-                        fontFamily: 'Agency FB',
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: isActive
-                            ? AppColors.signalColor
-                            : AppColors.textMute.withOpacity(0.5),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    // Title
-                    Text(
-                      widget.tabs[index]['title'].toString().toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight:
-                            isActive ? FontWeight.w900 : FontWeight.w500,
-                        letterSpacing: 1.5,
-                        color: isActive
-                            ? AppColors.textMain
-                            : isHovering
-                                ? AppColors.textMain.withOpacity(0.8)
-                                : AppColors.textMute,
-                        // Active Glow
-                        shadows: isActive
-                            ? [
-                                Shadow(
-                                    color: const Color(0xFFE0E7FF),
-                                    blurRadius: 10),
-                              ]
-                            : [],
-                      ),
-                    ),
-                  ],
+              if (widget.showIndex)
+                Text(
+                  '0${index + 1}',
+                  style: TextStyle(
+                    fontFamily: 'SF Pro Display',
+                    fontFamilyFallback: const ['Inter'],
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
+                    color: isActive ? AppColors.mellowCyan : AppColors.textMute,
+                  ),
+                ),
+              if (widget.showIndex) const SizedBox(width: 12),
+
+              if (hasIcon) ...[
+                Icon(
+                  icon,
+                  size: 16,
+                  color: isActive ? AppColors.textMain : AppColors.textMute,
+                ),
+                const SizedBox(width: 8),
+              ],
+
+              Text(
+                widget.tabs[index]['title'].toString().toUpperCase(),
+                style: TextStyle(
+                  fontFamily: 'SF Pro Display',
+                  fontFamilyFallback: const ['Inter'],
+                  fontSize: 12,
+                  fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                  letterSpacing: 1,
+                  color: isActive ? AppColors.textMain : AppColors.textMute,
                 ),
               ),
             ],

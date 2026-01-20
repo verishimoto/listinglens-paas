@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graphview/GraphView.dart';
 import '../../components/liquid_glass.dart';
-import '../../theme/app_theme.dart';
 
 class WorkflowScreen extends StatefulWidget {
   const WorkflowScreen({super.key});

@@ -112,7 +112,7 @@ class _MeniscusPainter extends CustomPainter {
     path.moveTo(size.width, 0); // Top Right (inside content)
     path.lineTo(size.width, 24); // Start of curve
     path.arcToPoint(
-      Offset(0, 24),
+      const Offset(0, 24),
       radius: const Radius.circular(24),
       clockwise: false,
     );
@@ -173,7 +173,7 @@ class _MeniscusPainter extends CustomPainter {
     topCurve.moveTo(0, 0);
     topCurve.lineTo(size.width, 0); // Top Right
     topCurve.lineTo(size.width, 24); // Bottom Right of top block
-    topCurve.arcToPoint(Offset(0, 0), radius: const Radius.circular(24), clockwise: false);
+    topCurve.arcToPoint(const Offset(0, 0), radius: const Radius.circular(24), clockwise: false);
     topCurve.close();
     // This draws a concave shape? No.
     
@@ -184,7 +184,7 @@ class _MeniscusPainter extends CustomPainter {
         ..moveTo(0, 24)
         ..lineTo(size.width, 24)
         ..lineTo(size.width, 0) // Go up to "content" top
-        ..arcToPoint(Offset(0, 24), radius: const Radius.circular(24), clockwise: false)
+        ..arcToPoint(const Offset(0, 24), radius: const Radius.circular(24), clockwise: false)
         ..close(),
       paint,
     );
@@ -222,7 +222,7 @@ class _MeniscusPainter extends CustomPainter {
     path1.moveTo(0, 0); 
     path1.lineTo(size.width, 0);
     path1.lineTo(size.width, 24);
-    path1.arcToPoint(Offset(0, 0), radius: const Radius.circular(24), clockwise: false);
+    path1.arcToPoint(const Offset(0, 0), radius: const Radius.circular(24), clockwise: false);
     path1.close();
     // Invert y for top (wait, my y coords above assumed local block for top glue)
     
@@ -244,7 +244,7 @@ class _MeniscusPainter extends CustomPainter {
         // Correct Shape:
         // Start Top Left (0,0), go Top Right (w,0), go Down (w, 24)
         // Arc back to Top Left.
-        ..arcToPoint(Offset(0, 0), radius: const Radius.circular(24), clockwise: false)
+        ..arcToPoint(const Offset(0, 0), radius: const Radius.circular(24), clockwise: false)
         ..close(),
       paint,
     );

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
-import 'package:listing_lens_paas/theme/fluid_background.dart';
-import 'package:listing_lens_paas/layout/meniscus_tab.dart';
+import 'package:listing_lens_paas/components/repulsion_background.dart';
+import 'package:listing_lens_paas/layout/fused_glass_shell.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
 import 'package:listing_lens_paas/features/hub/hub_view.dart';
 import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
-import 'package:listing_lens_paas/features/workflow_viz/workflow_screen.dart';
 
 class SolidFusionLayout extends StatefulWidget {
   const SolidFusionLayout({super.key});
@@ -16,68 +15,62 @@ class SolidFusionLayout extends StatefulWidget {
 }
 
 class _SolidFusionLayoutState extends State<SolidFusionLayout> {
-  String _activeView = 'lab'; // 'lab' or 'hub'
+  String _activeView = 'lab';
   int _activeSlide = 0;
 
-  // Mock Data for Slides
   final List<Map<String, dynamic>> _slides = [
     {
       "id": 1,
       "title": "Hero Cover",
       "role": "Primary Impact",
-      "check":
-          "Visual dominance anchor. Must capture interest in <1.2s via thumb-stop semiotics."
+      "check": "Visual dominance anchor <1.2s."
     },
     {
       "id": 2,
       "title": "Flat Proof",
-      "role": "Quality Assurance",
-      "check":
-          "Verification of alpha channel integrity and 300 DPI edge crispness."
+      "role": "QA",
+      "check": "Alpha integrity & 300 DPI."
     },
     {
       "id": 3,
       "title": "Video Retention",
-      "role": "Motion SEO",
-      "check":
-          "Loop physics and engagement cues optimized for social discovery."
+      "role": "SEO",
+      "check": "Loop physics optimization."
     },
     {
       "id": 4,
       "title": "Technical Specs",
-      "role": "Data Integrity",
-      "check":
-          "Explicit 4500px square, 300 DPI compliance check for professional POD."
+      "role": "Data",
+      "check": "4500px compliance."
     },
     {
       "id": 5,
-      "title": "Lifestyle Context",
-      "role": "Social Proof",
-      "check":
-          "Fabric deformation and scale realism. Match environmental lighting."
+      "title": "Lifestyle Fit",
+      "role": "Proof",
+      "check": "Fabric deformation realism."
     },
     {
       "id": 6,
-      "title": "Packaging Structure",
-      "role": "UX Delivery",
-      "check": "Standard vs Commercial folder topology transparency."
+      "title": "Packaging",
+      "role": "UX",
+      "check": "Topology transparency."
     },
     {
       "id": 7,
-      "title": "Licensing Tiers",
-      "role": "Revenue Logic",
-      "check": "Clear commercial upsell value proposition."
+      "title": "Licensing",
+      "role": "Revenue",
+      "check": "Commercial upsell logic."
     },
     {
       "id": 8,
-      "title": "Quick Start Guide",
+      "title": "Quick Start",
       "role": "Retention",
-      "check": "Frictionless onboarding guide. Digital download disclaimer."
+      "check": "Onboarding friction."
     },
   ];
 
-  List<bool> _slideStatus = List.filled(8, false);
-  String? _mountedImage; // Null = Show Upload UI
+  final List<bool> _slideStatus = List.filled(8, false);
+  String? _mountedImage;
 
   void _toggleView(String view) {
     setState(() => _activeView = view);
@@ -98,66 +91,47 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Let FluidBackground show
+      backgroundColor: AppColors.deepSpace, // DARK MODE BASE
       body: Stack(
         children: [
-          // 1. FLUID MOTION BACKGROUND (Full Screen)
-          const Positioned.fill(child: FluidBackground()),
+          // 1. PHYSICS (Reverse Repulsion)
+          const Positioned.fill(child: RepulsionBackground()),
 
-          // 2. MAIN LAYOUT GRID (Centered & Constrained)
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1400),
-              child: Column(
-                children: [
-                  // HEADER (Translucent)
-                  _buildHeader(),
-
-                  // LAB TABS (Visible only in Lab View)
-                  if (_activeView == 'lab')
-                    GlassTabBar(
+          // 2. SHELL
+          Column(
+            children: [
+              _buildHeader(),
+              Expanded(
+                child: Center(
+                  child: FusedGlassShell(
+                    sidebarWidth: 260,
+                    sidebar: GlassTabBar(
                       tabs: _slides,
                       activeIndex: _activeSlide,
-                      onTabSelected: (index) =>
-                          setState(() => _activeSlide = index),
+                      onTabSelected: (index) {
+                        setState(() {
+                          _activeSlide = index;
+                          if (_activeView != 'lab') _toggleView('lab');
+                        });
+                      },
+                      isVertical: true,
                     ),
-
-                  // WORKSPACE
-                  Expanded(
-                    child: Row(
-                      children: [
-                        // MAIN CONTENT CANVAS
-                        Expanded(
-                          child: Container(
-                            margin: const EdgeInsets.only(
-                                top: 0), // Merge with tabs
-                            decoration: BoxDecoration(
-                              color: _activeView == 'lab'
-                                  ? Colors.transparent
-                                  : AppColors.structureColor,
+                    content: _activeView == 'lab'
+                        ? Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: LabView(
+                              slide: _slides[_activeSlide],
+                              isPassed: _slideStatus[_activeSlide],
+                              mountedImage: _mountedImage,
+                              onMount: _mountImage,
+                              onAudit: () => _onSlideComplete(_activeSlide),
                             ),
-                            child: _activeView == 'lab'
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 24), // Space inside the panel
-                                    child: LabView(
-                                      slide: _slides[_activeSlide],
-                                      isPassed: _slideStatus[_activeSlide],
-                                      mountedImage: _mountedImage,
-                                      onMount: _mountImage,
-                                      onAudit: () =>
-                                          _onSlideComplete(_activeSlide),
-                                    ),
-                                  )
-                                : _buildHubView(),
-                          ),
-                        ),
-                      ],
-                    ),
+                          )
+                        : _buildHubView(),
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -165,10 +139,17 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
   }
 
   Widget _buildHeader() {
+    final headerTabs = [
+      {'title': 'The Lab', 'id': 'lab', 'icon': Icons.science},
+      {'title': 'Hub', 'id': 'hub', 'icon': Icons.grid_view},
+    ];
+
+    final activeIndex = headerTabs.indexWhere((t) => t['id'] == _activeView);
+
     return LiquidGlass(
         borderRadius: 0,
         blurSigma: 20,
-        frostOpacity: 0.02,
+        frostOpacity: 0.05,
         hasBorder: false,
         child: Container(
           height: 80,
@@ -183,12 +164,10 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
               Container(
                 width: 32,
                 height: 32,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     border: Border(
-                  left:
-                      const BorderSide(color: AppColors.signalColor, width: 4),
-                  bottom:
-                      const BorderSide(color: AppColors.signalColor, width: 4),
+                  left: BorderSide(color: AppColors.mellowOrange, width: 4),
+                  bottom: BorderSide(color: AppColors.mellowCyan, width: 4),
                 )),
               ),
               const SizedBox(width: 16),
@@ -198,26 +177,35 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
-                      color: AppColors.signalColor)),
+                      color: Colors.white)),
 
-              const SizedBox(width: 80),
+              const Spacer(flex: 1),
 
-              // TOP NAVIGATION (The Detective "View Toggles")
-              _buildNavBarItem('THE LAB', 'lab', Icons.science),
-              const SizedBox(width: 24),
-              _buildNavBarItem('HUB', 'hub', Icons.grid_view),
+              // NAV (Centered effectively)
+              SizedBox(
+                height: 60,
+                child: GlassTabBar(
+                  tabs: headerTabs,
+                  activeIndex: activeIndex,
+                  onTabSelected: (index) {
+                    _toggleView(headerTabs[index]['id'] as String);
+                  },
+                  isVertical: false,
+                  showIndex: false,
+                ),
+              ),
 
-              const Spacer(),
+              const Spacer(flex: 2),
 
-              // UTILS
+              // PRO BADGE
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1CFF00).withOpacity(0.1),
+                  color: AppColors.appleGreen.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      color: const Color(0xFF1CFF00).withOpacity(0.3)),
+                  border:
+                      Border.all(color: AppColors.appleGreen.withOpacity(0.3)),
                 ),
                 child: Row(
                   children: [
@@ -225,13 +213,14 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
                         width: 6,
                         height: 6,
                         decoration: const BoxDecoration(
-                            color: Color(0xFF1CFF00), shape: BoxShape.circle)),
+                            color: AppColors.appleGreen,
+                            shape: BoxShape.circle)),
                     const SizedBox(width: 8),
                     const Text('PRO SYSTEM',
                         style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w900,
-                            color: Color(0xFF1CFF00))),
+                            color: AppColors.appleGreen)),
                   ],
                 ),
               )
@@ -255,15 +244,6 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
             borderRadius: BorderRadius.circular(20),
             border: isActive
                 ? Border.all(color: Colors.white.withOpacity(0.2))
-                : null,
-            boxShadow: isActive
-                ? [
-                    BoxShadow(
-                      color: Colors.white.withOpacity(0.1),
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    )
-                  ]
                 : null,
           ),
           child: Row(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:listing_lens_paas/core/services/auth_service.dart';
 import 'package:listing_lens_paas/features/hub/hub_layout.dart';
-import 'package:listing_lens_paas/features/hub/auth_gate.dart';
 import 'package:listing_lens_paas/features/lab/audit_report_page.dart';
 
 class AuthWrapper extends ConsumerWidget {
