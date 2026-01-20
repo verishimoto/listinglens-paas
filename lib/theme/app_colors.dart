@@ -36,8 +36,8 @@ abstract class AppColors {
   // Positive/Success (Eco) -> Neon Green
   static const Color appleGreen = leverage4;
 
-  // Text -> White (Dark Mode Default)
-  static const Color textMain = leverage15;
+  // Text -> Crystal Mode (Dark on Light)
+  static const Color textMain = leverage8; // Swapped to Dark for Crystal
   static const Color textMute = Color(0xFF86868B);
 
   static const Color glassBorder = Color(0xFF2C2C2E);
@@ -47,4 +47,9 @@ abstract class AppColors {
   static const Color voidColor = deepSpace;
   static const Color textDark = textMute;
   static const Color borderColor = glassBorder;
+
+  // CRYSTAL THEME (Light Iridescent)
+  static const Color crystalBackground = Color(0xFFF5F5F7); // Soft Apple White
+  static const Color crystalSurface = Color(0xFFFFFFFF);
+  static const Color crystalHolo = Color(0xFFF2F2FF); // Pale Indigo Tint
 }

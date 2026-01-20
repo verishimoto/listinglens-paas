@@ -71,14 +71,16 @@ class _LiquidGlassState extends State<LiquidGlass>
                     end: Alignment.bottomRight,
                     colors: widget.isIridescent
                         ? [
-                            Colors.white.withOpacity(0.4),
+                            Colors.white.withOpacity(0.4 *
+                                (0.8 + 0.2 * _controller.value)), // Breathing
                             Colors.blueAccent.withOpacity(0.05),
                             Colors.purpleAccent.withOpacity(0.05),
                             Colors.white.withOpacity(0.1),
                           ]
                         : [
-                            Colors.white
-                                .withOpacity(widget.frostOpacity + 0.05),
+                            Colors.white.withOpacity(
+                                (widget.frostOpacity + 0.05) *
+                                    (0.9 + 0.1 * _controller.value)),
                             Colors.white.withOpacity(widget.frostOpacity),
                             Colors.black.withOpacity(0.02),
                           ],
@@ -98,6 +100,11 @@ class _LiquidGlassState extends State<LiquidGlass>
                                 .withOpacity(0.1 + (0.05 * _controller.value)),
                             blurRadius: 10 + (5 * _controller.value),
                             spreadRadius: -2,
+                          ),
+                          BoxShadow(
+                            color: Colors.purple.withOpacity(0.1),
+                            blurRadius: 20,
+                            spreadRadius: -5,
                           ),
                         ]
                       : null,

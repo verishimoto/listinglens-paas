@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
-import 'package:listing_lens_paas/components/repulsion_background.dart';
+// import 'package:listing_lens_paas/components/repulsion_background.dart';
 import 'package:listing_lens_paas/layout/fused_glass_shell.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
 import 'package:listing_lens_paas/features/hub/hub_view.dart';
@@ -91,11 +91,25 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.deepSpace, // DARK MODE BASE
+      backgroundColor: AppColors.crystalBackground, // CRYSTAL THEME
       body: Stack(
         children: [
-          // 1. PHYSICS (Reverse Repulsion)
-          const Positioned.fill(child: RepulsionBackground()),
+          // 1. PHYSICS (Subtle Light Mode Mesh - Placeholder for now)
+          // const Positioned.fill(child: RepulsionBackground()),
+          Positioned.fill(
+              child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFFFFF),
+                  Color(0xFFF4F4FF), // Very subtle purple tint
+                  Color(0xFFF0F8FF), // Alice Blue
+                ],
+              ),
+            ),
+          )),
 
           // 2. SHELL
           Column(
@@ -156,7 +170,7 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
             border: Border(
-                bottom: BorderSide(color: Colors.white.withOpacity(0.05))),
+                bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
           ),
           child: Row(
             children: [
@@ -177,7 +191,7 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
-                      color: Colors.white)),
+                      color: AppColors.textMain)),
 
               const Spacer(flex: 1),
 
@@ -240,23 +254,24 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             color:
-                isActive ? Colors.white.withOpacity(0.1) : Colors.transparent,
+                isActive ? Colors.black.withOpacity(0.05) : Colors.transparent,
             borderRadius: BorderRadius.circular(20),
             border: isActive
-                ? Border.all(color: Colors.white.withOpacity(0.2))
+                ? Border.all(color: Colors.black.withOpacity(0.05))
                 : null,
           ),
           child: Row(
             children: [
               Icon(icon,
-                  size: 16, color: isActive ? Colors.white : Colors.white54),
+                  size: 16,
+                  color: isActive ? AppColors.textMain : AppColors.textMute),
               const SizedBox(width: 8),
               Text(label,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1,
-                    color: isActive ? Colors.white : Colors.white54,
+                    color: isActive ? AppColors.textMain : AppColors.textMute,
                   )),
             ],
           ),

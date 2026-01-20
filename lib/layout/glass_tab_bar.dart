@@ -47,7 +47,7 @@ class _GlassTabBarState extends State<GlassTabBar> {
             child: Container(
               width: widget.isVertical ? 1 : null,
               height: widget.isVertical ? null : 1,
-              color: Colors.white.withOpacity(0.1), // Subtle rail
+              color: Colors.black.withOpacity(0.05), // Subtle rail
             ),
           ),
 
@@ -72,8 +72,8 @@ class _GlassTabBarState extends State<GlassTabBar> {
   Widget _buildTab(int index, bool isActive, bool isHovering) {
     // 1. FUSION LOGIC
     // The Active Tab must be the EXACT same color as the Content Panel.
-    final fusionColor =
-        AppColors.structureColor.withOpacity(0.85); // Matches FusedGlassShell
+    final fusionColor = AppColors.crystalSurface
+        .withOpacity(0.65); // Matches FusedGlassShell (Crystal)
 
     final hasIcon = widget.tabs[index].containsKey('icon');
     final IconData? icon =
@@ -110,18 +110,18 @@ class _GlassTabBarState extends State<GlassTabBar> {
             color: isActive
                 ? fusionColor // SEAMLESS MATCH
                 : isHovering
-                    ? Colors.white.withOpacity(0.05)
+                    ? Colors.black.withOpacity(0.05)
                     : Colors.transparent,
 
             border: isActive
                 ? Border(
-                    top: BorderSide(color: Colors.white.withOpacity(0.1)),
-                    left: BorderSide(color: Colors.white.withOpacity(0.1)),
+                    top: BorderSide(color: Colors.black.withOpacity(0.05)),
+                    left: BorderSide(color: Colors.black.withOpacity(0.05)),
                     right: widget.isVertical
                         ? BorderSide.none // Vertical: No Right Border
-                        : BorderSide(color: Colors.white.withOpacity(0.1)),
+                        : BorderSide(color: Colors.black.withOpacity(0.05)),
                     bottom: widget.isVertical
-                        ? BorderSide(color: Colors.white.withOpacity(0.1))
+                        ? BorderSide(color: Colors.black.withOpacity(0.05))
                         : BorderSide.none, // Horizontal: No Bottom Border
                   )
                 : Border.all(color: Colors.transparent),
@@ -136,11 +136,18 @@ class _GlassTabBarState extends State<GlassTabBar> {
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: AppColors.mellowOrange.withOpacity(0.2),
+                      color: AppColors.mellowOrange.withOpacity(0.15),
                       blurRadius: 20,
                       offset: widget.isVertical
                           ? const Offset(-5, 0) // Glows LEFT (Solar)
                           : const Offset(0, -5), // Glows UP
+                    ),
+                    BoxShadow(
+                      color: AppColors.mellowCyan.withOpacity(0.1),
+                      blurRadius: 15,
+                      offset: widget.isVertical
+                          ? const Offset(-2, 5)
+                          : const Offset(5, -2),
                     ),
                   ]
                 : [],

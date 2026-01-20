@@ -40,23 +40,23 @@ class _FusedGlassShellState extends State<FusedGlassShell> {
                   left: widget.sidebarWidth - 1.5), // -1.5px overlap for fusion
               child: Container(
                 // SOLAR REFRACTION (Glow follows mouse opposite)
-                // We keep this separate from the Glass surface itself
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(24), // Increased to match Apple
+                    topRight: Radius.circular(24),
                     bottomRight: Radius.circular(24),
                     bottomLeft: Radius.circular(24),
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
+                      color:
+                          Colors.black.withOpacity(0.05), // Soft subtle depth
                       blurRadius: 40,
                       spreadRadius: -10,
                       offset: const Offset(0, 20),
                     ),
-                    // Iridescent Refraction
+                    // Iridescent Refraction (Crystal Mode)
                     BoxShadow(
-                      color: AppColors.mellowOrange.withOpacity(0.05),
+                      color: AppColors.mellowCyan.withOpacity(0.15),
                       blurRadius: 100,
                       offset: Offset(
                         (_mousePos.dx - MediaQuery.of(context).size.width / 2) *
@@ -65,14 +65,20 @@ class _FusedGlassShellState extends State<FusedGlassShell> {
                                 MediaQuery.of(context).size.height / 2) *
                             -0.05,
                       ),
+                    ),
+                    BoxShadow(
+                      color: AppColors.mellowOrange.withOpacity(0.1),
+                      blurRadius: 80,
+                      spreadRadius: -20,
+                      offset: const Offset(-40, -40),
                     )
                   ],
                 ),
                 child: LiquidGlass(
                   borderRadius: 24,
-                  blurSigma: 40, // Deeper Apple blur
-                  frostOpacity: 0.1, // Solid enough for text
-                  isIridescent: false, // Keep content clean
+                  blurSigma: 40,
+                  frostOpacity: 0.25, // White glass for light mode
+                  isIridescent: true, // Enable iridescent shimmer
                   child: widget.content, // THE ACTUAL PAGE CONTENT
                 ),
               ),
