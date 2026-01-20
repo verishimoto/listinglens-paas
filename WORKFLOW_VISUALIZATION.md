@@ -51,7 +51,7 @@ Use these commands in the chat to activate specific agent routines:
 
 | Command | Agent | Function |
 | :--- | :--- | :--- |
-| **/notebooklm_injector** | **The Watcher** | Runs the `clean -> commit -> inject` pipeline. Ensures the codebase is stable and prepares context for NotebookLM. |
+| **/notebooklm_injector** | **The Watcher** | Runs the `clean -> commit -> save project > save > inject` pipeline. Ensures the codebase is stable and prepares context for NotebookLM. |
 | **/socratic_iteration** | **The Detective** | Synchronizes the "Detective" (NotebookLM) with the "Developer" (Antigravity). Use this when strategic adjustments are needed. |
 
 ## Role Descriptions
