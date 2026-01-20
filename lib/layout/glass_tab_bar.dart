@@ -92,62 +92,58 @@ class _GlassTabBarState extends State<GlassTabBar> {
           // FUSION GEOMETRY
           margin: widget.isVertical
               ? EdgeInsets.only(
-                  bottom: 8,
-                  right:
-                      isActive ? -1.5 : 0, // Vertical: Push RIGHT over border
+                  bottom: 12, // Increased spacing between tabs
+                  right: isActive
+                      ? -32
+                      : 0, // Deep Overlap: Pushes 32px INTO the content panel
                 )
               : EdgeInsets.only(
                   right: 8,
-                  bottom:
-                      isActive ? -1.5 : 0, // Horizontal: Push DOWN over border
+                  bottom: isActive ? -1.5 : 0,
                 ),
 
-          height: widget.isVertical ? 56 : null,
+          height: widget.isVertical ? 64 : null, // Taller tabs
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           alignment:
               widget.isVertical ? Alignment.centerLeft : Alignment.center,
           decoration: BoxDecoration(
             color: isActive
-                ? fusionColor // SEAMLESS MATCH
+                ? fusionColor // Shared Glass Color
                 : isHovering
                     ? Colors.black.withOpacity(0.05)
                     : Colors.transparent,
 
+            // CONDITIONAL BORDER:
+            // If Active, we REMOVE the right border so it flows into the panel.
             border: isActive
                 ? Border(
-                    top: BorderSide(color: Colors.black.withOpacity(0.05)),
-                    left: BorderSide(color: Colors.black.withOpacity(0.05)),
+                    top: BorderSide(
+                        color: Colors.white.withOpacity(0.5), width: 1),
+                    left: BorderSide(
+                        color: Colors.white.withOpacity(0.5), width: 1),
                     right: widget.isVertical
-                        ? BorderSide.none // Vertical: No Right Border
+                        ? BorderSide.none // OPEN RIGHT SIDE (Fusion Gate)
                         : BorderSide(color: Colors.black.withOpacity(0.05)),
                     bottom: widget.isVertical
-                        ? BorderSide(color: Colors.black.withOpacity(0.05))
-                        : BorderSide.none, // Horizontal: No Bottom Border
+                        ? BorderSide(
+                            color: Colors.white.withOpacity(0.5), width: 1)
+                        : BorderSide.none,
                   )
                 : Border.all(color: Colors.transparent),
 
             borderRadius: widget.isVertical
                 ? const BorderRadius.horizontal(
-                    left: Radius.circular(12)) // Smoother radius for side tabs
-                : const BorderRadius.vertical(
-                    top: Radius.circular(12)), // Rounded top for piano keys
+                    left: Radius.circular(16)) // Smooth left
+                : const BorderRadius.vertical(top: Radius.circular(12)),
 
-            // Solar Glow
+            // FUSION GLOW:
+            // This shadow must match the content panel's refraction to look like one object.
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                      color: AppColors.mellowOrange.withOpacity(0.15),
-                      blurRadius: 20,
-                      offset: widget.isVertical
-                          ? const Offset(-5, 0) // Glows LEFT (Solar)
-                          : const Offset(0, -5), // Glows UP
-                    ),
-                    BoxShadow(
-                      color: AppColors.mellowCyan.withOpacity(0.1),
-                      blurRadius: 15,
-                      offset: widget.isVertical
-                          ? const Offset(-2, 5)
-                          : const Offset(5, -2),
+                      color: AppColors.mellowCyan.withOpacity(0.2),
+                      blurRadius: 30,
+                      offset: const Offset(-10, 0), // Light source from right
                     ),
                   ]
                 : [],

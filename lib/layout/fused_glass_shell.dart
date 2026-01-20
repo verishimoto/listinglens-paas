@@ -37,7 +37,8 @@ class _FusedGlassShellState extends State<FusedGlassShell> {
             // It sits to the right, but its "Glass" extends fully effectively.
             Padding(
               padding: EdgeInsets.only(
-                  left: widget.sidebarWidth - 1.5), // -1.5px overlap for fusion
+                  left: widget.sidebarWidth -
+                      1), // Just barely touching, Tab pushes OVER
               child: Container(
                 // SOLAR REFRACTION (Glow follows mouse opposite)
                 decoration: BoxDecoration(
@@ -45,6 +46,8 @@ class _FusedGlassShellState extends State<FusedGlassShell> {
                     topRight: Radius.circular(24),
                     bottomRight: Radius.circular(24),
                     bottomLeft: Radius.circular(24),
+                    // TOP LEFT: We flatten this slightly so the tab merges natively
+                    topLeft: Radius.circular(0),
                   ),
                   boxShadow: [
                     BoxShadow(

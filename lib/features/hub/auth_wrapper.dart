@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:listing_lens_paas/core/services/auth_service.dart';
-import 'package:listing_lens_paas/features/hub/hub_layout.dart';
-import 'package:listing_lens_paas/features/lab/audit_report_page.dart';
+import 'package:listing_lens_paas/features/hub/hub_view.dart';
+import 'package:listing_lens_paas/features/hub/auth_gate.dart';
 
 class AuthWrapper extends ConsumerWidget {
   const AuthWrapper({super.key});
@@ -14,12 +14,14 @@ class AuthWrapper extends ConsumerWidget {
     return authState.when(
       data: (user) {
         if (user != null) {
-          return const HubLayout();
+          return const HubView();
         }
-        return const AuditReportPage(); // Default Public Page
+        return const AuthGate();
       },
-      loading: () => const Scaffold(backgroundColor: Colors.black, body: Center(child: CircularProgressIndicator())),
-      error: (e, trace) => const AuditReportPage(),
+      loading: () => const Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(child: CircularProgressIndicator())),
+      error: (e, trace) => Center(child: Text('Error: $e')),
     );
   }
 }

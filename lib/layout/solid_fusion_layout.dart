@@ -3,7 +3,7 @@ import 'package:listing_lens_paas/theme/app_colors.dart';
 // import 'package:listing_lens_paas/components/repulsion_background.dart';
 import 'package:listing_lens_paas/layout/fused_glass_shell.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
-import 'package:listing_lens_paas/features/hub/hub_view.dart';
+import 'package:listing_lens_paas/features/hub/auth_wrapper.dart';
 import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
 
@@ -281,6 +281,6 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
   }
 
   Widget _buildHubView() {
-    return const HubView();
+    return const AuthWrapper();
   }
 }
