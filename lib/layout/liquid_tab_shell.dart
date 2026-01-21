@@ -40,17 +40,30 @@ class _LiquidTabShellState extends State<LiquidTabShell> {
         children: [
           // 1. THE MENISCUS SHAPE (Custom Paint)
           // This draws the unified glass body + tab
-          Positioned.fill(
-            child: CustomPaint(
-              painter: _MeniscusGlassPainter(
-                tabTop: activeTabTop,
-                tabHeight: tabHeight,
-                tabWidth: tabWidth,
-                curveRadius: connectionCurveRadius,
-                mousePos: _mousePos,
+            Positioned.fill(
+              child: ClipRRect(
+                // Clip the blur to the custom shape (rough approximation or full rect if acceptable)
+                // For exact path clipping, we'd need a BackdropFilter inside a ClipPath,
+                // but usually Rect clip is fine for full-screen overlapping layers or specific regions.
+                // However, since Meniscus is a complex shape, applying blur to the whole area might look boxy.
+                // A better approach for "Glassmorphism" is to use BackdropFilter within a Stack layer that effectively covers the glass area.
+                // Given the painter fills the whole screen (except the gap), we can blur the whole screen background or use a ClipPath.
+                // Let's try blending it with the painter.
+                // Actually, the simplest reliable way in Flutter for this "Tab Shell" which covers most of the right side:
+                child: BackdropFilter(
+                  filter: ui.ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                  child: CustomPaint(
+                    painter: _MeniscusGlassPainter(
+                      tabTop: activeTabTop,
+                      tabHeight: tabHeight,
+                      tabWidth: tabWidth,
+                      curveRadius: connectionCurveRadius,
+                      mousePos: _mousePos,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
 
           // 2. THE CONTENT (Clipped or Padded)
           Padding(

@@ -166,29 +166,34 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
           const Positioned.fill(child: AntigravityBackground()),
 
           // 2. SHELL
-          Column(
-            children: [
-              _buildHeader(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 32, right: 32, top: 12), // Spacing for the shell
-                  child: LiquidTabShell(
-                    tabs: _slides,
-                    activeIndex: _activeSlide,
-                    onTabSelected: (index) {
-                      setState(() {
-                        _activeSlide = index;
-                        if (_activeView != 'lab') _toggleView('lab');
-                      });
-                    },
-                    content: _activeView == 'lab'
-                        ? _buildLabView()
-                        : _buildHubView(),
+          Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1400),
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 32, right: 32, top: 12), // Spacing for the shell
+                      child: LiquidTabShell(
+                        tabs: _slides,
+                        activeIndex: _activeSlide,
+                        onTabSelected: (index) {
+                          setState(() {
+                            _activeSlide = index;
+                            if (_activeView != 'lab') _toggleView('lab');
+                          });
+                        },
+                        content: _activeView == 'lab'
+                            ? _buildLabView()
+                            : _buildHubView(),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ],
       ),
