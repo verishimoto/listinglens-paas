@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
+import 'dart:ui';
 
 class LabView extends StatelessWidget {
   final Map<String, dynamic> slide;
@@ -221,33 +222,93 @@ class LabView extends StatelessWidget {
               Positioned.fill(
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          AppColors.signalColor.withOpacity(0.2)
-                        ], // Green wash
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      )),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    borderRadius: BorderRadius.circular(24),
+                    color: Colors.black.withOpacity(0.8), // Darken background
+                  ),
+                  child: Stack(
                     children: [
-                      const Icon(Icons.check_circle,
-                          size: 80, color: AppColors.signalColor),
-                      const SizedBox(height: 16),
-                      Text('HOLOGRAPHIC VERIFICATION COMPLETE',
-                          style: TextStyle(
-                              fontFamily: 'Agency FB',
-                              color: AppColors.signalColor.withOpacity(0.8),
-                              letterSpacing: 4,
-                              fontWeight: FontWeight.bold)),
+                      // BLURRED CONTENT (The "Why")
+                      // We simulate a detailed report that is obfuscated
+                      Positioned.fill(
+                        child: Padding(
+                          padding: const EdgeInsets.all(32),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildFakeReportLine(width: 200),
+                              const SizedBox(height: 12),
+                              _buildFakeReportLine(width: 400),
+                              const SizedBox(height: 12),
+                              _buildFakeReportLine(width: 350),
+                              const SizedBox(height: 12),
+                              _buildFakeReportLine(width: 150),
+                              const SizedBox(height: 32),
+                              _buildFakeReportLine(width: 300),
+                              const SizedBox(height: 12),
+                              _buildFakeReportLine(width: 250),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // THE FILTER (Glass Blur)
+                      Positioned.fill(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: Container(color: Colors.transparent),
+                        ),
+                      ),
+
+                      // THE HOOK (Clear Overlay)
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.lock_outline,
+                                size: 60, color: AppColors.mellowOrange),
+                            const SizedBox(height: 16),
+                            const Text('CRITICAL FAILURE DETECTED',
+                                style: TextStyle(
+                                    color: AppColors.mellowOrange,
+                                    letterSpacing: 2,
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 14)),
+                            const SizedBox(height: 8),
+                            Text('SCORE: 45/100',
+                                style: TextStyle(
+                                    fontFamily: 'Agency FB',
+                                    color: Colors.white.withOpacity(0.9),
+                                    letterSpacing: 4,
+                                    fontSize: 48,
+                                    fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 24),
+                            ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.mellowCyan,
+                                  foregroundColor: Colors.black,
+                                ),
+                                child: const Text("UNLOCK ANALYSIS"))
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
               )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFakeReportLine({required double width}) {
+    return Container(
+      width: width,
+      height: 12,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(6),
       ),
     );
   }

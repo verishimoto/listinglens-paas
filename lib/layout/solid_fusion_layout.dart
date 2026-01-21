@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
 import 'package:listing_lens_paas/components/antigravity_background.dart';
 import 'package:listing_lens_paas/layout/liquid_tab_shell.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
-import 'package:listing_lens_paas/features/hub/auth_wrapper.dart';
+import 'package:listing_lens_paas/features/hub/hub_view.dart';
 import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
+import 'package:listing_lens_paas/features/war_room/agent_graph_view.dart';
+import 'package:listing_lens_paas/core/services/firestore_service.dart';
+import 'package:listing_lens_paas/core/services/gemini_service.dart';
+import 'package:listing_lens_paas/core/models/audit_model.dart';
+import 'package:uuid/uuid.dart';
 
-class SolidFusionLayout extends StatefulWidget {
+class SolidFusionLayout extends ConsumerStatefulWidget {
   const SolidFusionLayout({super.key});
 
   @override
-  State<SolidFusionLayout> createState() => _SolidFusionLayoutState();
+  ConsumerState<SolidFusionLayout> createState() => _SolidFusionLayoutState();
 }
 
-class _SolidFusionLayoutState extends State<SolidFusionLayout> {
+class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
   String _activeView = 'lab';
   int _activeSlide = 0;
+  bool _isAuditing = false;
 
   final List<Map<String, dynamic>> _slides = [
     {
@@ -76,10 +83,60 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
     setState(() => _activeView = view);
   }
 
-  void _onSlideComplete(int index) {
-    setState(() {
-      _slideStatus[index] = true;
-    });
+  // The Governor: "Can we afford this?"
+  Future<void> _runAudit(int index) async {
+    if (_isAuditing) return;
+
+    setState(() => _isAuditing = true);
+    final firestore = ref.read(firestoreServiceProvider);
+
+    // 1. ELIGIBILITY CHECK (The Hub's Constraint)
+    final canRun = await firestore.canRunAudit();
+
+    if (!canRun) {
+      setState(() => _isAuditing = false);
+      // Show "Limit Reached" Dialog
+      showDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+                title: const Text("WEEKLY LIMIT REACHED"),
+                content: const Text(
+                    "The Mirror allows 1 audit per week. Upgrade to 'The Lens' for offloaded cognition."),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(c),
+                      child: const Text("OK"))
+                ],
+              ));
+      return;
+    }
+
+    // 2. EXECUTION (The Lab's Work)
+    try {
+      final gemini = ref.read(geminiServiceProvider);
+      // In real app, we'd send the image byte data
+      final diagnosis = await gemini
+          .sendPrompt("Analyze this listing for: ${_slides[index]['check']}");
+
+      // 3. STORAGE (Hub's Memory)
+      final audit = AuditModel(
+          id: const Uuid().v4(),
+          userId: "", // Service fills this
+          imageUrl: "assets/mock_image.png",
+          score: 45, // Mocked score from Gemini
+          diagnosis: diagnosis,
+          timestamp: DateTime.now());
+
+      await firestore.saveAudit(audit);
+
+      setState(() {
+        _slideStatus[index] = true;
+      });
+    } catch (e) {
+      print("Audit Failed: $e");
+    } finally {
+      if (mounted) setState(() => _isAuditing = false);
+    }
   }
 
   void _mountImage(String path) {
@@ -125,10 +182,12 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
                                 isPassed: _slideStatus[_activeSlide],
                                 mountedImage: _mountedImage,
                                 onMount: _mountImage,
-                                onAudit: () => _onSlideComplete(_activeSlide),
+                                onAudit: () => _runAudit(_activeSlide),
                               ),
                             )
-                          : _buildHubView(),
+                          : _activeView == 'hub'
+                              ? _buildHubView()
+                              : _buildWarRoom(),
                     ),
                   ),
                 ),
@@ -144,6 +203,7 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
     final headerTabs = [
       {'title': 'The Lab', 'id': 'lab', 'icon': Icons.science},
       {'title': 'Hub', 'id': 'hub', 'icon': Icons.grid_view},
+      {'title': 'War Room', 'id': 'war_room', 'icon': Icons.map},
     ];
 
     final activeIndex = headerTabs.indexWhere((t) => t['id'] == _activeView);
@@ -269,6 +329,10 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
   }
 
   Widget _buildHubView() {
-    return const AuthWrapper();
+    return const HubView();
+  }
+
+  Widget _buildWarRoom() {
+    return const AgentGraphView();
   }
 }

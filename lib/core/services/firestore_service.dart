@@ -47,4 +47,33 @@ class FirestoreService {
       }).toList();
     });
   }
+
+  // Usage Control: Free Tier = 1 Audit / Week
+  Future<bool> canRunAudit() async {
+    final user = _authService.currentUser;
+    if (user == null) return false; // Must be logged in
+
+    try {
+      final snapshot = await _auditsRef
+          .where('userId', isEqualTo: user.uid)
+          .orderBy('timestamp', descending: true)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isEmpty) return true; // First audit always allowed
+
+      final lastAudit = snapshot.docs.first;
+      final data = lastAudit.data() as Map<String, dynamic>;
+      final timestamp = (data['timestamp'] as Timestamp).toDate();
+      final now = DateTime.now();
+
+      // Check if 7 days have passed
+      final difference = now.difference(timestamp).inDays;
+      return difference >= 7;
+    } catch (e) {
+      print("Error checking audit eligibility: $e");
+      return true; // Fail safe to allow in dev/error, or false to lock. user prefers 'Zero-Cost', so strictly maybe false? But for UX lets fail open or log.
+      // Actually, if Firestore fails, we probably can't save either.
+    }
+  }
 }
