@@ -9,8 +9,8 @@ class AppTheme {
       primaryColor: AppColors.signalColor,
 
       // Font Family
-      fontFamily: 'SF Pro Display',
-      fontFamilyFallback: const ['SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+      fontFamily: 'San Francisco',
+      fontFamilyFallback: const ['SF Pro Text', 'Inter', 'Roboto', 'sans-serif'],
 
       textTheme: const TextTheme(
         // Headings
@@ -54,8 +54,8 @@ class AppTheme {
       primaryColor: AppColors.signalColor,
 
       // Font Family
-      fontFamily: 'SF Pro Display',
-      fontFamilyFallback: const ['SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+      fontFamily: 'San Francisco',
+      fontFamilyFallback: const ['SF Pro Text', 'Inter', 'Roboto', 'sans-serif'],
 
       textTheme: const TextTheme(
         // Headings

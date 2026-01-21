@@ -32,6 +32,7 @@ class LabView extends StatelessWidget {
               padding: const EdgeInsets.all(32),
               width: double.infinity,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center, // Phoenix Protocol: V-Align
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(

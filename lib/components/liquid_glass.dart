@@ -9,6 +9,7 @@ class LiquidGlass extends StatefulWidget {
   final bool hasBorder;
   final LinearGradient? borderGradient;
   final bool isIridescent;
+  final double refractiveIndex; // Phoenix Protocol
 
   const LiquidGlass({
     super.key,
@@ -19,6 +20,7 @@ class LiquidGlass extends StatefulWidget {
     this.hasBorder = true,
     this.borderGradient,
     this.isIridescent = false,
+    this.refractiveIndex = 1.5,
   });
 
   @override
@@ -55,6 +57,18 @@ class _LiquidGlassState extends State<LiquidGlass>
                 sigmaX: widget.blurSigma, sigmaY: widget.blurSigma),
             child: Container(
               color: Colors.transparent,
+            ),
+          ),
+
+          // 1.5 NOISE TEXTURE (Phoenix Protocol: "Tooth")
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.05,
+              child: Image.network(
+                'https://grainy-gradients.vercel.app/noise.svg',
+                fit: BoxFit.cover,
+                errorBuilder: (c, e, s) => const SizedBox(),
+              ),
             ),
           ),
 
