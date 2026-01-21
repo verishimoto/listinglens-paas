@@ -25,14 +25,14 @@ class _LiquidTabShellState extends State<LiquidTabShell> {
 
   @override
   Widget build(BuildContext context) {
-    const double tabHeight = 60.0;
-    const double tabWidth = 260.0;
-    const double connectionCurveRadius = 20.0;
+    const double tabHeight = 64.0; // Slightly taller
+    const double tabWidth = 280.0; // Slightly wider for better readability
+    const double connectionCurveRadius = 24.0;
 
     // Calculate vertical offset for the active tab (centered path)
     // We assume fixed tab height or consistent spacing
     final double activeTabTop =
-        24.0 + (widget.activeIndex * (tabHeight + 12.0));
+        32.0 + (widget.activeIndex * (tabHeight + 16.0)); // Increased spacing
 
     return MouseRegion(
       onHover: (e) => setState(() => _mousePos = e.position),
@@ -192,23 +192,54 @@ class _MeniscusGlassPainter extends CustomPainter {
     // DRAW SHADOW
     canvas.drawShadow(path, AppColors.mellowCyan.withOpacity(0.2), 30, true);
 
-    // DRAW FILL
+    // 4. DRAW FILL (Base Glass)
     canvas.drawPath(path, paint);
 
-    // DRAW STROKE (Refraction Edge)
-    final borderPaint = Paint()
-      ..color = Colors.white.withOpacity(0.6)
+    // 5. STRONG REFRACTION (Inner Glow)
+    final refractionPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = 2
+      ..shader = ui.Gradient.linear(
+          Offset(0, tabTop), Offset(tabWidth, tabTop + tabHeight), [
+        Colors.white.withOpacity(0.8),
+        Colors.white.withOpacity(0.0),
+        Colors.white.withOpacity(0.5),
+      ], [
+        0.0,
+        0.5,
+        1.0
+      ]);
+    canvas.drawPath(path, refractionPaint);
+
+    // 6. IRIDESCENT RIM (Outer Stroke)
+    final borderPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0
+      ..shader = ui.Gradient.sweep(Offset(size.width / 2, size.height / 2), [
+        AppColors.mellowCyan.withOpacity(0.5),
+        AppColors.mellowOrange.withOpacity(0.5),
+        const Color(0xFF7E00FF).withOpacity(0.5),
+        AppColors.mellowCyan.withOpacity(0.5),
+      ], [
+        0.0,
+        0.3,
+        0.7,
+        1.0
+      ]);
     canvas.drawPath(path, borderPaint);
 
-    // MOUSE GLOW (Overlay)
+    // 7. MOUSE GLOW (Overlay)
     final glowPaint = Paint()
       ..shader = RadialGradient(
-        colors: [AppColors.mellowCyan.withOpacity(0.3), Colors.transparent],
-        radius: 0.5,
-      ).createShader(Rect.fromCircle(center: mousePos, radius: 400))
-      ..blendMode = BlendMode.screen;
+        colors: [
+          AppColors.mellowCyan.withOpacity(0.4), // Stronger hover
+          AppColors.mellowOrange.withOpacity(0.1),
+          Colors.transparent
+        ],
+        stops: const [0.0, 0.5, 1.0],
+        radius: 0.8,
+      ).createShader(Rect.fromCircle(center: mousePos, radius: 500))
+      ..blendMode = BlendMode.overlay;
 
     canvas.drawRect(rect, glowPaint);
   }

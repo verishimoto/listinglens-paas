@@ -7,7 +7,7 @@ class LabView extends StatelessWidget {
   final Map<String, dynamic> slide;
   final bool isPassed;
   final String? mountedImage;
-  final Function(String) onMount;
+  final VoidCallback onMount;
   final VoidCallback onAudit;
 
   const LabView({
@@ -131,7 +131,7 @@ class LabView extends StatelessWidget {
 
   Widget _buildMountAssetUI() {
     return GestureDetector(
-      onTap: () => onMount('assets/mock_image.png'), // Simulating file pick
+      onTap: onMount,
       child: Container(
         width: 600,
         height: 400,

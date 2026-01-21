@@ -12,15 +12,21 @@ class AntigravityBackground extends StatefulWidget {
 class _AntigravityBackgroundState extends State<AntigravityBackground>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  final List<_Particle> _particles = [];
+  final Random _random = Random();
   Offset _mousePos = Offset.zero;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    )..repeat();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 10))
+          ..repeat();
+
+    // Initialize Particles
+    for (int i = 0; i < 150; i++) {
+      _particles.add(_Particle(_random));
+    }
   }
 
   @override
@@ -36,10 +42,12 @@ class _AntigravityBackgroundState extends State<AntigravityBackground>
       child: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
+          _updateParticles();
           return CustomPaint(
-            painter: _OrbitalBlobPainter(
+            painter: _AntigravityPainter(
               animationValue: _controller.value,
               mousePos: _mousePos,
+              particles: _particles,
             ),
             size: Size.infinite,
           );
@@ -47,64 +55,132 @@ class _AntigravityBackgroundState extends State<AntigravityBackground>
       ),
     );
   }
+
+  void _updateParticles() {
+    // Determine screen size roughly for boundary checks (or assume normalized 0-1 and scale in painter)
+    // Here we simulate simple physics updates
+    for (var particle in _particles) {
+      particle.update(_mousePos);
+    }
+  }
 }
 
-class _OrbitalBlobPainter extends CustomPainter {
+class _Particle {
+  Offset position;
+  Offset velocity;
+  double size;
+  double opacity;
+
+  _Particle(Random random)
+      : position = Offset(random.nextDouble(), random.nextDouble()),
+        velocity = Offset((random.nextDouble() - 0.5) * 0.002,
+            (random.nextDouble() - 0.5) * 0.002),
+        size = random.nextDouble() * 3 + 1,
+        opacity = random.nextDouble() * 0.5 + 0.1;
+
+  void update(Offset mousePos) {
+    position += velocity;
+
+    // Wrap around logic (normalized coordinates 0..1)
+    if (position.dx < 0) position = Offset(1, position.dy);
+    if (position.dx > 1) position = Offset(0, position.dy);
+    if (position.dy < 0) position = Offset(position.dx, 1);
+    if (position.dy > 1) position = Offset(position.dx, 0);
+  }
+}
+
+class _AntigravityPainter extends CustomPainter {
   final double animationValue;
   final Offset mousePos;
+  final List<_Particle> particles;
 
-  _OrbitalBlobPainter({required this.animationValue, required this.mousePos});
+  _AntigravityPainter({
+    required this.animationValue,
+    required this.mousePos,
+    required this.particles,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Base White/Crystal Field
+    // 1. Base Gradient (Subtle Aurora)
     final rect = Offset.zero & size;
-    final bgPaint = Paint()..color = AppColors.crystalBackground;
+    final bgPaint = Paint()
+      ..shader = const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFFF8F9FF), // White-ish
+          Color(0xFFEef2ff), // Very pale blue
+        ],
+      ).createShader(rect);
     canvas.drawRect(rect, bgPaint);
 
-    // 2. Calculated Orbital Positions
     final centerX = size.width / 2;
     final centerY = size.height / 2;
 
-    // Gentle repulsion from mouse
+    // 2. Orbital Blobs (Background visuals)
+    // Gentle repulsion from mouse for blobs too
     final mouseDeltaX = (mousePos.dx - centerX) * 0.05;
     final mouseDeltaY = (mousePos.dy - centerY) * 0.05;
 
-    // Blob 1: Orange (Sun)
     _drawBlob(
       canvas,
       Offset(
         centerX + cos(animationValue * 2 * pi) * 200 - mouseDeltaX,
         centerY + sin(animationValue * 2 * pi) * 100 - mouseDeltaY,
       ),
-      300,
-      AppColors.mellowOrange.withOpacity(0.15),
+      350,
+      AppColors.mellowOrange.withOpacity(0.08),
     );
 
-    // Blob 2: Cyan (Planet)
     _drawBlob(
       canvas,
       Offset(
         centerX + cos(animationValue * 2 * pi + 2) * 300 - mouseDeltaX * 1.5,
         centerY + sin(animationValue * 2 * pi + 2) * 200 - mouseDeltaY * 1.5,
       ),
-      250,
-      AppColors.mellowCyan.withOpacity(0.15),
+      300,
+      AppColors.mellowCyan.withOpacity(0.08),
     );
 
-    // Blob 3: Violet (Moon)
     _drawBlob(
       canvas,
       Offset(
-        centerX + cos(animationValue * -2 * pi) * 400 + mouseDeltaX,
-        centerY + sin(animationValue * -2 * pi) * 300 + mouseDeltaY,
+        centerX + cos(animationValue * -1.5 * pi) * 400 + mouseDeltaX,
+        centerY + sin(animationValue * -1.5 * pi) * 300 + mouseDeltaY,
       ),
-      350,
-      const Color(0xFF7E00FF).withOpacity(0.1),
+      400,
+      const Color(0xFF9747FF).withOpacity(0.05), // Soft Purple
     );
 
-    // 3. Noise Overlay (Static Grain)
-    // In production, use an ImageShader. Here we just assume it's part of the glass layer on top.
+    // 3. Dust Particles (Antigravity)
+    final particlePaint = Paint()..color = AppColors.textMute;
+
+    for (var particle in particles) {
+      // Scale normalized pos to screen size
+      var pX = particle.position.dx * size.width;
+      var pY = particle.position.dy * size.height;
+
+      // Mouse Reaction: Repel or Attract
+      // Let's do a localized repulsion field around the mouse
+      final dx = pX - mousePos.dx;
+      final dy = pY - mousePos.dy;
+      final dist = sqrt(dx * dx + dy * dy);
+
+      double renderX = pX;
+      double renderY = pY;
+
+      if (dist < 200) {
+        // Simple easing away from mouse
+        final force = (200 - dist) / 200;
+        renderX += dx * force * 0.5;
+        renderY += dy * force * 0.5;
+      }
+
+      particlePaint.color =
+          AppColors.textMain.withOpacity(particle.opacity * 0.6);
+      canvas.drawCircle(Offset(renderX, renderY), particle.size, particlePaint);
+    }
   }
 
   void _drawBlob(Canvas canvas, Offset center, double radius, Color color) {
@@ -118,7 +194,5 @@ class _OrbitalBlobPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _OrbitalBlobPainter oldDelegate) {
-    return true; // Constant animation
-  }
+  bool shouldRepaint(covariant _AntigravityPainter oldDelegate) => true;
 }

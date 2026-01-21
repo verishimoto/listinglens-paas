@@ -11,6 +11,7 @@ import 'package:listing_lens_paas/core/services/firestore_service.dart';
 import 'package:listing_lens_paas/core/services/gemini_service.dart';
 import 'package:listing_lens_paas/core/models/audit_model.dart';
 import 'package:uuid/uuid.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SolidFusionLayout extends ConsumerStatefulWidget {
   const SolidFusionLayout({super.key});
@@ -143,10 +144,16 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
     }
   }
 
-  void _mountImage(String path) {
-    setState(() {
-      _mountedImage = path;
-    });
+  Future<void> _pickAndMountImage() async {
+    final picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _mountedImage =
+            image.path; // On web this is a blob URL, on mobile/desktop a path
+      });
+    }
   }
 
   @override
@@ -163,34 +170,21 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
             children: [
               _buildHeader(),
               Expanded(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 32,
-                        right: 32,
-                        top: 12), // Spacing for the shell
-                    child: LiquidTabShell(
-                      tabs: _slides,
-                      activeIndex: _activeSlide,
-                      onTabSelected: (index) {
-                        setState(() {
-                          _activeSlide = index;
-                          if (_activeView != 'lab') _toggleView('lab');
-                        });
-                      },
-                      content: _activeView == 'lab'
-                          ? Padding(
-                              padding: const EdgeInsets.all(32),
-                              child: LabView(
-                                slide: _slides[_activeSlide],
-                                isPassed: _slideStatus[_activeSlide],
-                                mountedImage: _mountedImage,
-                                onMount: _mountImage,
-                                onAudit: () => _runAudit(_activeSlide),
-                              ),
-                            )
-                          : _buildHubView(),
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 32, right: 32, top: 12), // Spacing for the shell
+                  child: LiquidTabShell(
+                    tabs: _slides,
+                    activeIndex: _activeSlide,
+                    onTabSelected: (index) {
+                      setState(() {
+                        _activeSlide = index;
+                        if (_activeView != 'lab') _toggleView('lab');
+                      });
+                    },
+                    content: _activeView == 'lab'
+                        ? _buildLabView()
+                        : _buildHubView(),
                   ),
                 ),
               ),
@@ -294,5 +288,18 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
 
   Widget _buildHubView() {
     return const HubView();
+  }
+
+  Widget _buildLabView() {
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: LabView(
+        slide: _slides[_activeSlide],
+        isPassed: _slideStatus[_activeSlide],
+        mountedImage: _mountedImage,
+        onMount: _pickAndMountImage,
+        onAudit: () => _runAudit(_activeSlide),
+      ),
+    );
   }
 }
