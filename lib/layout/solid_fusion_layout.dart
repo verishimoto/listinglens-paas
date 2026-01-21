@@ -7,7 +7,6 @@ import 'package:listing_lens_paas/features/lab/lab_view.dart';
 import 'package:listing_lens_paas/features/hub/hub_view.dart';
 import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
-import 'package:listing_lens_paas/features/war_room/agent_graph_view.dart';
 import 'package:listing_lens_paas/core/services/firestore_service.dart';
 import 'package:listing_lens_paas/core/services/gemini_service.dart';
 import 'package:listing_lens_paas/core/models/audit_model.dart';
@@ -185,9 +184,7 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                                 onAudit: () => _runAudit(_activeSlide),
                               ),
                             )
-                          : _activeView == 'hub'
-                              ? _buildHubView()
-                              : _buildWarRoom(),
+                          : _buildHubView(),
                     ),
                   ),
                 ),
@@ -203,7 +200,6 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
     final headerTabs = [
       {'title': 'The Lab', 'id': 'lab', 'icon': Icons.science},
       {'title': 'Hub', 'id': 'hub', 'icon': Icons.grid_view},
-      {'title': 'War Room', 'id': 'war_room', 'icon': Icons.map},
     ];
 
     final activeIndex = headerTabs.indexWhere((t) => t['id'] == _activeView);
@@ -330,9 +326,5 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
 
   Widget _buildHubView() {
     return const HubView();
-  }
-
-  Widget _buildWarRoom() {
-    return const AgentGraphView();
   }
 }
