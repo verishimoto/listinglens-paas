@@ -54,7 +54,7 @@ class _LiquidTabShellState extends State<LiquidTabShell> {
 
           // 2. THE CONTENT (Clipped or Padded)
           Padding(
-            padding: EdgeInsets.only(left: tabWidth),
+            padding: const EdgeInsets.only(left: tabWidth),
             child: widget.content,
           ),
 

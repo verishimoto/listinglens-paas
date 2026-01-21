@@ -92,6 +92,11 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
     // 1. ELIGIBILITY CHECK (The Hub's Constraint)
     final canRun = await firestore.canRunAudit();
 
+    if (!mounted) {
+      _isAuditing = false;
+      return;
+    }
+
     if (!canRun) {
       setState(() => _isAuditing = false);
       // Show "Limit Reached" Dialog
@@ -132,7 +137,7 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
         _slideStatus[index] = true;
       });
     } catch (e) {
-      print("Audit Failed: $e");
+      // Error handling
     } finally {
       if (mounted) setState(() => _isAuditing = false);
     }
@@ -285,43 +290,6 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
             ],
           ),
         ));
-  }
-
-  Widget _buildNavBarItem(String label, String key, IconData icon) {
-    final isActive = _activeView == key;
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => _toggleView(key),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color:
-                isActive ? Colors.black.withOpacity(0.05) : Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
-            border: isActive
-                ? Border.all(color: Colors.black.withOpacity(0.05))
-                : null,
-          ),
-          child: Row(
-            children: [
-              Icon(icon,
-                  size: 16,
-                  color: isActive ? AppColors.textMain : AppColors.textMute),
-              const SizedBox(width: 8),
-              Text(label,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 1,
-                    color: isActive ? AppColors.textMain : AppColors.textMute,
-                  )),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildHubView() {

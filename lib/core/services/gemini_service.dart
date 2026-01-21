@@ -29,7 +29,7 @@ class GeminiService {
       final difference = now.difference(_lastRequestTime!).inMilliseconds;
       if (difference < _minIntervalMs) {
         final waitTime = _minIntervalMs - difference;
-        print("[The Governor] Rate Limit: Cooling down for ${waitTime}ms...");
+        // [The Governor] Rate Limit: Cooling down for ${waitTime}ms...
         await Future.delayed(Duration(milliseconds: waitTime));
       }
     }

@@ -71,7 +71,7 @@ class FirestoreService {
       final difference = now.difference(timestamp).inDays;
       return difference >= 7;
     } catch (e) {
-      print("Error checking audit eligibility: $e");
+      // Error checking audit eligibility: $e
       return true; // Fail safe to allow in dev/error, or false to lock. user prefers 'Zero-Cost', so strictly maybe false? But for UX lets fail open or log.
       // Actually, if Firestore fails, we probably can't save either.
     }
