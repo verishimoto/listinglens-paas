@@ -159,7 +159,7 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.crystalBackground,
+      backgroundColor: const Color(0xFF09090b),
       body: Stack(
         children: [
           // 1. ANTI-GRAVITY PHYSICS (Orbital Blobs)

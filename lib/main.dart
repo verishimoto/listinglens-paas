@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'layout/solid_fusion_layout.dart';
-import 'theme/app_theme.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -18,11 +17,11 @@ class ListingLensApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'ListingLens PaaS',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightIridescent,
-      home: const SolidFusionLayout(),
+      color: Color(0xFF09090b),
+      home: SolidFusionLayout(),
     );
   }
 }
