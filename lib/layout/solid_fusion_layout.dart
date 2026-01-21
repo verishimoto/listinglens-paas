@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
-// import 'package:listing_lens_paas/components/repulsion_background.dart';
-import 'package:listing_lens_paas/layout/fused_glass_shell.dart';
+import 'package:listing_lens_paas/components/antigravity_background.dart';
+import 'package:listing_lens_paas/layout/liquid_tab_shell.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
 import 'package:listing_lens_paas/features/hub/auth_wrapper.dart';
 import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
@@ -91,25 +91,11 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.crystalBackground, // CRYSTAL THEME
+      backgroundColor: AppColors.crystalBackground,
       body: Stack(
         children: [
-          // 1. PHYSICS (Subtle Light Mode Mesh - Placeholder for now)
-          // const Positioned.fill(child: RepulsionBackground()),
-          Positioned.fill(
-              child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFFFFFFFF),
-                  Color(0xFFF4F4FF), // Very subtle purple tint
-                  Color(0xFFF0F8FF), // Alice Blue
-                ],
-              ),
-            ),
-          )),
+          // 1. ANTI-GRAVITY PHYSICS (Orbital Blobs)
+          const Positioned.fill(child: AntigravityBackground()),
 
           // 2. SHELL
           Column(
@@ -117,9 +103,12 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
               _buildHeader(),
               Expanded(
                 child: Center(
-                  child: FusedGlassShell(
-                    sidebarWidth: 260,
-                    sidebar: GlassTabBar(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        bottom: 32,
+                        right: 32,
+                        top: 12), // Spacing for the shell
+                    child: LiquidTabShell(
                       tabs: _slides,
                       activeIndex: _activeSlide,
                       onTabSelected: (index) {
@@ -128,20 +117,19 @@ class _SolidFusionLayoutState extends State<SolidFusionLayout> {
                           if (_activeView != 'lab') _toggleView('lab');
                         });
                       },
-                      isVertical: true,
+                      content: _activeView == 'lab'
+                          ? Padding(
+                              padding: const EdgeInsets.all(32),
+                              child: LabView(
+                                slide: _slides[_activeSlide],
+                                isPassed: _slideStatus[_activeSlide],
+                                mountedImage: _mountedImage,
+                                onMount: _mountImage,
+                                onAudit: () => _onSlideComplete(_activeSlide),
+                              ),
+                            )
+                          : _buildHubView(),
                     ),
-                    content: _activeView == 'lab'
-                        ? Padding(
-                            padding: const EdgeInsets.all(32),
-                            child: LabView(
-                              slide: _slides[_activeSlide],
-                              isPassed: _slideStatus[_activeSlide],
-                              mountedImage: _mountedImage,
-                              onMount: _mountImage,
-                              onAudit: () => _onSlideComplete(_activeSlide),
-                            ),
-                          )
-                        : _buildHubView(),
                   ),
                 ),
               ),
