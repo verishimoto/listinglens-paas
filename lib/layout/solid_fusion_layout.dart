@@ -161,28 +161,6 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF09090b),
-      body: Stack(
-        children: [
-          // 1. ANTI-GRAVITY PHYSICS (Orbital Blobs)
-          const Positioned.fill(child: AntigravityBackground()),
-
-          // 2. SHELL
-          Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1400),
-              child: Column(
-                children: [
-                  _buildHeader(),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 32, right: 32, top: 12), // Spacing for the shell
-                      child: LiquidTabShell(
-                        tabs: _slides,
-                        activeIndex: _activeSlide,
-                        onTabSelected: (index) {
-                          setState(() {
-                            _activeSlide = index;
       body: CursorFollower(
         child: Stack(
           children: [
@@ -198,7 +176,7 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            bottom: 32, right: 32, top: 12), // Spacing for the shell
+                            bottom: 32, right: 32, top: 90), // Top padding for header space
                         child: LiquidTabShell(
                           tabs: _slides,
                           activeIndex: _activeSlide,
@@ -218,6 +196,7 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                 ),
               ),
             ),
+
             // 3. OMEGA HEADER (Floating)
             Positioned(
               top: 0,

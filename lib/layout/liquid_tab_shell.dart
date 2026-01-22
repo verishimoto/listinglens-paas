@@ -251,7 +251,7 @@ class _MeniscusGlassPainter extends CustomPainter {
         1.0
       ]);
     // 6. GHOST GLASS BORDER (Inner Edge Specular)
-    final borderPaint = Paint()
+    final innerBorderPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
       ..shader = ui.Gradient.linear(Offset(0, 0), Offset(0, size.height), [
@@ -263,7 +263,7 @@ class _MeniscusGlassPainter extends CustomPainter {
         0.3,
         1.0
       ]);
-    canvas.drawPath(path, borderPaint);
+    canvas.drawPath(path, innerBorderPaint);
 
     // 7. MOUSE GLOW (Overlay)
     final glowPaint = Paint()

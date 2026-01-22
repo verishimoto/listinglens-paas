@@ -92,9 +92,9 @@ class LabView extends StatelessWidget {
                   mountedImage != null ? _buildWorkArea() : _buildMountAssetUI(),
             ),
           ),
-  
-          // ...
-          // ...
+        ],
+      ),
+    );
   }
 
   Widget _buildMountAssetUI() {
@@ -168,104 +168,105 @@ class LabView extends StatelessWidget {
             ],
           ),
           child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Grid Overlay
-            Positioned.fill(
-              child: Opacity(
-                opacity: 0.1,
-                child: Image.network(
-                    'https://grainy-gradients.vercel.app/noise.svg',
-                    fit: BoxFit.cover,
-                    errorBuilder: (c, e, s) =>
-                        const SizedBox()), // Fallback noise if possible, or just ignore
-              ),
-            ),
-
-            const Icon(Icons.hub,
-                size: 80,
-                color:
-                    Colors.white10), // Changed icon to represent 'Processing'
-
-            if (isPassed)
+            alignment: Alignment.center,
+            children: [
+              // Grid Overlay
               Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(24),
-                    color: Colors.black.withOpacity(0.8), // Darken background
-                  ),
-                  child: Stack(
-                    children: [
-                      // BLURRED CONTENT (The "Why")
-                      // We simulate a detailed report that is obfuscated
-                      Positioned.fill(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32),
+                child: Opacity(
+                  opacity: 0.1,
+                  child: Image.network(
+                      'https://grainy-gradients.vercel.app/noise.svg',
+                      fit: BoxFit.cover,
+                      errorBuilder: (c, e, s) =>
+                          const SizedBox()), // Fallback noise if possible, or just ignore
+                ),
+              ),
+
+              const Icon(Icons.hub,
+                  size: 80,
+                  color:
+                      Colors.white10), // Changed icon to represent 'Processing'
+
+              if (isPassed)
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      color: Colors.black.withOpacity(0.8), // Darken background
+                    ),
+                    child: Stack(
+                      children: [
+                        // BLURRED CONTENT (The "Why")
+                        // We simulate a detailed report that is obfuscated
+                        Positioned.fill(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildFakeReportLine(width: 200),
+                                const SizedBox(height: 12),
+                                _buildFakeReportLine(width: 400),
+                                const SizedBox(height: 12),
+                                _buildFakeReportLine(width: 350),
+                                const SizedBox(height: 12),
+                                _buildFakeReportLine(width: 150),
+                                const SizedBox(height: 32),
+                                _buildFakeReportLine(width: 300),
+                                const SizedBox(height: 12),
+                                _buildFakeReportLine(width: 250),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // THE FILTER (Glass Blur)
+                        Positioned.fill(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                            child: Container(color: Colors.transparent),
+                          ),
+                        ),
+
+                        // THE HOOK (Clear Overlay)
+                        Center(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              _buildFakeReportLine(width: 200),
-                              const SizedBox(height: 12),
-                              _buildFakeReportLine(width: 400),
-                              const SizedBox(height: 12),
-                              _buildFakeReportLine(width: 350),
-                              const SizedBox(height: 12),
-                              _buildFakeReportLine(width: 150),
-                              const SizedBox(height: 32),
-                              _buildFakeReportLine(width: 300),
-                              const SizedBox(height: 12),
-                              _buildFakeReportLine(width: 250),
+                              const Icon(Icons.lock_outline,
+                                  size: 60, color: AppColors.mellowOrange),
+                              const SizedBox(height: 16),
+                              const Text('CRITICAL FAILURE DETECTED',
+                                  style: TextStyle(
+                                      color: AppColors.mellowOrange,
+                                      letterSpacing: 2,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 14)),
+                              const SizedBox(height: 8),
+                              Text('SCORE: 45/100',
+                                  style: TextStyle(
+                                      fontFamily: 'Agency FB',
+                                      color: Colors.white.withOpacity(0.9),
+                                      letterSpacing: 4,
+                                      fontSize: 48,
+                                      fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 24),
+                              ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.mellowCyan,
+                                    foregroundColor: Colors.black,
+                                  ),
+                                  child: const Text("UNLOCK ANALYSIS"))
                             ],
                           ),
                         ),
-                      ),
-
-                      // THE FILTER (Glass Blur)
-                      Positioned.fill(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                          child: Container(color: Colors.transparent),
-                        ),
-                      ),
-
-                      // THE HOOK (Clear Overlay)
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.lock_outline,
-                                size: 60, color: AppColors.mellowOrange),
-                            const SizedBox(height: 16),
-                            const Text('CRITICAL FAILURE DETECTED',
-                                style: TextStyle(
-                                    color: AppColors.mellowOrange,
-                                    letterSpacing: 2,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 14)),
-                            const SizedBox(height: 8),
-                            Text('SCORE: 45/100',
-                                style: TextStyle(
-                                    fontFamily: 'Agency FB',
-                                    color: Colors.white.withOpacity(0.9),
-                                    letterSpacing: 4,
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 24),
-                            ElevatedButton(
-                                onPressed: () {},
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.mellowCyan,
-                                  foregroundColor: Colors.black,
-                                ),
-                                child: const Text("UNLOCK ANALYSIS"))
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              )
-          ],
+                )
+            ],
+          ),
         ),
       ),
     );
