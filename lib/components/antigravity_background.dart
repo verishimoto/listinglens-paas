@@ -130,7 +130,7 @@ class _AntigravityPainter extends CustomPainter {
         centerY + sin(animationValue * 2 * pi) * 100 - mouseDeltaY,
       ),
       350,
-      AppColors.mellowOrange.withOpacity(0.08),
+      AppColors.mellowOrange.withValues(alpha: 0.08),
     );
 
     _drawBlob(
@@ -140,7 +140,7 @@ class _AntigravityPainter extends CustomPainter {
         centerY + sin(animationValue * 2 * pi + 2) * 200 - mouseDeltaY * 1.5,
       ),
       300,
-      AppColors.mellowCyan.withOpacity(0.08),
+      AppColors.mellowCyan.withValues(alpha: 0.08),
     );
 
     _drawBlob(
@@ -150,7 +150,7 @@ class _AntigravityPainter extends CustomPainter {
         centerY + sin(animationValue * -1.5 * pi) * 300 + mouseDeltaY,
       ),
       400,
-      const Color(0xFF9747FF).withOpacity(0.05), // Soft Purple
+      const Color(0xFF9747FF).withValues(alpha: 0.05), // Soft Purple
     );
 
     // 3. Dust Particles (Antigravity)
@@ -178,7 +178,7 @@ class _AntigravityPainter extends CustomPainter {
       }
 
       particlePaint.color =
-          AppColors.textMain.withOpacity(particle.opacity * 0.6);
+          AppColors.textMain.withValues(alpha: particle.opacity * 0.6);
       canvas.drawCircle(Offset(renderX, renderY), particle.size, particlePaint);
     }
   }
@@ -186,7 +186,7 @@ class _AntigravityPainter extends CustomPainter {
   void _drawBlob(Canvas canvas, Offset center, double radius, Color color) {
     final paint = Paint()
       ..shader = RadialGradient(
-        colors: [color, color.withOpacity(0)],
+        colors: [color, color.withValues(alpha: 0)],
         stops: const [0.0, 1.0],
       ).createShader(Rect.fromCircle(center: center, radius: radius));
 

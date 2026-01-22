@@ -45,12 +45,13 @@ class _DragDropZoneState extends State<DragDropZone> {
             decoration: BoxDecoration(
               // Glass Effect
               color: _dragging
-                  ? Colors.white.withOpacity(0.15) // Glowing on hover
-                  : Colors.white.withOpacity(0.05), // Subtle glass normally
+                  ? Colors.white.withValues(alpha: 0.15) // Glowing on hover
+                  : Colors.white
+                      .withValues(alpha: 0.05), // Subtle glass normally
               border: Border.all(
                 color: _dragging
-                    ? Colors.white.withOpacity(0.3)
-                    : Colors.white.withOpacity(0.1),
+                    ? Colors.white.withValues(alpha: 0.3)
+                    : Colors.white.withValues(alpha: 0.1),
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(16),
@@ -61,22 +62,26 @@ class _DragDropZoneState extends State<DragDropZone> {
                 Icon(
                   Icons.sensors, // More technical icon
                   size: 48,
-                  color: _dragging ? Colors.white : Colors.white.withOpacity(0.5),
+                  color: _dragging
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: 0.5),
                 ),
                 const SizedBox(height: 24),
                 Text(
                   _dragging ? 'RELEASE TO SCAN' : 'INITIATE ANALYSIS',
                   style: ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
-                    color: _dragging ? Colors.white : Colors.white.withOpacity(0.7),
+                    color: _dragging
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.7),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'DROP IMAGE FOR HEURISTIC AUDIT',
                   style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
-                     fontSize: 10,
-                     letterSpacing: 2.0,
-                     color: Colors.white.withOpacity(0.3),
+                    fontSize: 10,
+                    letterSpacing: 2.0,
+                    color: Colors.white.withValues(alpha: 0.3),
                   ),
                 ),
               ],

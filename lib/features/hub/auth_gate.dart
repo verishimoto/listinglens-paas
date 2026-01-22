@@ -109,9 +109,9 @@ class _AuthGateState extends ConsumerState<AuthGate> {
                             margin: const EdgeInsets.only(bottom: 24),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.red.withOpacity(0.1),
+                              color: Colors.red.withValues(alpha: 0.1),
                               border: Border.all(
-                                  color: Colors.red.withOpacity(0.3)),
+                                  color: Colors.red.withValues(alpha: 0.3)),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -174,9 +174,9 @@ class _AuthGateState extends ConsumerState<AuthGate> {
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.black.withOpacity(0.05)),
+            border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TextField(
@@ -211,11 +211,11 @@ class _AuthGateState extends ConsumerState<AuthGate> {
             borderRadius: BorderRadius.circular(12),
             border: isPrimary
                 ? null
-                : Border.all(color: AppColors.leverage1.withOpacity(0.3)),
+                : Border.all(color: AppColors.leverage1.withValues(alpha: 0.3)),
             boxShadow: isPrimary
                 ? [
                     BoxShadow(
-                        color: AppColors.leverage1.withOpacity(0.3),
+                        color: AppColors.leverage1.withValues(alpha: 0.3),
                         blurRadius: 20,
                         offset: const Offset(0, 4))
                   ]

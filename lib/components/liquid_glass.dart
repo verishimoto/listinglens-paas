@@ -85,18 +85,20 @@ class _LiquidGlassState extends State<LiquidGlass>
                     end: Alignment.bottomRight,
                     colors: widget.isIridescent
                         ? [
-                            Colors.white.withOpacity(0.4 *
-                                (0.8 + 0.2 * _controller.value)), // Breathing
-                            Colors.blueAccent.withOpacity(0.05),
-                            Colors.purpleAccent.withOpacity(0.05),
-                            Colors.white.withOpacity(0.1),
+                            Colors.white.withValues(
+                                alpha: 0.4 *
+                                    (0.8 +
+                                        0.2 * _controller.value)), // Breathing
+                            Colors.blueAccent.withValues(alpha: 0.05),
+                            Colors.purpleAccent.withValues(alpha: 0.05),
+                            Colors.white.withValues(alpha: 0.1),
                           ]
                         : [
-                            Colors.white.withOpacity(
-                                (widget.frostOpacity + 0.05) *
+                            Colors.white.withValues(
+                                alpha: (widget.frostOpacity + 0.05) *
                                     (0.9 + 0.1 * _controller.value)),
-                            Colors.white.withOpacity(widget.frostOpacity),
-                            Colors.black.withOpacity(0.02),
+                            Colors.white.withValues(alpha: widget.frostOpacity),
+                            Colors.black.withValues(alpha: 0.02),
                           ],
                     stops: widget.isIridescent
                         ? [
@@ -110,13 +112,13 @@ class _LiquidGlassState extends State<LiquidGlass>
                   boxShadow: widget.isIridescent
                       ? [
                           BoxShadow(
-                            color: Colors.blue
-                                .withOpacity(0.1 + (0.05 * _controller.value)),
+                            color: Colors.blue.withValues(
+                                alpha: 0.1 + (0.05 * _controller.value)),
                             blurRadius: 10 + (5 * _controller.value),
                             spreadRadius: -2,
                           ),
                           BoxShadow(
-                            color: Colors.purple.withOpacity(0.1),
+                            color: Colors.purple.withValues(alpha: 0.1),
                             blurRadius: 20,
                             spreadRadius: -5,
                           ),
@@ -144,16 +146,17 @@ class _LiquidGlassState extends State<LiquidGlass>
                           end: Alignment.bottomRight,
                           colors: widget.isIridescent
                               ? [
-                                  Colors.cyanAccent.withOpacity(0.6),
-                                  Colors.purpleAccent.withOpacity(0.5),
-                                  Colors.orangeAccent.withOpacity(0.4), // Omega: Fire
-                                  Colors.white.withOpacity(0.6),
+                                  Colors.cyanAccent.withValues(alpha: 0.6),
+                                  Colors.purpleAccent.withValues(alpha: 0.5),
+                                  Colors.orangeAccent
+                                      .withValues(alpha: 0.4), // Omega: Fire
+                                  Colors.white.withValues(alpha: 0.6),
                                 ]
                               : [
-                                  Colors.black.withOpacity(0.1),
-                                  Colors.black.withOpacity(0.02),
-                                  Colors.white.withOpacity(0.5),
-                                  Colors.black.withOpacity(0.05),
+                                  Colors.black.withValues(alpha: 0.1),
+                                  Colors.black.withValues(alpha: 0.02),
+                                  Colors.white.withValues(alpha: 0.5),
+                                  Colors.black.withValues(alpha: 0.05),
                                 ],
                           stops: const [0.0, 0.3, 0.6, 1.0],
                         ),
@@ -164,29 +167,28 @@ class _LiquidGlassState extends State<LiquidGlass>
 
           // 3.5 OMEGA GLOW (Breathing Outer Shadow for Iridescent items)
           if (widget.isIridescent)
-             Positioned.fill(
-               child: AnimatedBuilder(
-                 animation: _controller,
-                 builder: (c, _) => Container(
-                   decoration: BoxDecoration(
-                     borderRadius: BorderRadius.circular(widget.borderRadius),
-                     boxShadow: [
-                       BoxShadow(
-                         color: Colors.purple.withOpacity(0.1 + (0.1 * _controller.value)),
-                         blurRadius: 20 + (10 * _controller.value),
-                         spreadRadius: 2,
-                       ),
-                        BoxShadow(
-                         color: Colors.cyan.withOpacity(0.1),
-                         blurRadius: 30,
-                         spreadRadius: 5,
-                       )
-                     ]
-                   )
-                 ),
-               ),
-             ),
-
+            Positioned.fill(
+              child: AnimatedBuilder(
+                animation: _controller,
+                builder: (c, _) => Container(
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(widget.borderRadius),
+                        boxShadow: [
+                      BoxShadow(
+                        color: Colors.purple
+                            .withValues(alpha: 0.1 + (0.1 * _controller.value)),
+                        blurRadius: 20 + (10 * _controller.value),
+                        spreadRadius: 2,
+                      ),
+                      BoxShadow(
+                        color: Colors.cyan.withValues(alpha: 0.1),
+                        blurRadius: 30,
+                        spreadRadius: 5,
+                      )
+                    ])),
+              ),
+            ),
 
           // 4. CONTENT
           widget.child,

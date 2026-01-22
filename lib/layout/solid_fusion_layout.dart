@@ -5,7 +5,7 @@ import 'package:listing_lens_paas/components/antigravity_background.dart';
 import 'package:listing_lens_paas/layout/liquid_tab_shell.dart';
 import 'package:listing_lens_paas/features/lab/lab_view.dart';
 import 'package:listing_lens_paas/features/hub/hub_view.dart';
-import 'package:listing_lens_paas/layout/glass_tab_bar.dart';
+
 import 'package:listing_lens_paas/components/liquid_glass.dart';
 import 'package:listing_lens_paas/core/services/firestore_service.dart';
 import 'package:listing_lens_paas/core/services/gemini_service.dart';
@@ -176,7 +176,9 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.only(
-                            bottom: 32, right: 32, top: 90), // Top padding for header space
+                            bottom: 32,
+                            right: 32,
+                            top: 90), // Top padding for header space
                         child: LiquidTabShell(
                           tabs: _slides,
                           activeIndex: _activeSlide,
@@ -228,11 +230,11 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
                     onTap: () {
-                       // Reset to default state
-                       setState(() {
-                         _activeView = 'lab';
-                         _activeSlide = 0;
-                       });
+                      // Reset to default state
+                      setState(() {
+                        _activeView = 'lab';
+                        _activeSlide = 0;
+                      });
                     },
                     child: Row(
                       children: [
@@ -241,8 +243,10 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                           height: 28,
                           decoration: const BoxDecoration(
                               border: Border(
-                            left: BorderSide(color: AppColors.mellowOrange, width: 3),
-                            bottom: BorderSide(color: AppColors.mellowCyan, width: 3),
+                            left: BorderSide(
+                                color: AppColors.mellowOrange, width: 3),
+                            bottom: BorderSide(
+                                color: AppColors.mellowCyan, width: 3),
                           )),
                         ),
                         const SizedBox(width: 12),
@@ -264,9 +268,10 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                 Container(
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.03),
+                    color: Colors.white.withValues(alpha: 0.03),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
+                    border:
+                        Border.all(color: Colors.white.withValues(alpha: 0.05)),
                   ),
                   child: Row(
                     children: [
@@ -295,13 +300,15 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                       height: 32,
                       padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.1)),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.nightlight_round, size: 14, color: AppColors.textMute),
+                          const Icon(Icons.nightlight_round,
+                              size: 14, color: AppColors.textMute),
                           const SizedBox(width: 8),
                           Container(
                             width: 36,
@@ -327,16 +334,18 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                     const SizedBox(width: 24),
                     // Settings Gear (Rotation Animation placeholder)
                     MouseRegion(
-                       cursor: SystemMouseCursors.click,
-                       child: Container(
-                         padding: const EdgeInsets.all(8),
-                         decoration: BoxDecoration(
-                           shape: BoxShape.circle,
-                           border: Border.all(color: Colors.white.withOpacity(0.1)),
-                           color: Colors.white.withOpacity(0.02),
-                         ),
-                         child: const Icon(Icons.settings, color: AppColors.textMute, size: 20),
-                       ),
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.1)),
+                          color: Colors.white.withValues(alpha: 0.02),
+                        ),
+                        child: const Icon(Icons.settings,
+                            color: AppColors.textMute, size: 20),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     // Profile Avatar
@@ -345,15 +354,23 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                       height: 40,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
-                          colors: [AppColors.mellowCyan, AppColors.mellowOrange],
+                          colors: [
+                            AppColors.mellowCyan,
+                            AppColors.mellowOrange
+                          ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                        border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            width: 1),
                       ),
                       child: const Center(
-                        child: Text("V", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                        child: Text("V",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
                       ),
                     )
                   ],
@@ -364,7 +381,10 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
     );
   }
 
-  Widget _buildGlassLink({required String title, required bool isActive, required VoidCallback onTap}) {
+  Widget _buildGlassLink(
+      {required String title,
+      required bool isActive,
+      required VoidCallback onTap}) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -373,18 +393,22 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
           decoration: BoxDecoration(
-            color: isActive ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            color: isActive
+                ? Colors.white.withValues(alpha: 0.1)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(20), // Omega: 20px
             border: Border.all(
-              color: isActive ? Colors.white.withOpacity(0.1) : Colors.transparent
-            ),
-             boxShadow: isActive ? [
-               BoxShadow(
-                 color: Colors.white.withOpacity(0.05),
-                 blurRadius: 10,
-                 spreadRadius: 0
-               )
-             ] : [],
+                color: isActive
+                    ? Colors.white.withValues(alpha: 0.1)
+                    : Colors.transparent),
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                        color: Colors.white.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        spreadRadius: 0)
+                  ]
+                : [],
           ),
           child: Text(
             title,

@@ -40,7 +40,7 @@ class HubLayout extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // Velocity Chart Placeholder (Graphite Card)
             Container(
               height: 200,
@@ -97,15 +97,21 @@ class HubLayout extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFF97316).withOpacity(0.1),
+                                  color: const Color(0xFFF97316)
+                                      .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(color: const Color(0xFFF97316).withOpacity(0.3)),
+                                  border: Border.all(
+                                      color: const Color(0xFFF97316)
+                                          .withValues(alpha: 0.3)),
                                 ),
                                 child: Text(
                                   index % 2 == 0 ? 'SCORE: 42' : 'SCORE: 88',
-                                  style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
+                                  style: ObsidianTheme
+                                      .themeData.textTheme.bodyMedium
+                                      ?.copyWith(
                                     color: const Color(0xFFF97316),
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
@@ -115,7 +121,9 @@ class HubLayout extends StatelessWidget {
                               const Spacer(),
                               Text(
                                 '2h ago',
-                                style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
+                                style: ObsidianTheme
+                                    .themeData.textTheme.bodyMedium
+                                    ?.copyWith(
                                   color: Colors.white24,
                                   fontSize: 10,
                                 ),
@@ -125,7 +133,8 @@ class HubLayout extends StatelessWidget {
                           const Spacer(),
                           Text(
                             'Listing_${100 + index}.jpg',
-                            style: ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
+                            style: ObsidianTheme.themeData.textTheme.labelLarge
+                                ?.copyWith(
                               fontSize: 14,
                             ),
                           ),

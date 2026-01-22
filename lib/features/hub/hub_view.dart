@@ -92,7 +92,7 @@ class HubView extends StatelessWidget {
                       ),
                       boxShadow: [
                         BoxShadow(
-                            color: AppColors.leverage1.withOpacity(0.3),
+                            color: AppColors.leverage1.withValues(alpha: 0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 4)),
                       ],
@@ -138,7 +138,8 @@ class HubView extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: AppColors.leverage4.withOpacity(0.1),
+                                  color: AppColors.leverage4
+                                      .withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: const Text('+24% THIS WEEK',
@@ -312,12 +313,12 @@ class HubView extends StatelessWidget {
             color: isActive
                 ? AppColors.leverage1
                 : AppColors.leverage2
-                    .withOpacity(0.2), // Purple active, Cyan passive
+                    .withValues(alpha: 0.2), // Purple active, Cyan passive
             borderRadius: BorderRadius.circular(4),
             boxShadow: isActive
                 ? [
                     BoxShadow(
-                        color: AppColors.leverage1.withOpacity(0.4),
+                        color: AppColors.leverage1.withValues(alpha: 0.4),
                         blurRadius: 10,
                         offset: const Offset(0, 2))
                   ]
@@ -359,12 +360,12 @@ class HubView extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.4), // Glassy white
+            color: Colors.white.withValues(alpha: 0.4), // Glassy white
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.8)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.8)),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
+                  color: Colors.black.withValues(alpha: 0.02),
                   blurRadius: 8,
                   offset: const Offset(0, 2)),
             ]),
@@ -378,8 +379,8 @@ class HubView extends StatelessWidget {
                   height: 40,
                   decoration: BoxDecoration(
                     color: isHigh
-                        ? AppColors.leverage4.withOpacity(0.1)
-                        : AppColors.leverage6.withOpacity(0.1),
+                        ? AppColors.leverage4.withValues(alpha: 0.1)
+                        : AppColors.leverage6.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -429,8 +430,8 @@ class HubView extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundColor: isAI
-              ? AppColors.leverage1.withOpacity(0.1)
-              : AppColors.leverage7.withOpacity(0.05),
+              ? AppColors.leverage1.withValues(alpha: 0.1)
+              : AppColors.leverage7.withValues(alpha: 0.05),
           radius: 14,
           child: Icon(isAI ? Icons.auto_awesome : Icons.person,
               size: 14, color: isAI ? AppColors.leverage1 : AppColors.textMute),

@@ -10,7 +10,12 @@ class AppTheme {
 
       // Font Family
       fontFamily: 'San Francisco',
-      fontFamilyFallback: const ['SF Pro Text', 'Inter', 'Roboto', 'sans-serif'],
+      fontFamilyFallback: const [
+        'SF Pro Text',
+        'Inter',
+        'Roboto',
+        'sans-serif'
+      ],
 
       textTheme: const TextTheme(
         // Headings
@@ -55,7 +60,12 @@ class AppTheme {
 
       // Font Family
       fontFamily: 'San Francisco',
-      fontFamilyFallback: const ['SF Pro Text', 'Inter', 'Roboto', 'sans-serif'],
+      fontFamilyFallback: const [
+        'SF Pro Text',
+        'Inter',
+        'Roboto',
+        'sans-serif'
+      ],
 
       textTheme: const TextTheme(
         // Headings
@@ -90,7 +100,7 @@ class AppTheme {
       ),
 
       dividerTheme: DividerThemeData(
-        color: Colors.black.withOpacity(0.05),
+        color: Colors.black.withValues(alpha: 0.05),
         thickness: 1,
       ),
     );

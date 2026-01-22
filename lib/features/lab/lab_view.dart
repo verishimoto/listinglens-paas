@@ -35,7 +35,8 @@ class LabView extends StatelessWidget {
                 padding: const EdgeInsets.all(32),
                 width: double.infinity,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // Phoenix Protocol: V-Align
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Phoenix Protocol: V-Align
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -84,12 +85,13 @@ class LabView extends StatelessWidget {
               ),
             ),
           ),
-  
+
           // 2. CANVAS AREA
           Expanded(
             child: Center(
-              child:
-                  mountedImage != null ? _buildWorkArea() : _buildMountAssetUI(),
+              child: mountedImage != null
+                  ? _buildWorkArea()
+                  : _buildMountAssetUI(),
             ),
           ),
         ],
@@ -105,9 +107,11 @@ class LabView extends StatelessWidget {
         height: 400,
         decoration: BoxDecoration(
           border: Border.all(
-              color: Colors.white.withOpacity(0.1), width: 1, style: BorderStyle.none), // Dashed border implied or just subtle
+              color: Colors.white.withValues(alpha: 0.1),
+              width: 1,
+              style: BorderStyle.none), // Dashed border implied or just subtle
           // Omega: Dashed border simulation or just glass drop zone
-          color: Colors.white.withOpacity(0.02),
+          color: Colors.white.withValues(alpha: 0.02),
           borderRadius: BorderRadius.circular(32),
         ),
         child: Column(
@@ -119,23 +123,25 @@ class LabView extends StatelessWidget {
               height: 120,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF7E00FF), Color(0xFF4A00E0)], // Indigo Gradient
+                  colors: [
+                    Color(0xFF7E00FF),
+                    Color(0xFF4A00E0)
+                  ], // Indigo Gradient
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                      color: const Color(0xFF7E00FF).withOpacity(0.5),
+                      color: const Color(0xFF7E00FF).withValues(alpha: 0.5),
                       blurRadius: 60,
                       spreadRadius: -5,
                       offset: const Offset(0, 10)),
                   BoxShadow(
-                      color: Colors.white.withOpacity(0.2), // Inner light
+                      color: Colors.white.withValues(alpha: 0.2), // Inner light
                       blurRadius: 0,
                       spreadRadius: 1, // Border simulation
-                      offset: Offset.zero
-                  )
+                      offset: Offset.zero)
                 ],
               ),
               child: const Icon(Icons.add, size: 60, color: Colors.white),
@@ -150,19 +156,21 @@ class LabView extends StatelessWidget {
   Widget _buildWorkArea() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(24),
-      child: BackdropFilter( // Omega: True Refraction
+      child: BackdropFilter(
+        // Omega: True Refraction
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           width: 800,
           height: 500,
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.4), // More transparent for refraction
+            color: Colors.black
+                .withValues(alpha: 0.4), // More transparent for refraction
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
-                color: Colors.white.withOpacity(0.1), width: 1),
+                color: Colors.white.withValues(alpha: 0.1), width: 1),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   blurRadius: 50,
                   offset: const Offset(0, 10)),
             ],
@@ -192,7 +200,8 @@ class LabView extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(24),
-                      color: Colors.black.withOpacity(0.8), // Darken background
+                      color: Colors.black
+                          .withValues(alpha: 0.8), // Darken background
                     ),
                     child: Stack(
                       children: [
@@ -246,7 +255,8 @@ class LabView extends StatelessWidget {
                               Text('SCORE: 45/100',
                                   style: TextStyle(
                                       fontFamily: 'Agency FB',
-                                      color: Colors.white.withOpacity(0.9),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.9),
                                       letterSpacing: 4,
                                       fontSize: 48,
                                       fontWeight: FontWeight.bold)),
@@ -277,7 +287,7 @@ class LabView extends StatelessWidget {
       width: width,
       height: 12,
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
       ),
     );

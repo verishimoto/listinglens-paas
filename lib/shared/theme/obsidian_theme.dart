@@ -49,11 +49,11 @@ class ObsidianTheme {
 
   // Glass Physics
   static BoxDecoration get glassDecoration => BoxDecoration(
-    color: Colors.white.withOpacity(0.08),
-    border: Border.all(
-      color: Colors.white.withOpacity(0.1),
-      width: 1,
-    ),
-    borderRadius: BorderRadius.circular(12),
-  );
+        color: Colors.white.withValues(alpha: 0.08),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.1),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      );
 }

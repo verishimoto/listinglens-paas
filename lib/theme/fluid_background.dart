@@ -10,7 +10,8 @@ class FluidBackground extends StatefulWidget {
   State<FluidBackground> createState() => _FluidBackgroundState();
 }
 
-class _FluidBackgroundState extends State<FluidBackground> with SingleTickerProviderStateMixin {
+class _FluidBackgroundState extends State<FluidBackground>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -34,7 +35,7 @@ class _FluidBackgroundState extends State<FluidBackground> with SingleTickerProv
       children: [
         // Base Void
         Container(color: AppColors.voidColor),
-        
+
         // Fluid Orbs
         AnimatedBuilder(
           animation: _controller,
@@ -42,18 +43,25 @@ class _FluidBackgroundState extends State<FluidBackground> with SingleTickerProv
             return Stack(
               children: [
                 _buildOrb(
-                  alignment: Alignment(-0.5 + 0.2 * cos(_controller.value * 2 * pi), -0.5 + 0.2 * sin(_controller.value * 2 * pi)),
-                  color: AppColors.signalColor.withOpacity(0.4),
+                  alignment: Alignment(
+                      -0.5 + 0.2 * cos(_controller.value * 2 * pi),
+                      -0.5 + 0.2 * sin(_controller.value * 2 * pi)),
+                  color: AppColors.signalColor.withValues(alpha: 0.4),
                   radius: 400,
                 ),
                 _buildOrb(
-                  alignment: Alignment(0.5 - 0.2 * sin(_controller.value * 2 * pi), -0.5 + 0.2 * cos(_controller.value * 2 * pi)),
-                  color: const Color(0xFF00C7FF).withOpacity(0.4), // Cyan
+                  alignment: Alignment(
+                      0.5 - 0.2 * sin(_controller.value * 2 * pi),
+                      -0.5 + 0.2 * cos(_controller.value * 2 * pi)),
+                  color: const Color(0xFF00C7FF).withValues(alpha: 0.4), // Cyan
                   radius: 350,
                 ),
                 _buildOrb(
-                  alignment: Alignment(0.5 - 0.2 * cos(_controller.value * 2 * pi), 0.5 - 0.2 * sin(_controller.value * 2 * pi)),
-                  color: const Color(0xFF7E00FF).withOpacity(0.4), // Indigo
+                  alignment: Alignment(
+                      0.5 - 0.2 * cos(_controller.value * 2 * pi),
+                      0.5 - 0.2 * sin(_controller.value * 2 * pi)),
+                  color:
+                      const Color(0xFF7E00FF).withValues(alpha: 0.4), // Indigo
                   radius: 450,
                 ),
               ],
@@ -65,14 +73,17 @@ class _FluidBackgroundState extends State<FluidBackground> with SingleTickerProv
         BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
           child: Container(
-            color: AppColors.voidColor.withOpacity(0.75), // Dark overlay
+            color: AppColors.voidColor.withValues(alpha: 0.75), // Dark overlay
           ),
         ),
       ],
     );
   }
 
-  Widget _buildOrb({required Alignment alignment, required Color color, required double radius}) {
+  Widget _buildOrb(
+      {required Alignment alignment,
+      required Color color,
+      required double radius}) {
     return Align(
       alignment: alignment,
       child: Container(

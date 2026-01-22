@@ -37,12 +37,12 @@ class _AuditReportPageState extends State<AuditReportPage>
       _showReport = false;
     });
     _scannerController.forward().then((_) {
-       // Loop complete
-       setState(() {
-         _scanning = false;
-         _showReport = true;
-       });
-       _scannerController.reset();
+      // Loop complete
+      setState(() {
+        _scanning = false;
+        _showReport = true;
+      });
+      _scannerController.reset();
     });
   }
 
@@ -54,11 +54,12 @@ class _AuditReportPageState extends State<AuditReportPage>
         title: Text(
           'OBSIDIAN // LENS',
           style: ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
-             letterSpacing: 3.0,
+            letterSpacing: 3.0,
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent, // Glass AppBar handled by system or blur if needed
+        backgroundColor: Colors
+            .transparent, // Glass AppBar handled by system or blur if needed
         elevation: 0,
       ),
       body: Stack(
@@ -72,11 +73,9 @@ class _AuditReportPageState extends State<AuditReportPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                   DragDropZone(onFileDropped: (file) => _startScan()),
-                   
-                   const SizedBox(height: 48),
-
-                   if (_showReport) _buildRefractiveReport(),
+                  DragDropZone(onFileDropped: (file) => _startScan()),
+                  const SizedBox(height: 48),
+                  if (_showReport) _buildRefractiveReport(),
                 ],
               ),
             ),
@@ -84,60 +83,62 @@ class _AuditReportPageState extends State<AuditReportPage>
 
           // SCANNING OVERLAY (The "Hollow Loop")
           if (_scanning)
-             Positioned.fill(
-               child: IgnorePointer(
-                 child: Stack(
-                   children: [
-                     // Dark Glass Overlay
-                     BackdropFilter(
-                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                       child: Container(color: Colors.black.withOpacity(0.6)),
-                     ),
-                     
-                     // Scanning Line
-                     AnimatedBuilder(
-                       animation: _scannerController,
-                       builder: (context, child) {
-                         return Positioned(
-                           top: MediaQuery.of(context).size.height * _scannerController.value,
-                           left: 0,
-                           right: 0,
-                           child: Container(
-                             height: 2,
-                             decoration: BoxDecoration(
-                               gradient: LinearGradient(
-                                 colors: [
-                                   Colors.transparent,
-                                   Colors.white.withOpacity(0.8),
-                                   Colors.transparent
-                                 ],
-                               ),
-                               boxShadow: [
-                                 BoxShadow(
-                                   color: Colors.white.withOpacity(0.5),
-                                   blurRadius: 10,
-                                   spreadRadius: 2,
-                                 )
-                               ]
-                             ),
-                           ),
-                         );
-                       },
-                     ),
-                     
-                     Center(
-                       child: Text(
-                         'ALIGNING SIGNAL...',
-                         style: ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
-                           letterSpacing: 4.0,
-                           color: Colors.white.withOpacity(0.8),
-                         ),
-                       ),
-                     ),
-                   ],
-                 ),
-               ),
-             ),
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Stack(
+                  children: [
+                    // Dark Glass Overlay
+                    BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child:
+                          Container(color: Colors.black.withValues(alpha: 0.6)),
+                    ),
+
+                    // Scanning Line
+                    AnimatedBuilder(
+                      animation: _scannerController,
+                      builder: (context, child) {
+                        return Positioned(
+                          top: MediaQuery.of(context).size.height *
+                              _scannerController.value,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            height: 2,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.white.withValues(alpha: 0.8),
+                                    Colors.transparent
+                                  ],
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withValues(alpha: 0.5),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                  )
+                                ]),
+                          ),
+                        );
+                      },
+                    ),
+
+                    Center(
+                      child: Text(
+                        'ALIGNING SIGNAL...',
+                        style: ObsidianTheme.themeData.textTheme.labelLarge
+                            ?.copyWith(
+                          letterSpacing: 4.0,
+                          color: Colors.white.withValues(alpha: 0.8),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -150,12 +151,12 @@ class _AuditReportPageState extends State<AuditReportPage>
         Text(
           'ANALYSIS COMPLETE',
           style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
             letterSpacing: 2.0,
           ),
         ),
         const SizedBox(height: 16),
-        
+
         // MOCK AUDIT CARD (Glass)
         ClipRRect(
           borderRadius: BorderRadius.circular(16),
@@ -171,16 +172,15 @@ class _AuditReportPageState extends State<AuditReportPage>
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white.withOpacity(0.2),
-                          blurRadius: 20,
-                          spreadRadius: 5,
-                        )
-                      ]
-                    ),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.white.withValues(alpha: 0.2),
+                            blurRadius: 20,
+                            spreadRadius: 5,
+                          )
+                        ]),
                     child: Center(
                       child: Text(
                         '42',
@@ -189,7 +189,7 @@ class _AuditReportPageState extends State<AuditReportPage>
                     ),
                   ),
                   const SizedBox(width: 24),
-                  
+
                   // CRITIQUE
                   Expanded(
                     child: Column(
@@ -202,9 +202,10 @@ class _AuditReportPageState extends State<AuditReportPage>
                         const SizedBox(height: 8),
                         Text(
                           'Background texture competes with product signal. Reduction recommended.',
-                          style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
-                             color: Colors.white.withOpacity(0.7),
-                             height: 1.5,
+                          style: ObsidianTheme.themeData.textTheme.bodyMedium
+                              ?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.7),
+                            height: 1.5,
                           ),
                         ),
                       ],

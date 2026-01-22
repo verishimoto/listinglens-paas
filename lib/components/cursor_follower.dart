@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
+
 import 'dart:ui' as ui;
 
 class CursorFollower extends StatefulWidget {
@@ -54,9 +54,9 @@ class _CursorGlowPainter extends CustomPainter {
         position,
         600, // Large radius
         [
-          Colors.white.withOpacity(0.05), // Center highlight
-          Colors.cyanAccent.withOpacity(0.02),
-          Colors.purpleAccent.withOpacity(0.01),
+          Colors.white.withValues(alpha: 0.05), // Center highlight
+          Colors.cyanAccent.withValues(alpha: 0.02),
+          Colors.purpleAccent.withValues(alpha: 0.01),
           Colors.transparent
         ],
         [0.0, 0.3, 0.6, 1.0],
@@ -70,10 +70,7 @@ class _CursorGlowPainter extends CustomPainter {
       ..shader = ui.Gradient.radial(
         position,
         100,
-        [
-          Colors.white.withOpacity(0.1),
-          Colors.transparent
-        ],
+        [Colors.white.withValues(alpha: 0.1), Colors.transparent],
       )
       ..blendMode = BlendMode.overlay;
 

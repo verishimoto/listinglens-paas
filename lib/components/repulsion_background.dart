@@ -155,8 +155,8 @@ class _RepulsionPainter extends CustomPainter {
     // Paint
     final paint = Paint()
       ..color = particle.isBlob
-          ? particle.color.withOpacity(0.15)
-          : particle.color.withOpacity(0.3)
+          ? particle.color.withValues(alpha: 0.15)
+          : particle.color.withValues(alpha: 0.3)
       ..maskFilter =
           MaskFilter.blur(BlurStyle.normal, particle.isBlob ? 100 : 0);
 

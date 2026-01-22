@@ -40,7 +40,7 @@ class _ReflectorCardState extends State<ReflectorCard> {
             boxShadow: _isHovering
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 40,
                       offset: const Offset(0, 10),
                     )
@@ -90,8 +90,8 @@ class _ReflectorPainter extends CustomPainter {
         ),
         radius: 0.5, // 300px roughly
         colors: [
-          Colors.white.withOpacity(0.8),
-          const Color(0xFF00C7FF).withOpacity(0.3), // Accent Cyan
+          Colors.white.withValues(alpha: 0.8),
+          const Color(0xFF00C7FF).withValues(alpha: 0.3), // Accent Cyan
           Colors.transparent,
         ],
         stops: const [0.0, 0.3, 1.0],

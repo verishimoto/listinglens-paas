@@ -40,38 +40,36 @@ class _LiquidTabShellState extends State<LiquidTabShell> {
         children: [
           // 1. THE MENISCUS SHAPE (Custom Paint)
           // This draws the unified glass body + tab
-            Positioned.fill(
-              child: ClipRRect(
-                child: BackdropFilter(
-                  filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-                  child: Stack(
-                   children: [
-                     CustomPaint(
-                        size: Size.infinite,
-                        painter: _MeniscusGlassPainter(
-                          tabTop: activeTabTop,
-                          tabHeight: tabHeight,
-                          tabWidth: tabWidth,
-                          curveRadius: connectionCurveRadius,
-                          mousePos: _mousePos,
-                        ),
-                      ),
-                      // NOISE LAYER (Ghost Glass: 4%)
-                      Positioned.fill(
-                        child: Opacity(
-                          opacity: 0.04,
-                          child: Image.network(
-                            'https://grainy-gradients.vercel.app/noise.svg',
-                            fit: BoxFit.cover,
-                            errorBuilder: (c, e, s) => const SizedBox(),
-                          ),
-                        ),
-                      ),
-                   ]
+          Positioned.fill(
+            child: ClipRRect(
+              child: BackdropFilter(
+                filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                child: Stack(children: [
+                  CustomPaint(
+                    size: Size.infinite,
+                    painter: _MeniscusGlassPainter(
+                      tabTop: activeTabTop,
+                      tabHeight: tabHeight,
+                      tabWidth: tabWidth,
+                      curveRadius: connectionCurveRadius,
+                      mousePos: _mousePos,
+                    ),
                   ),
-                ),
+                  // NOISE LAYER (Ghost Glass: 4%)
+                  Positioned.fill(
+                    child: Opacity(
+                      opacity: 0.04,
+                      child: Image.network(
+                        'https://grainy-gradients.vercel.app/noise.svg',
+                        fit: BoxFit.cover,
+                        errorBuilder: (c, e, s) => const SizedBox(),
+                      ),
+                    ),
+                  ),
+                ]),
               ),
             ),
+          ),
 
           // 2. THE CONTENT (Clipped or Padded)
           Padding(
@@ -117,7 +115,9 @@ class _LiquidTabShellState extends State<LiquidTabShell> {
                                     ])),
                           if (isActive) const SizedBox(width: 12),
                           Text(
-                            widget.tabs[index]['title'].toString().toUpperCase(),
+                            widget.tabs[index]['title']
+                                .toString()
+                                .toUpperCase(),
                             style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight:
@@ -160,16 +160,16 @@ class _MeniscusGlassPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.crystalSurface.withOpacity(0.85) // Base Glass
+      ..color = AppColors.crystalSurface.withValues(alpha: 0.85) // Base Glass
       ..style = PaintingStyle.fill;
 
     // Shader for Iridescent Glow
     final rect = Offset.zero & size;
     paint.shader =
         ui.Gradient.linear(Offset.zero, Offset(size.width, size.height), [
-      Colors.white.withOpacity(0.9),
-      const Color(0xFFF5F5FA).withOpacity(0.8),
-      const Color(0xFFE0E5FF).withOpacity(0.6),
+      Colors.white.withValues(alpha: 0.9),
+      const Color(0xFFF5F5FA).withValues(alpha: 0.8),
+      const Color(0xFFE0E5FF).withValues(alpha: 0.6),
     ], [
       0.0,
       0.5,
@@ -214,7 +214,8 @@ class _MeniscusGlassPainter extends CustomPainter {
     path.close();
 
     // DRAW SHADOW
-    canvas.drawShadow(path, AppColors.mellowCyan.withOpacity(0.2), 30, true);
+    canvas.drawShadow(
+        path, AppColors.mellowCyan.withValues(alpha: 0.2), 30, true);
 
     // 4. DRAW FILL (Base Glass)
     canvas.drawPath(path, paint);
@@ -225,9 +226,9 @@ class _MeniscusGlassPainter extends CustomPainter {
       ..strokeWidth = 2
       ..shader = ui.Gradient.linear(
           Offset(0, tabTop), Offset(tabWidth, tabTop + tabHeight), [
-        Colors.white.withOpacity(0.8),
-        Colors.white.withOpacity(0.0),
-        Colors.white.withOpacity(0.5),
+        Colors.white.withValues(alpha: 0.8),
+        Colors.white.withValues(alpha: 0.0),
+        Colors.white.withValues(alpha: 0.5),
       ], [
         0.0,
         0.5,
@@ -236,28 +237,15 @@ class _MeniscusGlassPainter extends CustomPainter {
     canvas.drawPath(path, refractionPaint);
 
     // 6. IRIDESCENT RIM (Outer Stroke)
-    final borderPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0
-      ..shader = ui.Gradient.sweep(Offset(size.width / 2, size.height / 2), [
-        AppColors.mellowCyan.withOpacity(0.5),
-        AppColors.mellowOrange.withOpacity(0.5),
-        const Color(0xFF7E00FF).withOpacity(0.5),
-        AppColors.mellowCyan.withOpacity(0.5),
-      ], [
-        0.0,
-        0.3,
-        0.7,
-        1.0
-      ]);
+
     // 6. GHOST GLASS BORDER (Inner Edge Specular)
     final innerBorderPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
       ..shader = ui.Gradient.linear(Offset(0, 0), Offset(0, size.height), [
-        Colors.white.withOpacity(0.2),
-        Colors.white.withOpacity(0.05),
-        Colors.white.withOpacity(0.0),
+        Colors.white.withValues(alpha: 0.2),
+        Colors.white.withValues(alpha: 0.05),
+        Colors.white.withValues(alpha: 0.0),
       ], [
         0.0,
         0.3,
@@ -269,7 +257,7 @@ class _MeniscusGlassPainter extends CustomPainter {
     final glowPaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          AppColors.mellowCyan.withOpacity(0.3),
+          AppColors.mellowCyan.withValues(alpha: 0.3),
           Colors.transparent
         ],
         stops: const [0.0, 1.0],
