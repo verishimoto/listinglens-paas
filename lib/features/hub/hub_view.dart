@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
 
-class HubView extends StatelessWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:listing_lens_paas/core/services/listing_service.dart';
+
+class HubView extends ConsumerWidget {
   const HubView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final listingsAsync = ref.watch(listingStreamProvider);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
       child: Column(
@@ -274,9 +278,75 @@ class HubView extends StatelessWidget {
               children: [
                 Expanded(
                   child: _buildSection('ACTIVE PROJECTS', [
-                    _buildListTile(
-                        'Leo Zodiac Bundle', 'Creative Market', '92', true),
-                    _buildListTile('Mystic Aura Pack', 'Etsy', '88', false),
+                    listingsAsync.when(
+                      data: (listings) {
+                        if (listings.isEmpty) {
+                          return const Text('No audits found.',
+                              style: TextStyle(
+                                  color: AppColors.textMute,
+                                  fontFamily: 'Inter'));
+                        }
+                        return Column(
+                          children: listings
+                              .take(3)
+                              .map((listing) => _buildListTile(
+                                  listing.title,
+                                  'Pending',
+                                  listing.score?.toStringAsFixed(0) ?? '-',
+                                  (listing.score ?? 0) > 80))
+                              .toList(),
+                        );
+                      },
+                      loading: () => const LinearProgressIndicator(
+                          color: AppColors.leverage1,
+                          backgroundColor: Colors.transparent),
+                      error: (err, stack) => const Text('Error loading data',
+                          style: TextStyle(color: Colors.red)),
+                    ),
+                    const SizedBox(height: 24),
+                    // CONNECT ACCOUNTS PLACEHOLDER
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.leverage1.withValues(alpha: 0.05),
+                        border: Border.all(
+                            color: AppColors.leverage1.withValues(alpha: 0.2)),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.link, color: AppColors.leverage1),
+                          const SizedBox(width: 16),
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Connect Accounts',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.leverage7)),
+                                Text('Creative Market • Etsy • Gumroad',
+                                    style: TextStyle(
+                                        fontSize: 10,
+                                        color: AppColors.textMute)),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                                color: AppColors.leverage1,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: const Text('LINK',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10,
+                                    color: Colors.white)),
+                          )
+                        ],
+                      ),
+                    ),
                   ]),
                 ),
                 const SizedBox(width: 40),
@@ -410,13 +480,10 @@ class HubView extends StatelessWidget {
                 )
               ],
             ),
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(8)),
-              child: const Icon(Icons.arrow_forward_ios,
-                  size: 12, color: AppColors.textMute),
+            LiquidCheckbox(
+              value: false, // Mock state
+              onChanged: (val) {},
+              label: 'Verify',
             ),
           ],
         ),

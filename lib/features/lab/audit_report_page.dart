@@ -2,15 +2,21 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/features/lab/drag_drop_zone.dart';
 import 'package:listing_lens_paas/shared/theme/obsidian_theme.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:listing_lens_paas/core/services/listing_service.dart';
+import 'package:listing_lens_paas/core/models/listing.dart';
+import 'package:listing_lens_paas/core/services/auth_service.dart';
+import 'package:cross_file/cross_file.dart';
+import 'package:uuid/uuid.dart';
 
-class AuditReportPage extends StatefulWidget {
+class AuditReportPage extends ConsumerStatefulWidget {
   const AuditReportPage({super.key});
 
   @override
-  State<AuditReportPage> createState() => _AuditReportPageState();
+  ConsumerState<AuditReportPage> createState() => _AuditReportPageState();
 }
 
-class _AuditReportPageState extends State<AuditReportPage>
+class _AuditReportPageState extends ConsumerState<AuditReportPage>
     with SingleTickerProviderStateMixin {
   bool _scanning = false;
   bool _showReport = false;
@@ -31,19 +37,46 @@ class _AuditReportPageState extends State<AuditReportPage>
     super.dispose();
   }
 
-  void _startScan() {
+  Future<void> _handleFileDrop(XFile file) async {
     setState(() {
       _scanning = true;
       _showReport = false;
     });
-    _scannerController.forward().then((_) {
-      // Loop complete
+
+    // 1. Start Visual Scan
+    _scannerController.forward();
+
+    try {
+      // 2. Create Listing Data
+      final user = ref.read(authServiceProvider).currentUser;
+      if (user != null) {
+        final newListing = Listing(
+          id: const Uuid().v4(),
+          userId: user.uid,
+          title: file.name,
+          imageUrl: '', // TODO: Storage Upload
+          status: 'analyzing',
+          createdAt: DateTime.now(),
+          score: null, // Pending analysis
+        );
+
+        // 3. Push to Firestore
+        await ref.read(listingServiceProvider).createListing(newListing);
+      }
+    } catch (e) {
+      debugPrint('Error creating listing: $e');
+    }
+
+    // 4. Wait for animation
+    await Future.delayed(const Duration(seconds: 3));
+
+    if (mounted) {
       setState(() {
         _scanning = false;
         _showReport = true;
       });
       _scannerController.reset();
-    });
+    }
   }
 
   @override
@@ -73,7 +106,7 @@ class _AuditReportPageState extends State<AuditReportPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  DragDropZone(onFileDropped: (file) => _startScan()),
+                  DragDropZone(onFileDropped: (file) => _handleFileDrop(file)),
                   const SizedBox(height: 48),
                   if (_showReport) _buildRefractiveReport(),
                 ],

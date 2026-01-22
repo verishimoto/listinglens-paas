@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
+import 'package:listing_lens_paas/components/dark_mode_toggle.dart';
 import 'dart:ui' as ui;
 
 class LiquidTabShell extends StatefulWidget {
@@ -22,6 +23,13 @@ class LiquidTabShell extends StatefulWidget {
 
 class _LiquidTabShellState extends State<LiquidTabShell> {
   Offset _mousePos = Offset.zero;
+  bool _isDark = true; // Local state for demo, ideally Riverpod
+
+  void _toggleTheme() {
+    setState(() {
+      _isDark = !_isDark;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,55 +92,64 @@ class _LiquidTabShellState extends State<LiquidTabShell> {
             bottom: 0,
             width: tabWidth,
             child: Center(
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(vertical: 24),
-                itemCount: widget.tabs.length,
-                itemBuilder: (context, index) {
-                  final isActive = widget.activeIndex == index;
-                  // Render text only, geometry is handled by painter
-                  return GestureDetector(
-                    onTap: () => widget.onTabSelected(index),
-                    child: Container(
-                      height: tabHeight,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      color: Colors.transparent, // Hit test target
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          if (isActive)
-                            Container(
-                                width: 6,
-                                height: 6,
-                                decoration: const BoxDecoration(
-                                    color: AppColors.signalColor, // Active Dot
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: AppColors.signalColor,
-                                          blurRadius: 6)
-                                    ])),
-                          if (isActive) const SizedBox(width: 12),
-                          Text(
-                            widget.tabs[index]['title']
-                                .toString()
-                                .toUpperCase(),
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight:
-                                  isActive ? FontWeight.w900 : FontWeight.w500,
-                              letterSpacing: 1.2,
-                              color: isActive
-                                  ? AppColors.textMain
-                                  : AppColors.textMute,
-                            ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    itemCount: widget.tabs.length,
+                    itemBuilder: (context, index) {
+                      final isActive = widget.activeIndex == index;
+                      // Render text only, geometry is handled by painter
+                      return GestureDetector(
+                        onTap: () => widget.onTabSelected(index),
+                        child: Container(
+                          height: 64.0, // Match tabHeight constant
+                          margin: const EdgeInsets.only(bottom: 12),
+                          color: Colors.transparent, // Hit test target
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            children: [
+                              if (isActive)
+                                Container(
+                                    width: 6,
+                                    height: 6,
+                                    decoration: const BoxDecoration(
+                                        color:
+                                            AppColors.signalColor, // Active Dot
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color: AppColors.signalColor,
+                                              blurRadius: 6)
+                                        ])),
+                              if (isActive) const SizedBox(width: 12),
+                              Text(
+                                widget.tabs[index]['title']
+                                    .toString()
+                                    .toUpperCase(),
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: isActive
+                                      ? FontWeight.w900
+                                      : FontWeight.w500,
+                                  letterSpacing: 1.2,
+                                  color: isActive
+                                      ? AppColors.textMain
+                                      : AppColors.textMute,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 40),
+                  DarkModeToggle(onToggle: _toggleTheme, isDark: _isDark),
+                ],
               ),
             ),
           ),
@@ -160,16 +177,27 @@ class _MeniscusGlassPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.crystalSurface.withValues(alpha: 0.85) // Base Glass
+      ..color =
+          AppColors.crystalSurface.withValues(alpha: 0.65) // Transparent Liquid
       ..style = PaintingStyle.fill;
 
-    // Shader for Iridescent Glow
-    final rect = Offset.zero & size;
+    // SUN REFRACTION PHYSICS
+    // The cursor is the "Sun". Refraction (glow) happens on the OPPOSITE side.
+    // Calculate the vector from Mouse(Sun) through Center to the opposite edge.
+    final center = Offset(size.width / 2, size.height / 2);
+    final toUnnormalized = center - mousePos;
+    final dist = toUnnormalized.distance;
+    final dir = dist > 0 ? toUnnormalized / dist : const Offset(1, 1);
+
+    // Project the glow point to the far edge based on mouse position intensity
+    final glowOffset = center + (dir * size.width * 0.6);
+
+    // Dynamic Iridescence Shader
     paint.shader =
-        ui.Gradient.linear(Offset.zero, Offset(size.width, size.height), [
-      Colors.white.withValues(alpha: 0.9),
-      const Color(0xFFF5F5FA).withValues(alpha: 0.8),
-      const Color(0xFFE0E5FF).withValues(alpha: 0.6),
+        ui.Gradient.linear(Offset(0, 0), Offset(size.width, size.height), [
+      Colors.white.withValues(alpha: 0.5),
+      const Color(0xFFF5F5FA).withValues(alpha: 0.3),
+      const Color(0xFFE0E5FF).withValues(alpha: 0.2),
     ], [
       0.0,
       0.5,
@@ -178,94 +206,95 @@ class _MeniscusGlassPainter extends CustomPainter {
 
     final path = Path();
 
-    // START: Top Right of Body
+    // CONSTANTS
+    const double bodyRadius = 40.0;
+    const double tabInternalRadius = 24.0;
+
+    // 1. BUILD PATH (Continuous Meniscus)
     path.moveTo(size.width, 0);
-    path.lineTo(tabWidth, 0); // Top Left of Body (Gap Start)
+    path.lineTo(tabWidth, 0);
 
-    // TAB CONNECTION (Top)
-    // Line down to tab top connection
+    // Top Meniscus (Connection)
+    // Smooth Bezier from Body Edge (x=tabWidth) down to Tab Top
+    // Control point pushes slightly OUT into the tab area for a "liquid" feel
     path.lineTo(tabWidth, tabTop - curveRadius);
-    // Curve OUT to Tab
-    path.quadraticBezierTo(
+    path.cubicTo(
         tabWidth,
-        tabTop, // Control Point (Corner)
-        tabWidth - curveRadius,
-        tabTop // End Point (Tab Top Edge start)
-        );
-    path.lineTo(20, tabTop); // Tab Left Edge (padded)
-
-    // TAB NOSE (Rounded Left)
-    path.arcToPoint(Offset(20, tabTop + tabHeight),
-        radius: const Radius.circular(16), clockwise: false);
-
-    // TAB CONNECTION (Bottom)
-    path.lineTo(tabWidth - curveRadius, tabTop + tabHeight);
-    // Curve IN to Body
-    path.quadraticBezierTo(
-        tabWidth,
-        tabTop + tabHeight, // Control
-        tabWidth,
-        tabTop + tabHeight + curveRadius // End
+        tabTop - (curveRadius * 0.5), // Control 1
+        tabWidth - (curveRadius * 0.5),
+        tabTop, // Control 2
+        tabWidth - curveRadius - 10,
+        tabTop // End (pushed in)
         );
 
-    // CONTINUE BODY
+    // Tab Top Edge
+    path.lineTo(tabInternalRadius, tabTop);
+
+    // Tab Nose (Selection Indicator)
+    path.arcToPoint(Offset(tabInternalRadius, tabTop + tabHeight),
+        radius: const Radius.circular(tabInternalRadius), clockwise: false);
+
+    // Tab Bottom Edge
+    path.lineTo(tabWidth - curveRadius - 10, tabTop + tabHeight);
+
+    // Bottom Meniscus (Connection)
+    path.cubicTo(
+        tabWidth - (curveRadius * 0.5),
+        tabTop + tabHeight,
+        tabWidth,
+        tabTop + tabHeight + (curveRadius * 0.5),
+        tabWidth,
+        tabTop + tabHeight + curveRadius);
+
+    // Continue Body
     path.lineTo(tabWidth, size.height);
     path.lineTo(size.width, size.height);
     path.close();
 
-    // DRAW SHADOW
+    // 2. SHADOW (Deep Ambient Diffusion)
     canvas.drawShadow(
-        path, AppColors.mellowCyan.withValues(alpha: 0.2), 30, true);
+        path, AppColors.leverage1.withValues(alpha: 0.12), 50, true);
 
-    // 4. DRAW FILL (Base Glass)
+    // 3. FILL (Glass)
     canvas.drawPath(path, paint);
 
-    // 5. STRONG REFRACTION (Inner Glow)
-    final refractionPaint = Paint()
+    // 4. OPPOSITE GLIMMER (The "Sun" Effect)
+    // Radial gradient centered at the "Anti-Sun" position
+    final glimmerPaint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2
-      ..shader = ui.Gradient.linear(
-          Offset(0, tabTop), Offset(tabWidth, tabTop + tabHeight), [
-        Colors.white.withValues(alpha: 0.8),
-        Colors.white.withValues(alpha: 0.0),
-        Colors.white.withValues(alpha: 0.5),
-      ], [
-        0.0,
-        0.5,
-        1.0
-      ]);
-    canvas.drawPath(path, refractionPaint);
+      ..strokeWidth = 2.0
+      ..shader = ui.Gradient.radial(
+          glowOffset,
+          size.width * 0.7, // Large spread
+          [
+            Colors.white.withValues(alpha: 0.95), // Hotspot
+            Colors.white.withValues(alpha: 0.4),
+            Colors.white.withValues(alpha: 0.0), // Fade out
+          ],
+          [
+            0.0,
+            0.2,
+            1.0
+          ])
+      ..maskFilter =
+          const MaskFilter.blur(BlurStyle.normal, 4.0); // Soften the light
 
-    // 6. IRIDESCENT RIM (Outer Stroke)
+    // Clip to path key for border effect
+    canvas.save();
+    canvas.clipPath(path);
+    canvas.drawPath(
+        path, glimmerPaint); // Draw stroke *inside* clip? No, usually center.
+    // Actually, simply drawing the stroke with the masked shader works well for borders.
+    canvas.restore();
+    // Re-draw stroke on top to ensure visibility
+    canvas.drawPath(path, glimmerPaint);
 
-    // 6. GHOST GLASS BORDER (Inner Edge Specular)
-    final innerBorderPaint = Paint()
+    // 5. INNER SPECULAR (The "Ice Block" Edge)
+    final innerBorder = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
-      ..shader = ui.Gradient.linear(Offset.zero, Offset(0, size.height), [
-        Colors.white.withValues(alpha: 0.2),
-        Colors.white.withValues(alpha: 0.05),
-        Colors.white.withValues(alpha: 0.0),
-      ], [
-        0.0,
-        0.3,
-        1.0
-      ]);
-    canvas.drawPath(path, innerBorderPaint);
-
-    // 7. MOUSE GLOW (Overlay)
-    final glowPaint = Paint()
-      ..shader = RadialGradient(
-        colors: [
-          AppColors.mellowCyan.withValues(alpha: 0.3),
-          Colors.transparent
-        ],
-        stops: const [0.0, 1.0],
-        radius: 0.6,
-      ).createShader(Rect.fromCircle(center: mousePos, radius: 400))
-      ..blendMode = BlendMode.screen;
-
-    canvas.drawRect(rect, glowPaint);
+      ..color = Colors.white.withValues(alpha: 0.15);
+    canvas.drawPath(path, innerBorder);
   }
 
   @override

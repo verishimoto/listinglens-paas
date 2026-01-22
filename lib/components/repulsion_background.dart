@@ -38,14 +38,18 @@ class _RepulsionBackgroundState extends State<RepulsionBackground>
           x: random.nextDouble() * size.width,
           y: random.nextDouble() * size.height,
           radius: isBlob
-              ? random.nextDouble() * 200 + 100
+              ? random.nextDouble() * 400 + 300 // Huge blobs (300-700px)
               : random.nextDouble() * 4 + 2,
           color: isBlob
-              ? (i % 2 == 0 ? AppColors.mellowCyan : AppColors.mellowOrange)
+              ? (i % 3 == 0 
+                  ? AppColors.leverage1.withValues(alpha: 0.4) // Purple
+                  : i % 3 == 1
+                      ? AppColors.leverage2.withValues(alpha: 0.4) // Cyan
+                      : AppColors.leverage4.withValues(alpha: 0.3)) // Neon Green
               : Colors.white,
           isBlob: isBlob,
           velocity:
-              Offset(random.nextDouble() - 0.5, random.nextDouble() - 0.5),
+              Offset((random.nextDouble() - 0.5) * 0.5, (random.nextDouble() - 0.5) * 0.5), // Slow drift
         );
 
         if (isBlob) {
@@ -172,7 +176,7 @@ class _RepulsionPainter extends CustomPainter {
           ? particle.color.withValues(alpha: 0.15)
           : particle.color.withValues(alpha: 0.3)
       ..maskFilter =
-          MaskFilter.blur(BlurStyle.normal, particle.isBlob ? 100 : 0);
+          MaskFilter.blur(BlurStyle.normal, particle.isBlob ? 150 : 0);
 
     canvas.drawCircle(Offset(particle.x, particle.y), particle.radius, paint);
   }
