@@ -7,7 +7,6 @@ class ObsidianTheme {
       useMaterial3: true,
       scaffoldBackgroundColor: Colors.black, // Pure Black
       colorScheme: const ColorScheme.dark(
-        background: Colors.black,
         surface: Colors.black, // Surface is black, glass sits on top
         primary: Colors.white,
         secondary: Color(0xFF27272a), // Zinc-800

@@ -41,7 +41,6 @@ class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: AppColors.signalColor,
         surface: AppColors.structureColor,
-        background: AppColors.voidColor,
       ),
 
       dividerTheme: const DividerThemeData(
@@ -96,7 +95,6 @@ class AppTheme {
       colorScheme: const ColorScheme.light(
         primary: AppColors.signalColor,
         surface: Colors.white,
-        background: Color(0xFFF5F5FA),
       ),
 
       dividerTheme: DividerThemeData(

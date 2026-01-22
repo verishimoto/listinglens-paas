@@ -13,8 +13,25 @@ class DragDropZone extends StatefulWidget {
   State<DragDropZone> createState() => _DragDropZoneState();
 }
 
-class _DragDropZoneState extends State<DragDropZone> {
+class _DragDropZoneState extends State<DragDropZone>
+    with SingleTickerProviderStateMixin {
   bool _dragging = false;
+  late AnimationController _breathingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _breathingController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _breathingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,36 +72,69 @@ class _DragDropZoneState extends State<DragDropZone> {
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.sensors, // More technical icon
-                  size: 48,
+              boxShadow: [
+                BoxShadow(
                   color: _dragging
-                      ? Colors.white
-                      : Colors.white.withValues(alpha: 0.5),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  _dragging ? 'RELEASE TO SCAN' : 'INITIATE ANALYSIS',
-                  style: ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
-                    color: _dragging
-                        ? Colors.white
-                        : Colors.white.withValues(alpha: 0.7),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'DROP IMAGE FOR HEURISTIC AUDIT',
-                  style: ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
-                    fontSize: 10,
-                    letterSpacing: 2.0,
-                    color: Colors.white.withValues(alpha: 0.3),
-                  ),
+                      ? Colors.white.withValues(alpha: 0.1)
+                      : Colors.transparent,
+                  blurRadius: 20,
+                  spreadRadius: 2,
                 ),
               ],
+            ),
+            child: AnimatedBuilder(
+              animation: _breathingController,
+              builder: (context, child) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white.withValues(
+                            alpha: _dragging
+                                ? 0.1
+                                : 0.05 + (_breathingController.value * 0.02)),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                  child: child,
+                );
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.sensors, // More technical icon
+                    size: 48,
+                    color: _dragging
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.5),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    _dragging ? 'RELEASE TO SCAN' : 'INITIATE ANALYSIS',
+                    style:
+                        ObsidianTheme.themeData.textTheme.labelLarge?.copyWith(
+                      color: _dragging
+                          ? Colors.white
+                          : Colors.white.withValues(alpha: 0.7),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'DROP IMAGE FOR HEURISTIC AUDIT',
+                    style:
+                        ObsidianTheme.themeData.textTheme.bodyMedium?.copyWith(
+                      fontSize: 10,
+                      letterSpacing: 2.0,
+                      color: Colors.white.withValues(alpha: 0.3),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

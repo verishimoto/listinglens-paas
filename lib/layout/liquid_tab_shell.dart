@@ -242,7 +242,7 @@ class _MeniscusGlassPainter extends CustomPainter {
     final innerBorderPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
-      ..shader = ui.Gradient.linear(Offset(0, 0), Offset(0, size.height), [
+      ..shader = ui.Gradient.linear(Offset.zero, Offset(0, size.height), [
         Colors.white.withValues(alpha: 0.2),
         Colors.white.withValues(alpha: 0.05),
         Colors.white.withValues(alpha: 0.0),

@@ -22,13 +22,13 @@ class ListingLensApp extends StatelessWidget {
     return MaterialApp(
       title: 'ListingLens PaaS',
       debugShowCheckedModeBanner: false,
-      color: Color(0xFF09090b),
-      home: SolidFusionLayout(),
+      color: const Color(0xFF09090b),
+      home: const SolidFusionLayout(),
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(
           Theme.of(context).textTheme.apply(
-            letterSpacingDelta: -0.5,
-          ),
+                letterSpacingDelta: -0.5,
+              ),
         ),
       ),
     );
