@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
+import 'package:listing_lens_paas/components/liquid_checkbox.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:listing_lens_paas/core/services/listing_service.dart';

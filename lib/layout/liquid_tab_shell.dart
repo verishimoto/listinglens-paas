@@ -207,7 +207,6 @@ class _MeniscusGlassPainter extends CustomPainter {
     final path = Path();
 
     // CONSTANTS
-    const double bodyRadius = 40.0;
     const double tabInternalRadius = 24.0;
 
     // 1. BUILD PATH (Continuous Meniscus)
