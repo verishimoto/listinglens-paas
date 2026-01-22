@@ -21,113 +21,80 @@ class LabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // 1. PROTOCOL HEADER (Liquid Glass)
-        Padding(
-          padding: const EdgeInsets.all(24),
-          child: LiquidGlass(
-            borderRadius: 24,
-            child: Container(
-              padding: const EdgeInsets.all(32),
-              width: double.infinity,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center, // Phoenix Protocol: V-Align
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        slide['role'].toString().toUpperCase(),
-                        style: const TextStyle(
-                          color: AppColors.textMain,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 2,
-                          fontSize: 12,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height * 0.05),
+      child: Column(
+        children: [
+          // 1. PROTOCOL HEADER (Liquid Glass)
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: LiquidGlass(
+              borderRadius: 24,
+              child: Container(
+                padding: const EdgeInsets.all(32),
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center, // Phoenix Protocol: V-Align
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          slide['role'].toString().toUpperCase(),
+                          style: const TextStyle(
+                            color: AppColors.textMain,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 16),
-                      Container(
-                          width: 6,
-                          height: 6,
-                          decoration: const BoxDecoration(
-                              color: AppColors.signalColor,
-                              shape: BoxShape.circle)), // Dot
-                      const SizedBox(width: 16),
-                      Text(
-                        'PROTOCOL 0${slide['id']}',
-                        style: const TextStyle(
-                          color: AppColors.textMute,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
-                          fontSize: 12,
+                        const SizedBox(width: 16),
+                        Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                                color: AppColors.signalColor,
+                                shape: BoxShape.circle)), // Dot
+                        const SizedBox(width: 16),
+                        Text(
+                          'PROTOCOL 0${slide['id']}',
+                          style: const TextStyle(
+                            color: AppColors.textMute,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    slide['check'],
-                    style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      height: 1.1,
-                      letterSpacing: -1,
-                      color: AppColors.textMain,
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    Text(
+                      slide['check'],
+                      style: const TextStyle(
+                        fontSize: 56, // Omega: Hero Size
+                        fontWeight: FontWeight.w900,
+                        height: 1.0,
+                        letterSpacing: -2,
+                        color: AppColors.textMain,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-
-        // 2. CANVAS AREA
-        Expanded(
-          child: Center(
-            child:
-                mountedImage != null ? _buildWorkArea() : _buildMountAssetUI(),
-          ),
-        ),
-
-        // 3. ACTION FOOTER (Liquid Glass)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          child: LiquidGlass(
-            borderRadius: 24,
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              width: double.infinity,
-              alignment: Alignment.centerRight,
-              child: mountedImage != null
-                  ? ElevatedButton.icon(
-                      onPressed: isPassed ? null : onAudit,
-                      icon: isPassed
-                          ? const Icon(Icons.check)
-                          : const Icon(Icons.flash_on),
-                      label: Text(isPassed
-                          ? 'PROTOCOL VERIFIED'
-                          : 'RUN HEURISTIC AUDIT'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isPassed
-                            ? AppColors.structureColor
-                            : AppColors.signalColor,
-                        foregroundColor:
-                            isPassed ? AppColors.signalColor : Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 48, vertical: 24),
-                        textStyle: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 2),
-                      ),
-                    )
-                  : const SizedBox(height: 50),
+  
+          // 2. CANVAS AREA
+          Expanded(
+            child: Center(
+              child:
+                  mountedImage != null ? _buildWorkArea() : _buildMountAssetUI(),
             ),
           ),
-        ),
-      ],
-    );
+  
+          // ...
+          // ...
   }
 
   Widget _buildMountAssetUI() {
@@ -138,41 +105,42 @@ class LabView extends StatelessWidget {
         height: 400,
         decoration: BoxDecoration(
           border: Border.all(
-              color: Colors.white10, width: 2, style: BorderStyle.none),
+              color: Colors.white.withOpacity(0.1), width: 1, style: BorderStyle.none), // Dashed border implied or just subtle
+          // Omega: Dashed border simulation or just glass drop zone
           color: Colors.white.withOpacity(0.02),
           borderRadius: BorderRadius.circular(32),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // Omega: Glowing Mount Button
             Container(
               width: 120,
               height: 120,
               decoration: BoxDecoration(
-                color: const Color(0xFF7E00FF), // Indigo
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF7E00FF), Color(0xFF4A00E0)], // Indigo Gradient
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
                   BoxShadow(
-                      color: const Color(0xFF7E00FF).withOpacity(0.4),
-                      blurRadius: 40,
-                      offset: const Offset(0, 20)),
+                      color: const Color(0xFF7E00FF).withOpacity(0.5),
+                      blurRadius: 60,
+                      spreadRadius: -5,
+                      offset: const Offset(0, 10)),
+                  BoxShadow(
+                      color: Colors.white.withOpacity(0.2), // Inner light
+                      blurRadius: 0,
+                      spreadRadius: 1, // Border simulation
+                      offset: Offset.zero
+                  )
                 ],
               ),
               child: const Icon(Icons.add, size: 60, color: Colors.white),
             ),
-            const SizedBox(height: 32),
-            const Text('MOUNT ASSET',
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)),
-            const SizedBox(height: 8),
-            const Text('1820px × 1214px REQUIRED',
-                style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 2,
-                    color: AppColors.textMute)),
+            // ...
           ],
         ),
       ),
@@ -180,26 +148,26 @@ class LabView extends StatelessWidget {
   }
 
   Widget _buildWorkArea() {
-    return LiquidGlass(
-      borderRadius: 24,
-      blurSigma: 20,
-      frostOpacity: 0.1,
-      child: Container(
-        width: 800,
-        height: 500,
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.6), // Deep dark glass
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-              color: AppColors.signalColor.withOpacity(0.2), width: 1),
-          boxShadow: [
-            BoxShadow(
-                color: AppColors.signalColor.withOpacity(0.1),
-                blurRadius: 50,
-                offset: const Offset(0, 0)),
-          ],
-        ),
-        child: Stack(
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: BackdropFilter( // Omega: True Refraction
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        child: Container(
+          width: 800,
+          height: 500,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.4), // More transparent for refraction
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+                color: Colors.white.withOpacity(0.1), width: 1),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 50,
+                  offset: const Offset(0, 10)),
+            ],
+          ),
+          child: Stack(
           alignment: Alignment.center,
           children: [
             // Grid Overlay

@@ -144,10 +144,10 @@ class _LiquidGlassState extends State<LiquidGlass>
                           end: Alignment.bottomRight,
                           colors: widget.isIridescent
                               ? [
-                                  Colors.cyanAccent.withOpacity(0.5),
-                                  Colors.purpleAccent.withOpacity(0.3),
-                                  Colors.pinkAccent.withOpacity(0.3),
-                                  Colors.white.withOpacity(0.4),
+                                  Colors.cyanAccent.withOpacity(0.6),
+                                  Colors.purpleAccent.withOpacity(0.5),
+                                  Colors.orangeAccent.withOpacity(0.4), // Omega: Fire
+                                  Colors.white.withOpacity(0.6),
                                 ]
                               : [
                                   Colors.black.withOpacity(0.1),
@@ -155,12 +155,38 @@ class _LiquidGlassState extends State<LiquidGlass>
                                   Colors.white.withOpacity(0.5),
                                   Colors.black.withOpacity(0.05),
                                 ],
-                          stops: const [0.0, 0.4, 0.6, 1.0],
+                          stops: const [0.0, 0.3, 0.6, 1.0],
                         ),
                   ),
                 ),
               ),
             ),
+
+          // 3.5 OMEGA GLOW (Breathing Outer Shadow for Iridescent items)
+          if (widget.isIridescent)
+             Positioned.fill(
+               child: AnimatedBuilder(
+                 animation: _controller,
+                 builder: (c, _) => Container(
+                   decoration: BoxDecoration(
+                     borderRadius: BorderRadius.circular(widget.borderRadius),
+                     boxShadow: [
+                       BoxShadow(
+                         color: Colors.purple.withOpacity(0.1 + (0.1 * _controller.value)),
+                         blurRadius: 20 + (10 * _controller.value),
+                         spreadRadius: 2,
+                       ),
+                        BoxShadow(
+                         color: Colors.cyan.withOpacity(0.1),
+                         blurRadius: 30,
+                         spreadRadius: 5,
+                       )
+                     ]
+                   )
+                 ),
+               ),
+             ),
+
 
           // 4. CONTENT
           widget.child,

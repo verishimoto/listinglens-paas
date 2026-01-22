@@ -12,6 +12,7 @@ import 'package:listing_lens_paas/core/services/gemini_service.dart';
 import 'package:listing_lens_paas/core/models/audit_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:listing_lens_paas/components/cursor_follower.dart';
 
 class SolidFusionLayout extends ConsumerStatefulWidget {
   const SolidFusionLayout({super.key});
@@ -182,113 +183,242 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
                         onTabSelected: (index) {
                           setState(() {
                             _activeSlide = index;
-                            if (_activeView != 'lab') _toggleView('lab');
-                          });
-                        },
-                        content: _activeView == 'lab'
-                            ? _buildLabView()
-                            : _buildHubView(),
+      body: CursorFollower(
+        child: Stack(
+          children: [
+            // 1. ANTI-GRAVITY PHYSICS (Orbital Blobs)
+            const Positioned.fill(child: AntigravityBackground()),
+
+            // 2. SHELL
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1400),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 32, right: 32, top: 12), // Spacing for the shell
+                        child: LiquidTabShell(
+                          tabs: _slides,
+                          activeIndex: _activeSlide,
+                          onTabSelected: (index) {
+                            setState(() {
+                              _activeSlide = index;
+                              if (_activeView != 'lab') _toggleView('lab');
+                            });
+                          },
+                          content: _activeView == 'lab'
+                              ? _buildLabView()
+                              : _buildHubView(),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            // 3. OMEGA HEADER (Floating)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _buildHeader(),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildHeader() {
-    final headerTabs = [
-      {'title': 'The Lab', 'id': 'lab', 'icon': Icons.science},
-      {'title': 'Hub', 'id': 'hub', 'icon': Icons.grid_view},
-    ];
-
-    final activeIndex = headerTabs.indexWhere((t) => t['id'] == _activeView);
-
-    return LiquidGlass(
-        borderRadius: 0,
-        blurSigma: 20,
-        frostOpacity: 0.05,
-        hasBorder: false,
-        child: Container(
-          height: 80,
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Colors.black.withOpacity(0.05))),
-          ),
-          child: Row(
-            children: [
-              // LOGO
-              Container(
-                width: 32,
-                height: 32,
-                decoration: const BoxDecoration(
-                    border: Border(
-                  left: BorderSide(color: AppColors.mellowOrange, width: 4),
-                  bottom: BorderSide(color: AppColors.mellowCyan, width: 4),
-                )),
-              ),
-              const SizedBox(width: 16),
-              const Text('LISTINGLENS',
-                  style: TextStyle(
-                      fontFamily: 'Agency FB',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                      color: AppColors.textMain)),
-
-              const Spacer(flex: 1),
-
-              // NAV (Centered effectively)
-              SizedBox(
-                height: 60,
-                child: GlassTabBar(
-                  tabs: headerTabs,
-                  activeIndex: activeIndex,
-                  onTabSelected: (index) {
-                    _toggleView(headerTabs[index]['id'] as String);
-                  },
-                  isVertical: false,
-                  showIndex: false,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      child: LiquidGlass(
+          borderRadius: 40, // Omega: 40px rigidity
+          blurSigma: 20,
+          frostOpacity: 0.05,
+          hasBorder: true,
+          child: Container(
+            height: 72,
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Row(
+              children: [
+                // 1. OMEGA LOGO (Clickable -> Reset)
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                       // Reset to default state
+                       setState(() {
+                         _activeView = 'lab';
+                         _activeSlide = 0;
+                       });
+                    },
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 28,
+                          height: 28,
+                          decoration: const BoxDecoration(
+                              border: Border(
+                            left: BorderSide(color: AppColors.mellowOrange, width: 3),
+                            bottom: BorderSide(color: AppColors.mellowCyan, width: 3),
+                          )),
+                        ),
+                        const SizedBox(width: 12),
+                        const Text('LISTINGLENS',
+                            style: TextStyle(
+                                fontFamily: 'Agency FB',
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 2,
+                                color: AppColors.textMain)),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
 
-              const Spacer(flex: 2),
+                const Spacer(),
 
-              // PRO BADGE
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.appleGreen.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: AppColors.appleGreen.withOpacity(0.3)),
+                // 2. CENTRAL NAV (Lab | Hub)
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.03),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: Colors.white.withOpacity(0.05)),
+                  ),
+                  child: Row(
+                    children: [
+                      _buildGlassLink(
+                        title: 'THE LAB',
+                        isActive: _activeView == 'lab',
+                        onTap: () => _toggleView('lab'),
+                      ),
+                      const SizedBox(width: 4),
+                      _buildGlassLink(
+                        title: 'THE HUB',
+                        isActive: _activeView == 'hub',
+                        onTap: () => _toggleView('hub'),
+                      ),
+                    ],
+                  ),
                 ),
-                child: Row(
+
+                const Spacer(),
+
+                // 3. RIGHT CONTROLS (Theme | Profile)
+                Row(
                   children: [
+                    // Theme Switch (Mock iOS Toggle)
                     Container(
-                        width: 6,
-                        height: 6,
-                        decoration: const BoxDecoration(
-                            color: AppColors.appleGreen,
-                            shape: BoxShape.circle)),
-                    const SizedBox(width: 8),
-                    const Text('PRO SYSTEM',
-                        style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.appleGreen)),
+                      height: 32,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.nightlight_round, size: 14, color: AppColors.textMute),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 36,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: AppColors.appleGreen,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.all(2),
+                            child: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 24),
+                    // Settings Gear (Rotation Animation placeholder)
+                    MouseRegion(
+                       cursor: SystemMouseCursors.click,
+                       child: Container(
+                         padding: const EdgeInsets.all(8),
+                         decoration: BoxDecoration(
+                           shape: BoxShape.circle,
+                           border: Border.all(color: Colors.white.withOpacity(0.1)),
+                           color: Colors.white.withOpacity(0.02),
+                         ),
+                         child: const Icon(Icons.settings, color: AppColors.textMute, size: 20),
+                       ),
+                    ),
+                    const SizedBox(width: 12),
+                    // Profile Avatar
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [AppColors.mellowCyan, AppColors.mellowOrange],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white.withOpacity(0.2), width: 1),
+                      ),
+                      child: const Center(
+                        child: Text("V", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                      ),
+                    )
                   ],
                 ),
-              )
-            ],
+              ],
+            ),
+          )),
+    );
+  }
+
+  Widget _buildGlassLink({required String title, required bool isActive, required VoidCallback onTap}) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          decoration: BoxDecoration(
+            color: isActive ? Colors.white.withOpacity(0.1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(20), // Omega: 20px
+            border: Border.all(
+              color: isActive ? Colors.white.withOpacity(0.1) : Colors.transparent
+            ),
+             boxShadow: isActive ? [
+               BoxShadow(
+                 color: Colors.white.withOpacity(0.05),
+                 blurRadius: 10,
+                 spreadRadius: 0
+               )
+             ] : [],
           ),
-        ));
+          child: Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: isActive ? FontWeight.w900 : FontWeight.w500,
+              letterSpacing: 1.5,
+              color: isActive ? Colors.white : AppColors.textMute,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildHubView() {

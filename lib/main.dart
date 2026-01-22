@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'layout/solid_fusion_layout.dart';
 import 'firebase_options.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -17,11 +19,18 @@ class ListingLensApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'ListingLens PaaS',
       debugShowCheckedModeBanner: false,
       color: Color(0xFF09090b),
       home: SolidFusionLayout(),
+      theme: ThemeData(
+        textTheme: GoogleFonts.interTextTheme(
+          Theme.of(context).textTheme.apply(
+            letterSpacingDelta: -0.5,
+          ),
+        ),
+      ),
     );
   }
 }
