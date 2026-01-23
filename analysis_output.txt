@@ -1,0 +1,11 @@
+Analyzing listing_lens_paas...                                  
+
+   info - Use 'const' with the constructor to improve performance - lib\features\beta\beta_flow.dart:175:23 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\beta\beta_flow.dart:177:32 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\beta\beta_flow.dart:182:36 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\features\beta\beta_flow.dart:183:29 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\gamma\gamma_input.dart:109:15 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\gamma\gamma_input.dart:166:17 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\trinity_dashboard.dart:26:15 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\trinity_dashboard.dart:28:24 - prefer_const_constructors
+

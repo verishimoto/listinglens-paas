@@ -193,8 +193,8 @@ class _MeniscusGlassPainter extends CustomPainter {
     final glowOffset = center + (dir * size.width * 0.6);
 
     // Dynamic Iridescence Shader
-    paint.shader =
-        ui.Gradient.linear(Offset(0, 0), Offset(size.width, size.height), [
+    paint.shader = ui.Gradient.linear(
+        const Offset(0, 0), Offset(size.width, size.height), [
       Colors.white.withValues(alpha: 0.5),
       const Color(0xFFF5F5FA).withValues(alpha: 0.3),
       const Color(0xFFE0E5FF).withValues(alpha: 0.2),

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ListingLens PaaS - The Trinity Protocol</title>
+    <style>
+        body {
+            margin: 0;
+            background: #09090b;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, #a855f7, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .card h2 {
+            margin: 0 0 1rem 0;
+            font-size: 2rem;
+        }
+
+        .card p {
+            color: #a1a1aa;
+        }
+
+        .alpha {
+            border-color: #3b82f6;
+        }
+
+        .alpha:hover {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .beta {
+            border-color: #a855f7;
+        }
+
+        .beta:hover {
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+        }
+
+        .gamma {
+            border-color: #f97316;
+        }
+
+        .gamma:hover {
+            box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>THE TRINITY PROTOCOL</h1>
+    <div class="grid">
+        <a href="alpha/" class="card alpha">
+            <h2>ALPHA</h2>
+            <p>SolidFusion</p>
+            <div class="tag">Material 3</div>
+            <p style="margin-top: 20px; font-size: 0.9rem;">Reliable. Clean. Standard.</p>
+        </a>
+        <a href="beta/" class="card beta">
+            <h2>BETA</h2>
+            <p>LiquidOpal</p>
+            <div class="tag">Glassmorphism</div>
+            <p style="margin-top: 20px; font-size: 0.9rem;">Dark. Neon. Aesthetic.</p>
+        </a>
+        <a href="gamma/" class="card gamma">
+            <h2>GAMMA</h2>
+            <p>ClayMotion</p>
+            <div class="tag">Neumorphism</div>
+            <p style="margin-top: 20px; font-size: 0.9rem;">Playful. Tactile. Fun.</p>
+        </a>
+    </div>
+    <div style="margin-top: 3rem; color: #52525b; font-size: 0.8rem;">
+        ListingLens PaaS • Level 9 Deployment
+    </div>
+</body>
+
+</html>
