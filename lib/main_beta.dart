@@ -26,7 +26,14 @@ class BetaApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF09090b),
+        // LiquidOpal: Aesthetics & Vibe (Glassmorphism + Shaders)
+        scaffoldBackgroundColor:
+            const Color(0xFF000000), // Pure black for max contrast
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.purple,
+          brightness: Brightness.dark,
+          surface: const Color(0xFF101014), // Very dark surface
+        ),
         textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme),
       ),
     );

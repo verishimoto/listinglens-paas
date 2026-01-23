@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
 import '../../core/services/analysis_service.dart';
@@ -261,6 +261,7 @@ class AlphaDashboard extends ConsumerWidget {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _handleNewAnalysis(context, ref),
           icon: const Icon(Icons.add),
+          label: const Text('New Analysis'),
         ), // New Analysis
       ),
     );

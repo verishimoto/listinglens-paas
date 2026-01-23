@@ -4,9 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:ui';
 import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
-import 'dart:ui';
-import '../../core/services/credit_service.dart';
-import '../../shared/paywall_modal.dart';
+
 import '../../core/services/analysis_service.dart';
 import '../../core/data/analysis_result.dart';
 import '../../shared/smooth_cursor.dart';
@@ -160,80 +158,81 @@ class BetaFlow extends ConsumerWidget {
                 icon: const Icon(Icons.menu, color: Colors.white),
               ),
             ),
-          // 1. Ambient Background Mesh
-          const Positioned(
-            top: -100,
-            left: -100,
-            child: _GlowOrb(color: Colors.purple, size: 400),
-          ),
-          const Positioned(
-            bottom: -50,
-            right: -50,
-            child: _GlowOrb(color: Colors.cyan, size: 300),
-          ),
+            // 1. Ambient Background Mesh
+            const Positioned(
+              top: -100,
+              left: -100,
+              child: _GlowOrb(color: Colors.purple, size: 400),
+            ),
+            const Positioned(
+              bottom: -50,
+              right: -50,
+              child: _GlowOrb(color: Colors.cyan, size: 300),
+            ),
 
-          // 2. Glass Foreground
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: Container(
-                  width: 500,
-                  height: 600,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(30),
-                    border:
-                        Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 40,
-                        spreadRadius: 10,
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      const Spacer(),
-                      const Icon(Icons.auto_awesome,
-                          size: 60, color: Colors.white),
-                      const SizedBox(height: 30),
-                      Text(
-                        'LIQUID OPAL',
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 4,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(color: Colors.purple, blurRadius: 20),
-                          ],
+            // 2. Glass Foreground
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                  child: Container(
+                    width: 500,
+                    height: 600,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(30),
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.1)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 40,
+                          spreadRadius: 10,
+                        )
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        const Spacer(),
+                        const Icon(Icons.auto_awesome,
+                            size: 60, color: Colors.white),
+                        const SizedBox(height: 30),
+                        const Text(
+                          'LIQUID OPAL',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 4,
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(color: Colors.purple, blurRadius: 20),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'Aesthetic Intelligence',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white.withValues(alpha: 0.6),
-                          letterSpacing: 2,
+                        const SizedBox(height: 10),
+                        Text(
+                          'Aesthetic Intelligence',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white.withValues(alpha: 0.6),
+                            letterSpacing: 2,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      _GlassButton(
-                        label: "BEGIN ANALYSIS",
-                        onTap: () => _handleBeginAnalysis(context, ref),
-                      ),
-                      const SizedBox(height: 40),
-                    ],
+                        const Spacer(),
+                        _GlassButton(
+                          label: "BEGIN ANALYSIS",
+                          onTap: () => _handleBeginAnalysis(context, ref),
+                        ),
+                        const SizedBox(height: 40),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -245,15 +244,15 @@ class _CinematicNavOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black.withOpacity(0.9),
+      backgroundColor: Colors.black.withValues(alpha: 0.9),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _NavText("HOME"),
-            _NavText("LISTINGS"),
-            _NavText("ANALYTICS"),
-            _NavText("SETTINGS"),
+            const _NavText("HOME"),
+            const _NavText("LISTINGS"),
+            const _NavText("ANALYTICS"),
+            const _NavText("SETTINGS"),
             const SizedBox(height: 40),
             IconButton(
               icon: const Icon(Icons.close, color: Colors.white54),

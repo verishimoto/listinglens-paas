@@ -34,7 +34,6 @@ class _SmoothCursorState extends State<SmoothCursor>
   // Interactive state (hovering over clickable)
   // Note: True "global hover" detection in Flutter is complex without wrapping every widget.
   // We will default to a standard size, but the infrastructure is here if we want to expand it.
-  bool _isHovering = false;
 
   @override
   void initState() {

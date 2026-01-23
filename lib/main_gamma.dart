@@ -25,9 +25,14 @@ class GammaApp extends StatelessWidget {
       home: const GammaInput(),
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF0F0F0),
-        // ClayMotion Theme
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        brightness: Brightness.light,
+        // ClayMotion: Play & Novelty (Neumorphism + Physics)
+        scaffoldBackgroundColor:
+            const Color(0xFFE0E5EC), // Classic Neumorphic Base
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
+          background: const Color(0xFFE0E5EC),
+        ),
         textTheme: GoogleFonts.dmSansTextTheme(),
       ),
     );

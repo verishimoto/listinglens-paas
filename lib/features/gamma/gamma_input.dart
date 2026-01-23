@@ -161,12 +161,14 @@ class _GammaInputState extends ConsumerState<GammaInput>
           children: [
             // Nav Toggle
             Positioned(
-              top: 20, 
+              top: 20,
               right: 20,
               child: GestureDetector(
                 onTap: () {
-                   // Popout Menu (Simple Dialog for Gamma feeling)
-                   showDialog(context: context, builder: (_) => const _GammaPopoutMenu());
+                  // Popout Menu (Simple Dialog for Gamma feeling)
+                  showDialog(
+                      context: context,
+                      builder: (_) => const _GammaPopoutMenu());
                 },
                 child: const _ClayIcon(icon: Icons.menu),
               ),
@@ -178,38 +180,44 @@ class _GammaInputState extends ConsumerState<GammaInput>
                   width: 600,
                   constraints: const BoxConstraints(minHeight: 400),
                   decoration: BoxDecoration(
-              color: const Color(0xFFF0F2F5),
-              borderRadius: BorderRadius.circular(50),
-              boxShadow: [
-                const BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(-20, -20),
-                  blurRadius: 60,
-                ),
-                BoxShadow(
-                  color: const Color(0xFFA6ABBD).withValues(alpha: 0.4),
-                  offset: const Offset(20, 20),
-                  blurRadius: 60,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(50),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _ClayIcon(
-                      icon:
-                          _step == 0 ? Icons.rocket_launch : Icons.upload_file),
-                  const SizedBox(height: 40),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: _step == 0 ? _buildIntroStep() : _buildUploadStep(),
+                    color: const Color(0xFFF0F2F5),
+                    borderRadius: BorderRadius.circular(50),
+                    boxShadow: [
+                      const BoxShadow(
+                        color: Colors.white,
+                        offset: Offset(-20, -20),
+                        blurRadius: 60,
+                      ),
+                      BoxShadow(
+                        color: const Color(0xFFA6ABBD).withValues(alpha: 0.4),
+                        offset: const Offset(20, 20),
+                        blurRadius: 60,
+                      ),
+                    ],
                   ),
-                ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(50),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _ClayIcon(
+                            icon: _step == 0
+                                ? Icons.rocket_launch
+                                : Icons.upload_file),
+                        const SizedBox(height: 40),
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: _step == 0
+                              ? _buildIntroStep()
+                              : _buildUploadStep(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -292,21 +300,29 @@ class _GammaPopoutMenu extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFF0F2F5),
           borderRadius: BorderRadius.circular(40),
-          boxShadow: [
-             const BoxShadow(color: Colors.white, offset: Offset(-10,-10), blurRadius: 20),
-             const BoxShadow(color: Colors.black12, offset: Offset(10,10), blurRadius: 20),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.white, offset: Offset(-10, -10), blurRadius: 20),
+            BoxShadow(
+                color: Colors.black12, offset: Offset(10, 10), blurRadius: 20),
           ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Toy Box", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueGrey[800])),
+            Text("Toy Box",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blueGrey[800])),
             const SizedBox(height: 20),
-            _ClayButton(label: "Play", onTap: (){}),
+            _ClayButton(label: "Play", onTap: () {}),
             const SizedBox(height: 10),
-            _ClayButton(label: "Settings", onTap: (){}),
-             const SizedBox(height: 10),
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Close"))
+            _ClayButton(label: "Settings", onTap: () {}),
+            const SizedBox(height: 10),
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Close"))
           ],
         ),
       ),

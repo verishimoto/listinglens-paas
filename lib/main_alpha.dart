@@ -25,9 +25,15 @@ class AlphaApp extends StatelessWidget {
       home: const AlphaDashboard(),
       theme: ThemeData(
         useMaterial3: true,
-        // Material 3 "SolidFusion" Theme
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-        textTheme: GoogleFonts.interTextTheme(),
+        brightness: Brightness.dark,
+        // Material 3 "SolidFusion" Theme: Reliability & Scale
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.cyan,
+          brightness: Brightness.dark,
+          surface: const Color(0xFF0F172A), // Slate 900
+        ),
+        scaffoldBackgroundColor: const Color(0xFF0F172A),
+        textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
       ),
     );
   }
