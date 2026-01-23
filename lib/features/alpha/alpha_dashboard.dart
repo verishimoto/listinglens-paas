@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
 import '../../core/services/analysis_service.dart';
 import '../../core/data/analysis_result.dart';
+import '../../shared/smooth_cursor.dart';
 
 class AlphaDashboard extends ConsumerWidget {
   const AlphaDashboard({super.key});
@@ -135,126 +137,131 @@ class AlphaDashboard extends ConsumerWidget {
     final theme = Theme.of(context);
     final credits = ref.watch(creditServiceProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Alpha Hub'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 8),
-          CircleAvatar(
-            backgroundColor: theme.colorScheme.primaryContainer,
-            child: Text('A',
-                style: TextStyle(color: theme.colorScheme.onPrimaryContainer)),
-          ),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: Row(
-        children: [
-          NavigationRail(
-            extended: MediaQuery.of(context).size.width > 900,
-            destinations: const [
-              NavigationRailDestination(
-                icon: Icon(Icons.dashboard_outlined),
-                selectedIcon: Icon(Icons.dashboard),
-                label: Text('Overview'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.analytics_outlined),
-                selectedIcon: Icon(Icons.analytics),
-                label: Text('Analysis'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('Settings'),
-              ),
-            ],
-            selectedIndex: 0,
-            onDestinationSelected: (int index) {},
-          ),
-          const VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome back, Agent.',
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+    return SmoothCursor(
+      cursorColor: Colors.black, // Solid/Ink color for Alpha
+      smoothing: 0.15, // Slightly heavier/stable for "Solid" feel
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Alpha Hub'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.notifications_outlined),
+              onPressed: () {},
+            ),
+            const SizedBox(width: 8),
+            CircleAvatar(
+              backgroundColor: theme.colorScheme.primaryContainer,
+              child: Text('A',
+                  style:
+                      TextStyle(color: theme.colorScheme.onPrimaryContainer)),
+            ),
+            const SizedBox(width: 16),
+          ],
+        ),
+        body: Row(
+          children: [
+            NavigationRail(
+              extended: MediaQuery.of(context).size.width > 900,
+              destinations: const [
+                NavigationRailDestination(
+                  icon: Icon(Icons.dashboard_outlined),
+                  selectedIcon: Icon(Icons.dashboard),
+                  label: Text('Overview'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.analytics_outlined),
+                  selectedIcon: Icon(Icons.analytics),
+                  label: Text('Analysis'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.settings_outlined),
+                  selectedIcon: Icon(Icons.settings),
+                  label: Text('Settings'),
+                ),
+              ],
+              selectedIndex: 0,
+              onDestinationSelected: (int index) {},
+            ),
+            const VerticalDivider(thickness: 1, width: 1),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome back, Agent.',
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      const _SummaryCard(
-                        title: 'Listings',
-                        value: '24',
-                        icon: Icons.home_work_outlined,
-                        color: Colors.blue,
-                      ),
-                      const SizedBox(width: 16),
-                      const _SummaryCard(
-                        title: 'Pending',
-                        value: '3',
-                        icon: Icons.pending_actions_outlined,
-                        color: Colors.orange,
-                      ),
-                      const SizedBox(width: 16),
-                      _SummaryCard(
-                        title: 'Credits',
-                        value: '$credits',
-                        icon: Icons.token_outlined,
-                        color: credits > 0 ? Colors.green : Colors.red,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-                  Text(
-                    'Recent Activity',
-                    style: theme.textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 16),
-                  Card(
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 5,
-                      separatorBuilder: (c, i) => const Divider(height: 1),
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(8),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        const _SummaryCard(
+                          title: 'Listings',
+                          value: '24',
+                          icon: Icons.home_work_outlined,
+                          color: Colors.blue,
+                        ),
+                        const SizedBox(width: 16),
+                        const _SummaryCard(
+                          title: 'Pending',
+                          value: '3',
+                          icon: Icons.pending_actions_outlined,
+                          color: Colors.orange,
+                        ),
+                        const SizedBox(width: 16),
+                        _SummaryCard(
+                          title: 'Credits',
+                          value: '$credits',
+                          icon: Icons.token_outlined,
+                          color: credits > 0 ? Colors.green : Colors.red,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 32),
+                    Text(
+                      'Recent Activity',
+                      style: theme.textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 16),
+                    Card(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 5,
+                        separatorBuilder: (c, i) => const Divider(height: 1),
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color:
+                                    theme.colorScheme.surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(Icons.image_outlined),
                             ),
-                            child: const Icon(Icons.image_outlined),
-                          ),
-                          title: Text('Luxury Apartment #${100 + index}'),
-                          subtitle: Text(
-                              'Analyzed 2 hours ago • Score: ${85 + index}'),
-                          trailing: const Icon(Icons.chevron_right),
-                        );
-                      },
+                            title: Text('Luxury Apartment #${100 + index}'),
+                            subtitle: Text(
+                                'Analyzed 2 hours ago • Score: ${85 + index}'),
+                            trailing: const Icon(Icons.chevron_right),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _handleNewAnalysis(context, ref),
-        icon: const Icon(Icons.add),
-        label: const Text('New Analysis'),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => _handleNewAnalysis(context, ref),
+          icon: const Icon(Icons.add),
+        ), // New Analysis
       ),
     );
   }

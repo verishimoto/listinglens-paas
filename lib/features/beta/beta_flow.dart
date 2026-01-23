@@ -4,11 +4,27 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:ui';
 import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
+import 'dart:ui';
+import '../../core/services/credit_service.dart';
+import '../../shared/paywall_modal.dart';
 import '../../core/services/analysis_service.dart';
 import '../../core/data/analysis_result.dart';
+import '../../shared/smooth_cursor.dart';
 
 class BetaFlow extends ConsumerWidget {
   const BetaFlow({super.key});
+
+  void _showCinematicNav(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Nav",
+      pageBuilder: (_, __, ___) => const _CinematicNavOverlay(),
+      transitionBuilder: (_, anim, __, child) {
+        return FadeTransition(opacity: anim, child: child);
+      },
+    );
+  }
 
   Future<void> _handleBeginAnalysis(BuildContext context, WidgetRef ref) async {
     final creditService = ref.read(creditServiceProvider.notifier);
@@ -128,10 +144,22 @@ class BetaFlow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // LiquidOpal: Dark Mode Only, Neon Gradients, Glass
-    return Scaffold(
-      backgroundColor: const Color(0xFF09090b),
-      body: Stack(
-        children: [
+    return SmoothCursor(
+      cursorColor: Colors.cyanAccent,
+      smoothing: 0.08, // Very fluid/fast for "Liquid" feel
+      child: Scaffold(
+        backgroundColor: const Color(0xFF09090b),
+        body: Stack(
+          children: [
+            // 0. Nav Trigger (Top Right)
+            Positioned(
+              top: 24,
+              right: 24,
+              child: IconButton(
+                onPressed: () => _showCinematicNav(context),
+                icon: const Icon(Icons.menu, color: Colors.white),
+              ),
+            ),
           // 1. Ambient Background Mesh
           const Positioned(
             top: -100,
@@ -206,6 +234,54 @@ class BetaFlow extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CinematicNavOverlay extends StatelessWidget {
+  const _CinematicNavOverlay();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.9),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _NavText("HOME"),
+            _NavText("LISTINGS"),
+            _NavText("ANALYTICS"),
+            _NavText("SETTINGS"),
+            const SizedBox(height: 40),
+            IconButton(
+              icon: const Icon(Icons.close, color: Colors.white54),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NavText extends StatelessWidget {
+  final String text;
+  const _NavText(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 32,
+          letterSpacing: 8,
+          fontWeight: FontWeight.w200,
+        ),
       ),
     );
   }

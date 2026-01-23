@@ -5,6 +5,7 @@ import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
 import '../../core/services/analysis_service.dart';
 import '../../core/data/analysis_result.dart';
+import '../../shared/smooth_cursor.dart';
 
 class GammaInput extends ConsumerStatefulWidget {
   const GammaInput({super.key});
@@ -151,15 +152,32 @@ class _GammaInputState extends ConsumerState<GammaInput>
   @override
   Widget build(BuildContext context) {
     // ClayMotion: Soft UI, High Interaction, Friendly
-    return Scaffold(
-      backgroundColor: const Color(0xFFF0F2F5),
-      body: Center(
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: Container(
-            width: 600,
-            constraints: const BoxConstraints(minHeight: 400),
-            decoration: BoxDecoration(
+    return SmoothCursor(
+      cursorColor: const Color(0xFF4A5568),
+      smoothing: 0.2, // Bouncy/Elastic feel
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF0F2F5),
+        body: Stack(
+          children: [
+            // Nav Toggle
+            Positioned(
+              top: 20, 
+              right: 20,
+              child: GestureDetector(
+                onTap: () {
+                   // Popout Menu (Simple Dialog for Gamma feeling)
+                   showDialog(context: context, builder: (_) => const _GammaPopoutMenu());
+                },
+                child: const _ClayIcon(icon: Icons.menu),
+              ),
+            ),
+            Center(
+              child: ScaleTransition(
+                scale: _scaleAnimation,
+                child: Container(
+                  width: 600,
+                  constraints: const BoxConstraints(minHeight: 400),
+                  decoration: BoxDecoration(
               color: const Color(0xFFF0F2F5),
               borderRadius: BorderRadius.circular(50),
               boxShadow: [
@@ -257,6 +275,41 @@ class _GammaInputState extends ConsumerState<GammaInput>
         const SizedBox(height: 40),
         _ClayButton(label: "Analyze Now", onTap: _handleDeepAnalysis),
       ],
+    );
+  }
+}
+
+class _GammaPopoutMenu extends StatelessWidget {
+  const _GammaPopoutMenu();
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(20),
+      child: Container(
+        padding: const EdgeInsets.all(30),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF0F2F5),
+          borderRadius: BorderRadius.circular(40),
+          boxShadow: [
+             const BoxShadow(color: Colors.white, offset: Offset(-10,-10), blurRadius: 20),
+             const BoxShadow(color: Colors.black12, offset: Offset(10,10), blurRadius: 20),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Toy Box", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueGrey[800])),
+            const SizedBox(height: 20),
+            _ClayButton(label: "Play", onTap: (){}),
+            const SizedBox(height: 10),
+            _ClayButton(label: "Settings", onTap: (){}),
+             const SizedBox(height: 10),
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text("Close"))
+          ],
+        ),
+      ),
     );
   }
 }
