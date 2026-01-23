@@ -19,6 +19,44 @@ param (
 
 $WorkspaceRoot = Get-Location
 $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+$StateFile = Join-Path $WorkspaceRoot ".gemini_state.json"
+
+function Get-State {
+    if (Test-Path $StateFile) {
+        return Get-Content $StateFile | ConvertFrom-Json
+    }
+    return @{}
+}
+
+function Save-State {
+    param ($State)
+    $State | ConvertTo-Json | Set-Content $StateFile
+}
+
+function Test-RoutineDue {
+    param (
+        [string]$RoutineName,
+        [int]$IntervalMinutes
+    )
+    $State = Get-State
+    if ($State.$RoutineName) {
+        $LastRun = [DateTime]$State.$RoutineName
+        $NextRun = $LastRun.AddMinutes($IntervalMinutes)
+        if ((Get-Date) -lt $NextRun) {
+            $TimeRemaining = ($NextRun - (Get-Date)).TotalMinutes
+            Log-Message "Routine '$RoutineName' is not due yet. Next run in $([math]::Round($TimeRemaining, 1)) mins."
+            return $false
+        }
+    }
+    return $true
+}
+
+function Update-RoutineTimestamp {
+    param ([string]$RoutineName)
+    $State = Get-State
+    $State | Add-Member -Type NoteProperty -Name $RoutineName -Value (Get-Date) -Force
+    Save-State $State
+}
 
 function Log-Message {
     param ([string]$Message)
@@ -169,6 +207,7 @@ function Run-Antigravity {
     }
 
     Log-Message "Antigravity Routine Complete. System is autonomous."
+    Update-RoutineTimestamp -RoutineName "Antigravity"
 }
 
 # --- Main Execution ---

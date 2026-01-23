@@ -1,6 +1,7 @@
 ---
 description: Run the Gemini Autonomy Routine (Heartbeat or Deep Clean)
 ---
+// turbo-all
 
 This workflow triggers the Gemini Autonomy Manager to perform self-maintenance tasks.
 
