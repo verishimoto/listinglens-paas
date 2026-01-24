@@ -1,13 +1,6 @@
-import 'beta_time_stream.dart';
-
-// ... (rest of imports)
-
-// ...
-
-                  context: context,
-                  pageBuilder: (_, __, ___) => const BetaTimeStream(),
-                );
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'beta_time_stream.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:ui';
 import '../../core/services/credit_service.dart';
@@ -15,9 +8,7 @@ import '../../shared/paywall_modal.dart';
 
 import '../../core/services/analysis_service.dart';
 import '../../core/services/history_service.dart';
-import '../../core/services/history_service.dart';
 import '../../core/data/analysis_result.dart';
-import '../../core/providers/history_provider.dart';
 import '../../shared/smooth_cursor.dart';
 
 class BetaFlow extends ConsumerWidget {
@@ -271,7 +262,7 @@ class _CinematicNavOverlay extends StatelessWidget {
                 Navigator.pop(context);
                 showGeneralDialog(
                   context: context,
-                  pageBuilder: (_, __, ___) => const _BetaTimeStream(),
+                  pageBuilder: (_, __, ___) => const BetaTimeStream(),
                 );
               },
             ),

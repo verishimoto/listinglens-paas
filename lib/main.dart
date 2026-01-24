@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:listing_lens_paas/features/alpha/alpha_dashboard.dart';
 import 'firebase_options.dart';
+import 'package:listing_lens_paas/core/theme/app_theme.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,15 +23,8 @@ class ListingLensApp extends StatelessWidget {
     return MaterialApp(
       title: 'ListingLens PaaS',
       debugShowCheckedModeBanner: false,
-      color: const Color(0xFF09090b),
+      theme: AppTheme.darkTheme,
       home: const AlphaDashboard(),
-      theme: ThemeData(
-        textTheme: GoogleFonts.interTextTheme(
-          Theme.of(context).textTheme.apply(
-                letterSpacingDelta: -0.5,
-              ),
-        ),
-      ),
     );
   }
 }

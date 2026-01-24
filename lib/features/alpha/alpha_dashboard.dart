@@ -9,6 +9,7 @@ import '../../core/data/analysis_result.dart';
 import '../../core/services/history_service.dart';
 import '../../shared/smooth_cursor.dart';
 import '../../core/providers/history_provider.dart';
+import '../../shared/glass_container.dart';
 
 class AlphaDashboard extends ConsumerWidget {
   const AlphaDashboard({super.key});
@@ -253,14 +254,12 @@ class AlphaDashboard extends ConsumerWidget {
     return historyAsync.when(
       data: (history) {
         if (history.isEmpty) {
-          return const Card(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Text("No analysis history yet."),
-            ),
+          return const GlassContainer(
+            padding: EdgeInsets.all(16),
+            child: Text("No analysis history yet."),
           );
         }
-        return Card(
+        return GlassContainer(
           child: ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -311,23 +310,21 @@ class _SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: color, size: 28),
-              const SizedBox(height: 16),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              Text(title),
-            ],
-          ),
+      child: GlassContainer(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: color, size: 28),
+            const SizedBox(height: 16),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            Text(title, style: Theme.of(context).textTheme.bodySmall),
+          ],
         ),
       ),
     );
@@ -344,13 +341,11 @@ class _ScoreCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GlassContainer(
+      color: color,
+      opacity: 0.1,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
+      border: Border.all(color: color.withValues(alpha: 0.3)),
       child: Column(
         children: [
           Text(
