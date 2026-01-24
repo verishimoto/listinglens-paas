@@ -1,11 +1,4 @@
 class AnalysisResult {
-  final int overallScore;
-  final int lightingScore;
-  final int compositionScore;
-  final int clarityScore;
-  final List<String> actionableFeedback;
-  final String summary;
-
   final String id;
   final DateTime timestamp;
   final String? userId; // Nullable for anonymous

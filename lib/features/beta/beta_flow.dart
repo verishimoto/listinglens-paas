@@ -1,4 +1,12 @@
-import 'package:flutter/material.dart';
+import 'beta_time_stream.dart';
+
+// ... (rest of imports)
+
+// ...
+
+                  context: context,
+                  pageBuilder: (_, __, ___) => const BetaTimeStream(),
+                );
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:ui';

@@ -1,0 +1,11 @@
+Analyzing listing_lens_paas...                                  
+
+  error - The name 'overallScore' is already defined - lib\core\data\analysis_result.dart:12:13 - duplicate_definition
+  error - The name 'lightingScore' is already defined - lib\core\data\analysis_result.dart:13:13 - duplicate_definition
+  error - The name 'compositionScore' is already defined - lib\core\data\analysis_result.dart:14:13 - duplicate_definition
+  error - The name 'clarityScore' is already defined - lib\core\data\analysis_result.dart:15:13 - duplicate_definition
+  error - The name 'actionableFeedback' is already defined - lib\core\data\analysis_result.dart:16:22 - duplicate_definition
+  error - The name 'summary' is already defined - lib\core\data\analysis_result.dart:17:16 - duplicate_definition
+  error - All final variables must be initialized, but 'actionableFeedback', 'clarityScore', and 4 others aren't - lib\core\data\analysis_result.dart:19:3 - final_not_initialized_constructor
+  error - The name '_BetaTimeStream' isn't a class - lib\features\beta\beta_flow.dart:266:54 - creation_with_non_type
+
