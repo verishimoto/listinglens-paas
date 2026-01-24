@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:listing_lens_paas/features/trinity_dashboard.dart';
+import 'package:listing_lens_paas/features/alpha/alpha_dashboard.dart';
 import 'firebase_options.dart';
 import 'package:listing_lens_paas/core/theme/app_theme.dart';
-
-import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +14,9 @@ void main() async {
 }
 
 class ListingLensApp extends StatelessWidget {
-  const ListingLensApp({super.key});
+  final Widget? home;
+
+  const ListingLensApp({super.key, this.home});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class ListingLensApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       color: const Color(0xFF09090b),
-      home: const TrinityDashboard(),
+      home: home ?? const TrinityDashboard(),
     );
   }
 }

@@ -22,7 +22,7 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: background,
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: primary,
         onPrimary: onPrimary,
         secondary: secondary,
@@ -41,7 +41,7 @@ class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: surfaceHighlight.withValues(alpha: 0.5),
         elevation: 0,
         shape: RoundedRectangleBorder(

@@ -111,6 +111,40 @@ function Run-DeepClean {
 
     # 4. Resource Optimization (Stub - could kill chrome processes etc)
     Log-Message "Workspace optimized."
+    
+    # 5. Clutter Sweep
+    Run-ClutterSweep
+}
+
+function Run-ClutterSweep {
+    Log-Message "Starting Clutter Sweep..."
+    
+    # Define clutter patterns
+    $ClutterPatterns = @(
+        "*.bak",
+        "*.tmp",
+        "analysis_output.txt"
+    )
+    
+    $Count = 0
+    foreach ($Pattern in $ClutterPatterns) {
+        $Files = Get-ChildItem -Path $WorkspaceRoot -Filter $Pattern -Recurse -ErrorAction SilentlyContinue
+        foreach ($File in $Files) {
+            # Skip if in .git or node_modules to be safe, though unlikely for these extensions
+            if ($File.FullName -notmatch "\\.git\\" -and $File.FullName -notmatch "node_modules") {
+                Remove-Item $File.FullName -Force
+                Log-Message "Removed clutter: $($File.Name)"
+                $Count++
+            }
+        }
+    }
+    
+    if ($Count -eq 0) {
+        Log-Message "No clutter found."
+    }
+    else {
+        Log-Message "Cleaned $Count clutter items."
+    }
 }
 
 function Start-Watcher {
@@ -205,6 +239,9 @@ function Run-Antigravity {
     else {
         Log-Message "No post-fix changes to commit."
     }
+
+    # 6. Clutter Sweep
+    Run-ClutterSweep
 
     Log-Message "Antigravity Routine Complete. System is autonomous."
     Update-RoutineTimestamp -RoutineName "Antigravity"
