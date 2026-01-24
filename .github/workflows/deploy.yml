@@ -17,13 +17,17 @@ jobs:
         with:
           channel: 'stable'
           
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build Web
-        run: flutter build web --release --no-tree-shake-icons
+      - name: Build Trinity Protocol
+        run: python tools/deploy_trinity.py
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build/web
+          folder: deploy
