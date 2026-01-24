@@ -13,7 +13,7 @@
 
 param (
     [Parameter(Mandatory = $true)]
-    [ValidateSet("Heartbeat", "DeepClean", "Watcher", "Restore", "Antigravity")]
+    [ValidateSet("Heartbeat", "DeepClean", "Watcher", "Restore", "Antigravity", "Backup")]
     [string]$Routine
 )
 
@@ -210,6 +210,44 @@ function Run-Antigravity {
     Update-RoutineTimestamp -RoutineName "Antigravity"
 }
 
+function Run-Backup {
+    Log-Message "Initiating Artifact Backup Protocol..."
+    
+    $BackupRoot = Join-Path $WorkspaceRoot "backups"
+    if (-not (Test-Path $BackupRoot)) { New-Item -ItemType Directory -Path $BackupRoot | Out-Null }
+    
+    $SanitizedTimestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $BackupName = "ListingLens_Artifacts_$SanitizedTimestamp"
+    $TargetDir = Join-Path $BackupRoot $BackupName
+    New-Item -ItemType Directory -Path $TargetDir | Out-Null
+    
+    # 1. Backup 'Brain' (Knowledge & Plans)
+    $BrainPath = "C:\Users\veris\.gemini\antigravity\brain\a6599345-759b-407b-be2b-e5efb7e859dc"
+    if (Test-Path $BrainPath) {
+        Log-Message "Backing up Brain Artifacts..."
+        try {
+            Copy-Item -Path "$BrainPath\*" -Destination "$TargetDir\brain" -Recurse -Container -Force
+        }
+        catch {
+            Log-Message "Warning: Could not fully backup Brain (Permission or Path issue)."
+        }
+    }
+    
+    # 2. Backup 'Deploy' (Builds)
+    $DeployPath = Join-Path $WorkspaceRoot "deploy"
+    if (Test-Path $DeployPath) {
+        Log-Message "Backing up Deployment Artifacts..."
+        try {
+            Copy-Item -Path $DeployPath -Destination "$TargetDir\deploy" -Recurse -Container -Force
+        }
+        catch {
+            Log-Message "Warning: Could not fully backup Deploy."
+        }
+    }
+
+    Log-Message "Backup Complete: $TargetDir"
+}
+
 # --- Main Execution ---
 
 try {
@@ -219,6 +257,7 @@ try {
         "Watcher" { Start-Watcher }
         "Restore" { Restore-SafeMode }
         "Antigravity" { Run-Antigravity }
+        "Backup" { Run-Backup }
     }
 }
 catch {

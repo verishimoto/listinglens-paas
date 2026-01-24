@@ -6,7 +6,9 @@ import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
 import '../../core/services/analysis_service.dart';
 import '../../core/data/analysis_result.dart';
+import '../../core/services/history_service.dart';
 import '../../shared/smooth_cursor.dart';
+import '../../core/providers/history_provider.dart';
 
 class AlphaDashboard extends ConsumerWidget {
   const AlphaDashboard({super.key});
@@ -48,6 +50,9 @@ class AlphaDashboard extends ConsumerWidget {
 
         // consume credit now that we have a result
         creditService.consumeCredit();
+
+        // Save to History
+        HistoryService().saveAnalysis(result);
 
         // 3. Show Result
         _showAnalysisResult(context, result);
@@ -226,32 +231,7 @@ class AlphaDashboard extends ConsumerWidget {
                       style: theme.textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
-                    Card(
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 5,
-                        separatorBuilder: (c, i) => const Divider(height: 1),
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            leading: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color:
-                                    theme.colorScheme.surfaceContainerHighest,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Icon(Icons.image_outlined),
-                            ),
-                            title: Text('Luxury Apartment #${100 + index}'),
-                            subtitle: Text(
-                                'Analyzed 2 hours ago • Score: ${85 + index}'),
-                            trailing: const Icon(Icons.chevron_right),
-                          );
-                        },
-                      ),
-                    ),
+                    _buildHistoryList(ref, theme),
                   ],
                 ),
               ),
@@ -264,6 +244,53 @@ class AlphaDashboard extends ConsumerWidget {
           label: const Text('New Analysis'),
         ), // New Analysis
       ),
+    );
+  }
+
+  Widget _buildHistoryList(WidgetRef ref, ThemeData theme) {
+    final historyAsync = ref.watch(historyStreamProvider);
+
+    return historyAsync.when(
+      data: (history) {
+        if (history.isEmpty) {
+          return const Card(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text("No analysis history yet."),
+            ),
+          );
+        }
+        return Card(
+          child: ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: history.length,
+            separatorBuilder: (c, i) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final item = history[index];
+              return ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.image_outlined),
+                ),
+                title: Text(item.summary,
+                    maxLines: 1, overflow: TextOverflow.ellipsis),
+                subtitle: Text(
+                    '${item.timestamp.hour}:${item.timestamp.minute} • Score: ${item.overallScore}'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _showAnalysisResult(context, item),
+              );
+            },
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Text('Error loading history: $err'),
     );
   }
 }

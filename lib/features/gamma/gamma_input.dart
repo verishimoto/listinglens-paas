@@ -4,7 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
 import '../../core/services/analysis_service.dart';
+import '../../core/services/history_service.dart';
 import '../../core/data/analysis_result.dart';
+import '../../core/providers/history_provider.dart';
 import '../../shared/smooth_cursor.dart';
 
 class GammaInput extends ConsumerStatefulWidget {
@@ -87,6 +89,7 @@ class _GammaInputState extends ConsumerState<GammaInput>
       if (mounted) {
         Navigator.pop(context);
         creditService.consumeCredit();
+        HistoryService().saveAnalysis(result);
 
         // Show Gamma Result
         _showGammaResult(result);
@@ -316,7 +319,14 @@ class _GammaPopoutMenu extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Colors.blueGrey[800])),
             const SizedBox(height: 20),
-            _ClayButton(label: "Play", onTap: () {}),
+            _ClayButton(
+                label: "Memories",
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(
+                      context: context,
+                      builder: (_) => const _GammaMemoryLane());
+                }),
             const SizedBox(height: 10),
             _ClayButton(label: "Settings", onTap: () {}),
             const SizedBox(height: 10),
@@ -412,6 +422,98 @@ class _ClayButtonState extends State<_ClayButton> {
             fontWeight: FontWeight.bold,
             color: Color(0xFF4A5568),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GammaMemoryLane extends ConsumerWidget {
+  const _GammaMemoryLane();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final historyAsync = ref.watch(historyStreamProvider);
+
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(20),
+      child: Container(
+        height: 600,
+        padding: const EdgeInsets.all(30),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF0F2F5),
+          borderRadius: BorderRadius.circular(40),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.white,
+                offset: const Offset(-10, -10),
+                blurRadius: 20),
+            BoxShadow(
+                color: Colors.black12,
+                offset: const Offset(10, 10),
+                blurRadius: 20),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Memory Lane",
+                    style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.w900,
+                        color: Color(0xFF4A5568))),
+                IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context)),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: historyAsync.when(
+                data: (history) => ListView.builder(
+                  itemCount: history.length,
+                  itemBuilder: (ctx, i) {
+                    final item = history[i];
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0F2F5),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.white,
+                              offset: const Offset(-5, -5),
+                              blurRadius: 10),
+                          BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              offset: const Offset(5, 5),
+                              blurRadius: 10),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.summary,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF4A5568))),
+                          const SizedBox(height: 5),
+                          Text("Score: ${item.overallScore}%",
+                              style: TextStyle(color: Colors.blueGrey[400])),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (e, s) => const Text("Oops! Memories stuck."),
+              ),
+            ),
+          ],
         ),
       ),
     );

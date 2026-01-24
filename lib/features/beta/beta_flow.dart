@@ -6,7 +6,10 @@ import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
 
 import '../../core/services/analysis_service.dart';
+import '../../core/services/history_service.dart';
+import '../../core/services/history_service.dart';
 import '../../core/data/analysis_result.dart';
+import '../../core/providers/history_provider.dart';
 import '../../shared/smooth_cursor.dart';
 
 class BetaFlow extends ConsumerWidget {
@@ -63,6 +66,7 @@ class BetaFlow extends ConsumerWidget {
       if (context.mounted) {
         Navigator.pop(context); // Dismiss loading
         creditService.consumeCredit();
+        HistoryService().saveAnalysis(result);
 
         // Show Beta Result (Glass Modal)
         _showBetaResult(context, result);
@@ -253,6 +257,16 @@ class _CinematicNavOverlay extends StatelessWidget {
             const _NavText("LISTINGS"),
             const _NavText("ANALYTICS"),
             const _NavText("SETTINGS"),
+            _GlassButton(
+              label: "RECALL",
+              onTap: () {
+                Navigator.pop(context);
+                showGeneralDialog(
+                  context: context,
+                  pageBuilder: (_, __, ___) => const _BetaTimeStream(),
+                );
+              },
+            ),
             const SizedBox(height: 40),
             IconButton(
               icon: const Icon(Icons.close, color: Colors.white54),

@@ -31,7 +31,7 @@ class GammaApp extends StatelessWidget {
             const Color(0xFFE0E5EC), // Classic Neumorphic Base
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.orange,
-          background: const Color(0xFFE0E5EC),
+          surface: const Color(0xFFE0E5EC),
         ),
         textTheme: GoogleFonts.dmSansTextTheme(),
       ),
