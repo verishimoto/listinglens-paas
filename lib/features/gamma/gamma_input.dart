@@ -444,14 +444,14 @@ class _GammaMemoryLane extends ConsumerWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFF0F2F5),
           borderRadius: BorderRadius.circular(40),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
                 color: Colors.white,
-                offset: const Offset(-10, -10),
+                offset: Offset(-10, -10),
                 blurRadius: 20),
             BoxShadow(
                 color: Colors.black12,
-                offset: const Offset(10, 10),
+                offset: Offset(10, 10),
                 blurRadius: 20),
           ],
         ),
@@ -484,9 +484,9 @@ class _GammaMemoryLane extends ConsumerWidget {
                         color: const Color(0xFFF0F2F5),
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
-                          BoxShadow(
+                          const BoxShadow(
                               color: Colors.white,
-                              offset: const Offset(-5, -5),
+                              offset: Offset(-5, -5),
                               blurRadius: 10),
                           BoxShadow(
                               color: Colors.black.withValues(alpha: 0.05),
