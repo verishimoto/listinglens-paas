@@ -85,6 +85,12 @@ def deploy_governor():
     shutil.copy2(src, os.path.join(dest_dir, "index.html"))
     print(f"Governor deployed to {dest_dir}/index.html")
 
+def generate_governor_data():
+    print("Generating Governor Data...")
+    # We call the powershell script
+    script = os.path.join(PROJECT_ROOT, "tools/governor/generate_dashboard_data.ps1")
+    cmd = ["powershell", "-ExecutionPolicy", "Bypass", "-File", script]
+    subprocess.run(cmd, check=True, cwd=PROJECT_ROOT)
 
 def run():
     print("--- Starting Trinity Deployment Pipeline (Stable) ---")
@@ -110,6 +116,9 @@ def run():
             
         # 3. Deploy Governor
         deploy_governor()
+        
+        # 4. Generate Data
+        generate_governor_data()
 
     except Exception as e:
         print(f"\n!!! Error during deployment: {e}")

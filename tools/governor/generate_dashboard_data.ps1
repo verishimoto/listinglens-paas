@@ -51,9 +51,6 @@ function Get-CognitiveState {
     return $Content
 }
 
-return $Content
-}
-
 function Measure-CognitiveMetrics {
     # Heuristics Engine (Low-Token Optimization)
     
