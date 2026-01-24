@@ -8,12 +8,12 @@
     It ensures work is saved, pushes changes to remote, and reports problems.
 
 .PARAMETER Routine
-    The routine to run: "Heartbeat" or "DeepClean".
+    The routine to run: "Heartbeat", "DeepClean", "CognitiveSync", etc.
 #>
 
 param (
     [Parameter(Mandatory = $true)]
-    [ValidateSet("Heartbeat", "DeepClean", "Watcher", "Restore", "Antigravity", "Backup")]
+    [ValidateSet("Heartbeat", "DeepClean", "Watcher", "Restore", "Antigravity", "Backup", "CognitiveSync")]
     [string]$Routine
 )
 
@@ -285,16 +285,28 @@ function Run-Backup {
     Log-Message "Backup Complete: $TargetDir"
 }
 
+function Run-CognitiveSync {
+    Log-Message "Initiating Cognitive Sync (Memory Palace)..."
+    $Generator = Join-Path $WorkspaceRoot "tools\governor\generate_dashboard_data.ps1"
+    if (Test-Path $Generator) {
+        & $Generator
+    }
+    else {
+        Log-Message "Error: Data generator not found at $Generator"
+    }
+}
+
 # --- Main Execution ---
 
 try {
     switch ($Routine) {
         "Heartbeat" { Run-AutoSave }
-        "DeepClean" { Run-DeepClean }
+        "DeepClean" { Run-DeepClean; Run-CognitiveSync }
         "Watcher" { Start-Watcher }
         "Restore" { Restore-SafeMode }
-        "Antigravity" { Run-Antigravity }
+        "Antigravity" { Run-Antigravity; Run-CognitiveSync }
         "Backup" { Run-Backup }
+        "CognitiveSync" { Run-CognitiveSync }
     }
 }
 catch {

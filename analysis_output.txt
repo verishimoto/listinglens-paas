@@ -1,6 +1,0 @@
-Analyzing listing_lens_paas...                                  
-
-   info - Use 'const' with the constructor to improve performance - lib\core\theme\app_theme.dart:25:20 - prefer_const_constructors
-  error - The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  - lib\core\theme\app_theme.dart:44:18 - argument_type_not_assignable
-warning - Unused import: 'package:google_fonts/google_fonts.dart' - lib\main.dart:8:8 - unused_import
-

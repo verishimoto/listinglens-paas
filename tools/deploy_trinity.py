@@ -67,7 +67,6 @@ def deploy_folder(target_subpath):
             s = os.path.join(BUILD_OUTPUT, item)
             d = os.path.join(DEPLOY_ROOT, item)
             if os.path.isdir(s):
-                # If target dir exists, replace it
                 if os.path.exists(d):
                     shutil.rmtree(d)
                 shutil.copytree(s, d)
@@ -75,6 +74,17 @@ def deploy_folder(target_subpath):
                 shutil.copy2(s, d)
     
     print(f"Deployed to {target_dir}")
+
+def deploy_governor():
+    print("\n=== Deploying Governor Dashboard ===")
+    src = os.path.join(PROJECT_ROOT, "lib/governor/dashboard.html")
+    dest_dir = os.path.join(DEPLOY_ROOT, "governor")
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+        
+    shutil.copy2(src, os.path.join(dest_dir, "index.html"))
+    print(f"Governor deployed to {dest_dir}/index.html")
+
 
 def run():
     print("--- Starting Trinity Deployment Pipeline (Stable) ---")
@@ -98,6 +108,9 @@ def run():
             build_web(p['target'], p['href'])
             deploy_folder(p['name'])
             
+        # 3. Deploy Governor
+        deploy_governor()
+
     except Exception as e:
         print(f"\n!!! Error during deployment: {e}")
         raise e 
