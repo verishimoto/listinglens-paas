@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ListingLens · Zeta v1.0 (Stable Fusion - Repaired)</title>
+
+    <!-- React Dependencies -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons (Global) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
+        :root {
+            --primary: #FF5100;
+            --accent: #00C7FF;
+            --indigo: #7E00FF;
+            --success: #1CFF00;
+            --black: #000000;
+            --white: #FFFFFF;
+            /* Default variables will be updated by React */
+            --solid-bg: #FFFFFF;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(0, 0, 0, 0.06);
+            --hover-bg: rgba(0, 0, 0, 0.03);
+            --text-main: #000000;
+        }
+
+        body {
+            font-family: "SF Pro Display", -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            background-color: var(--solid-bg);
+            color: var(--text-main);
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        /* --- FUSION PHYSICS --- */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .active-tab {
+            background-color: var(--solid-bg) !important;
+            z-index: 50;
+            position: relative;
+            border-left: 4px solid var(--primary);
+        }
+
+        .hover-card {
+            transition: all 0.3s;
+        }
+
+        .hover-card:hover {
+            background-color: var(--hover-bg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Meniscus Glue */
+        .meniscus-top {
+            position: absolute;
+            top: -20px;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            z-index: 60;
+            pointer-events: none;
+            background: transparent;
+            border-bottom-right-radius: 20px;
+            box-shadow: 5px 5px 0 0 var(--solid-bg);
+        }
+
+        .meniscus-bottom {
+            position: absolute;
+            bottom: -20px;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            z-index: 60;
+            pointer-events: none;
+            background: transparent;
+            border-top-right-radius: 20px;
+            box-shadow: 5px -5px 0 0 var(--solid-bg);
+        }
+
+        /* Mouse Tracking Reflector */
+        .reflector {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: inherit;
+            overflow: hidden;
+        }
+
+        .reflector::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            padding: 1px;
+            border-radius: inherit;
+            background: radial-gradient(200px circle at var(--mx) var(--my), rgba(255, 255, 255, 0.8), var(--primary), var(--indigo), transparent 80%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .hover-card:hover .reflector::before {
+            opacity: 1;
+        }
+
+        /* Motion BG */
+        .fluid-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 0% 0%, var(--primary), transparent 50%),
+                radial-gradient(circle at 100% 100%, var(--indigo), transparent 50%);
+            filter: blur(100px);
+            opacity: 0.15;
+            animation: flow 30s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes flow {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.2);
+            }
+        }
+
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // SAFE ICON COMPONENT
+        const Icon = ({ name, size = 18, color = "currentColor", className = "" }) => {
+            const LucideIcon = window.lucide && window.lucide.icons ? window.lucide.icons[name] : null;
+            if (!LucideIcon) return <span className={className} style={{ width: size, height: size, display: 'inline-block' }} />;
+            return React.createElement(LucideIcon, { size, color, className });
+        };
+
+        // Static Data
+        const SLIDES = [
+            { id: 1, title: "Hero Cover", role: "Primary Impact", check: "Visual dominance anchor." },
+            { id: 2, title: "Flat Proof", role: "Quality Assurance", check: "Verification of alpha channel integrity." },
+            { id: 3, title: "Video Retention", role: "Motion SEO", check: "Loop physics and engagement cues." },
+            { id: 4, title: "Technical Specs", role: "Data Integrity", check: "Explicit 4500px square compliance." },
+            { id: 5, title: "Lifestyle Context", role: "Social Proof", check: "Fabric deformation and scale realism." },
+            { id: 6, title: "Packaging Structure", role: "UX Delivery", check: "Standard vs Commercial folder topology." },
+            { id: 7, title: "Licensing Tiers", role: "Revenue Logic", check: "Clear commercial upsell value." },
+            { id: 8, title: "Quick Start Guide", role: "Retention", check: "Frictionless onboarding guide." }
+        ];
+
+        const App = () => {
+            const [theme, setTheme] = useState('light');
+            const [activeTab, setActiveTab] = useState('lab');
+            const [activeSlide, setActiveSlide] = useState(0);
+            const [data, setData] = useState(SLIDES.map(s => ({ ...s, img: null, passed: false, score: null })));
+            const [isAuditing, setIsAuditing] = useState(false);
+
+            const fileRef = useRef(null);
+            const isLight = theme === 'light';
+
+            // Effect to update CSS variables on theme change
+            useEffect(() => {
+                const root = document.documentElement;
+                if (isLight) {
+                    root.style.setProperty('--solid-bg', '#FFFFFF');
+                    root.style.setProperty('--glass-bg', 'rgba(255,255,255,0.6)');
+                    root.style.setProperty('--glass-border', 'rgba(0,0,0,0.06)');
+                    root.style.setProperty('--hover-bg', 'rgba(0,0,0,0.03)');
+                    root.style.setProperty('--text-main', '#000000');
+                } else {
+                    root.style.setProperty('--solid-bg', '#121212');
+                    root.style.setProperty('--glass-bg', 'rgba(20,20,20,0.6)');
+                    root.style.setProperty('--glass-border', 'rgba(255,255,255,0.1)');
+                    root.style.setProperty('--hover-bg', 'rgba(255,255,255,0.05)');
+                    root.style.setProperty('--text-main', '#FFFFFF');
+                }
+            }, [theme]);
+
+            // Mouse Tracking for edge lighting
+            const handleMouseMove = (e) => {
+                document.documentElement.style.setProperty('--mx', `${e.clientX}px`);
+                document.documentElement.style.setProperty('--my', `${e.clientY}px`);
+            };
+
+            const handleUpload = (e) => {
+                if (e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        const newData = [...data];
+                        newData[activeSlide].img = ev.target.result;
+                        setData(newData);
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            };
+
+            const runAudit = () => {
+                setIsAuditing(true);
+                setTimeout(() => {
+                    const newData = [...data];
+                    newData[activeSlide].passed = true;
+                    newData[activeSlide].score = (92 + Math.random() * 5).toFixed(1);
+                    setData(newData);
+                    setIsAuditing(false);
+                }, 1500);
+            };
+
+            return (
+                <div className={`h-screen flex flex-col transition-colors duration-500`} onMouseMove={handleMouseMove}>
+                    <div className="fluid-bg" />
+
+                    {/* Header */}
+                    <header className="h-20 flex items-center justify-between px-8 border-b border-[var(--glass-border)] backdrop-blur-xl relative z-50">
+                        <div className="flex items-center gap-4 cursor-pointer" onClick={() => setActiveTab('hub')}>
+                            <div className="w-10 h-10 relative">
+                                <div className="absolute inset-0 border-l-[6px] border-b-[6px] border-[#FF5100]" />
+                                <div className="absolute inset-0 translate-x-2 translate-y-2 border-l-[6px] border-b-[6px] border-[#7E00FF] opacity-60" />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl font-black uppercase tracking-tight text-[#FF5100]">ListingLens</h1>
+                                <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">Prototype Zeta</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-6">
+                            <div className="px-4 py-1.5 rounded-full bg-black/5 flex items-center gap-2 border border-black/5">
+                                <div className="w-2 h-2 rounded-full bg-[#1CFF00] animate-pulse" />
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1CFF00]">Pro Active</span>
+                            </div>
+                            <button onClick={() => setTheme(isLight ? 'dark' : 'light')} className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500 to-purple-600 p-[2px] shadow-lg transition-transform hover:scale-110">
+                                <div className={`w-full h-full rounded-full flex items-center justify-center ${isLight ? 'bg-white' : 'bg-black'}`}>
+                                    <Icon name={isLight ? "Moon" : "Sun"} size={16} />
+                                </div>
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* Main Layout */}
+                    <main className="flex-1 grid grid-cols-[340px_1fr] overflow-hidden relative z-10">
+
+                        {/* Sidebar */}
+                        <aside className="pt-8 pl-8 flex flex-col border-r border-[var(--glass-border)]">
+                            <div className="flex gap-4 mb-8">
+                                <button onClick={() => setActiveTab('lab')} className={`text-xs font-black uppercase pb-1 border-b-2 transition-all ${activeTab === 'lab' ? 'border-[#FF5100] opacity-100' : 'border-transparent opacity-40'}`}>The Lab</button>
+                                <button onClick={() => setActiveTab('hub')} className={`text-xs font-black uppercase pb-1 border-b-2 transition-all ${activeTab === 'hub' ? 'border-[#FF5100] opacity-100' : 'border-transparent opacity-40'}`}>Hub</button>
+                            </div>
+
+                            {activeTab === 'lab' && (
+                                <div className="flex-1 overflow-y-auto hide-scroll space-y-1 pr-6 pb-20">
+                                    {data.map((slide, idx) => (
+                                        <div key={idx} className="relative">
+                                            <button
+                                                onClick={() => setActiveSlide(idx)}
+                                                className={`w-full p-5 text-left transition-all duration-300 relative rounded-l-2xl ${activeSlide === idx ? 'active-tab' : 'hover-card opacity-60 hover:opacity-100'}`}
+                                            >
+                                                <div className="flex items-center gap-4 relative z-10">
+                                                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-bold ${slide.passed ? 'bg-[#1CFF00] text-black border-[#1CFF00]' : 'border-current opacity-40'}`}>
+                                                        {slide.passed ? <Icon name="Check" size={10} /> : idx + 1}
+                                                    </div>
+                                                    <span className="font-bold text-sm tracking-tight">{slide.title}</span>
+                                                </div>
+                                                <div className="reflector" />
+                                            </button>
+                                            {activeSlide === idx && <><div className="meniscus-top" /><div className="meniscus-bottom" /></>}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {activeTab === 'hub' && (
+                                <div className="p-4 space-y-4 pr-6">
+                                    <div className="glass-panel p-6">
+                                        <h3 className="text-xs font-black uppercase mb-4 flex items-center gap-2 opacity-60"><Icon name="Globe" size={14} /> Connected</h3>
+                                        <div className="flex justify-between p-3 bg-black/5 rounded-xl border border-white/10 text-xs font-bold items-center">
+                                            <span>Creative Market</span>
+                                            <div className="w-2 h-2 rounded-full bg-[#1CFF00] shadow-[0_0_8px_#1CFF00]" />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </aside>
+
+                        {/* Canvas */}
+                        <div className="bg-[var(--solid-bg)] rounded-tl-[40px] rounded-bl-[40px] shadow-2xl overflow-hidden flex flex-col border-l border-t border-b border-[var(--glass-border)]">
+                            {activeTab === 'lab' ? (
+                                <>
+                                    <div className="p-10 border-b border-[var(--glass-border)]">
+                                        <div className="flex items-center gap-3 mb-2 opacity-50">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-[#7E00FF]">{data[activeSlide].role}</span>
+                                            <div className="w-1 h-1 rounded-full bg-current" />
+                                            <span className="text-[10px] font-bold uppercase">Protocol 0{activeSlide + 1}</span>
+                                        </div>
+                                        <h2 className="text-4xl font-black tracking-tight max-w-3xl">{data[activeSlide].check}</h2>
+                                    </div>
+
+                                    <div className="flex-1 flex flex-col items-center justify-center p-12 overflow-hidden relative">
+                                        {data[activeSlide].img ? (
+                                            <img src={data[activeSlide].img} className="max-h-full rounded-lg shadow-2xl" />
+                                        ) : (
+                                            <div
+                                                onClick={() => fileRef.current.click()}
+                                                className="w-full max-w-2xl aspect-video border-2 border-dashed border-current/10 rounded-[30px] flex flex-col items-center justify-center gap-6 cursor-pointer hover:bg-current/5 transition-all group"
+                                            >
+                                                <div className="w-20 h-20 rounded-2xl bg-current/5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                                    <Icon name="Image" size={32} />
+                                                </div>
+                                                <div className="text-center">
+                                                    <h3 className="text-2xl font-black uppercase">Mount Asset</h3>
+                                                    <p className="text-[10px] font-bold opacity-40 tracking-widest mt-1 uppercase">1820px × 1214 px • 300 DPI</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <input type="file" ref={fileRef} className="hidden" accept="image/*" onChange={handleUpload} />
+                                    </div>
+
+                                    <div className="h-24 border-t border-[var(--glass-border)] flex items-center justify-between px-10">
+                                        {data[activeSlide].passed && (
+                                            <div className="flex items-end gap-1">
+                                                <span className="text-5xl font-thin leading-none text-[#1CFF00]">{data[activeSlide].score}</span>
+                                                <span className="text-lg font-black text-[#1CFF00]">%</span>
+                                            </div>
+                                        )}
+                                        {data[activeSlide].img && (
+                                            <button onClick={runAudit} disabled={isAuditing} className="px-8 py-3 bg-[#FF5100] text-white font-black rounded-xl text-xs uppercase tracking-widest shadow-lg flex items-center gap-2 transition-transform hover:scale-105 active:scale-95 disabled:opacity-50">
+                                                {isAuditing ? <Icon name="Loader2" className="animate-spin" /> : <Icon name="Zap" />}
+                                                {isAuditing ? 'Auditing...' : 'Run Audit'}
+                                            </button>
+                                        )}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="p-16 h-full overflow-y-auto">
+                                    <div className="flex justify-between items-end mb-16">
+                                        <div>
+                                            <h2 className="text-6xl font-black uppercase tracking-tighter mb-2">Performance Hub</h2>
+                                            <p className="text-xl opacity-40 font-light">Central Intelligence Feed.</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-[10px] font-black opacity-30 uppercase tracking-widest mb-1">Global ROI</p>
+                                            <span className="text-8xl font-thin leading-none text-[#1CFF00]">95.2</span>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-8">
+                                        <div className="glass-panel p-8">
+                                            <h3 className="text-xs font-black uppercase opacity-40 mb-4">Market Velocity</h3>
+                                            <div className="h-32 flex items-end gap-2">
+                                                {[40, 70, 45, 90, 65, 80, 50].map((h, i) => (
+                                                    <div key={i} className="flex-1 bg-[#00C7FF]/20 rounded-t-lg transition-all hover:bg-[#00C7FF]" style={{ height: `${h}%` }} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="glass-panel p-8">
+                                            <h3 className="text-xs font-black uppercase opacity-40 mb-4">Active Audits</h3>
+                                            <div className="text-4xl font-black">12</div>
+                                            <p className="text-xs opacity-40 mt-2">+3 from yesterday</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
