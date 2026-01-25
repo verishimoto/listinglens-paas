@@ -1,240 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="./">
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ListingLens | Trinity Convergence</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --alpha: #6366f1;
-      --beta: #06b6d4;
-      --gamma: #94a3b8;
-      --bg: #09090b;
-    }
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="ListingLens PaaS - AI Audit Platform">
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      user-select: none;
-    }
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="listing_lens_paas">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-    body {
-      background-color: var(--bg);
-      color: white;
-      font-family: 'Outfit', sans-serif;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-    /* Ambient Glows */
-    .orb {
-      position: absolute;
-      width: 60vw;
-      height: 60vw;
-      border-radius: 50%;
-      filter: blur(150px);
-      opacity: 0.2;
-      z-index: -1;
-      animation: pulse 10s infinite alternate;
-    }
-
-    .orb-1 {
-      top: -20%;
-      left: -10%;
-      background: radial-gradient(circle, var(--alpha), transparent);
-    }
-
-    .orb-2 {
-      bottom: -20%;
-      right: -10%;
-      background: radial-gradient(circle, var(--beta), transparent);
-      animation-delay: -5s;
-    }
-
-    @keyframes pulse {
-      0% {
-        transform: scale(1) translate(0, 0);
-      }
-
-      100% {
-        transform: scale(1.2) translate(5%, 5%);
-      }
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 60px;
-      animation: fadeInDown 1s ease-out;
-    }
-
-    h1 {
-      font-size: 5rem;
-      font-weight: 900;
-      letter-spacing: -2px;
-      background: linear-gradient(to bottom, #fff, #444);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 1.2rem;
-      color: rgba(255, 255, 255, 0.4);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
-
-    .container {
-      display: flex;
-      gap: 30px;
-      max-width: 1200px;
-      padding: 20px;
-      z-index: 10;
-    }
-
-    .card {
-      flex: 1;
-      aspect-ratio: 4/5;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 40px;
-      padding: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      cursor: pointer;
-      transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-      text-decoration: none;
-      backdrop-filter: blur(10px);
-    }
-
-    .card:hover {
-      transform: translateY(-20px) scale(1.02);
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100%;
-      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
-      opacity: 0.6;
-      transition: opacity 0.5s;
-    }
-
-    .card:hover::before {
-      opacity: 1;
-    }
-
-    .card-tag {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      position: relative;
-    }
-
-    .card-title {
-      font-size: 2.2rem;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 10px;
-      position: relative;
-    }
-
-    .card-desc {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.5);
-      position: relative;
-    }
-
-    .alpha-card:hover {
-      --theme: var(--alpha);
-    }
-
-    .beta-card:hover {
-      --theme: var(--beta);
-    }
-
-    .gamma-card:hover {
-      --theme: var(--gamma);
-    }
-
-    .card:hover .card-title {
-      color: var(--theme);
-    }
-
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-40px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    footer {
-      position: absolute;
-      bottom: 40px;
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.2);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-  </style>
+  <title>ListingLens PaaS</title>
+  <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <header>
-    <h1>TRINITY</h1>
-    <p>Converged Intelligence Phase</p>
-  </header>
-
-  <div class="container">
-    <a href="alpha/index.html" class="card alpha-card">
-      <div class="card-tag">Persona I</div>
-      <div class="card-title">ALPHA HUB</div>
-      <div class="card-desc">The Executive Terminal. High-fidelity dashboards, Opal Gem visualizations, and precise
-        management logic.</div>
-    </a>
-
-    <a href="beta/index.html" class="card beta-card">
-      <div class="card-tag">Persona II</div>
-      <div class="card-title">LIQUID OPAL</div>
-      <div class="card-desc">The Aesthetic Core. Dark glassmorphism, cinematic wizard flows, and atmospheric
-        intelligence.</div>
-    </a>
-
-    <a href="gamma/index.html" class="card gamma-card">
-      <div class="card-tag">Persona III</div>
-      <div class="card-title">CLAY MOTION</div>
-      <div class="card-desc">The Playful Lab. Tactile neomorphic elements, interactive feedback sculpting, and
-        motion-heavy UX.</div>
-    </a>
-  </div>
-
-  <footer>ListingLens PaaS &bull; Gemini Oracle &bull; 2026</footer>
+  <script src="flutter_bootstrap.js" async></script>
 </body>
 
 </html>

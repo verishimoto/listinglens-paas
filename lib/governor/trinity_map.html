@@ -42,7 +42,8 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            font-weight: 100;
             margin: 0;
             padding: 40px;
             display: flex;
@@ -61,13 +62,16 @@
         }
 
         h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
+            font-size: 5rem;
+            font-weight: 100;
             margin: 0;
             background: linear-gradient(135deg, #fff 0%, #86868b 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -3px;
+            letter-spacing: -6px;
+            text-transform: uppercase;
+            font-stretch: extra-condensed;
         }
 
         .subtitle {
@@ -80,46 +84,78 @@
             opacity: 0.8;
         }
 
-        .diagram-container {
-            width: 100%;
-            max-width: 1200px;
+        /* --- Level 10 Opalescent Glassmorphism --- */
+        .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(40px) saturate(150%);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid var(--glass-border);
             border-radius: 32px;
-            padding: 60px;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
             position: relative;
             overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.2, 0, 0, 1);
         }
 
-        .legend {
-            display: flex;
-            gap: 32px;
-            margin-top: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
+        /* Border-Centric Glow */
+        .glass::before {
+            content: "";
+            position: absolute;
+            inset: -4px;
+            background: linear-gradient(var(--glow-angle, 0deg),
+                    var(--accent-alpha),
+                    var(--accent-beta),
+                    var(--accent-gamma),
+                    var(--accent-core),
+                    var(--accent-alpha));
+            border-radius: 36px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            filter: blur(12px);
         }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        /* Reflective Highlight */
+        .glass::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            opacity: 0.2;
+            z-index: 0;
         }
 
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            box-shadow: 0 0 10px currentColor;
+        .glass:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 50px rgba(0, 199, 255, 0.1);
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.03);
         }
 
-        /* --- Smooth & Refractive Cursor --- */
+        .glass:hover::before {
+            opacity: 0.6;
+            animation: rotate-glow 6s linear infinite;
+        }
+
+        @keyframes rotate-glow {
+            from {
+                --glow-angle: 0deg;
+            }
+
+            to {
+                --glow-angle: 360deg;
+            }
+        }
+
+        .diagram-container {
+            width: 90%;
+            max-width: 1600px;
+            padding: 80px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            margin-bottom: 40px;
+        }
+
+        /* --- THE SUN CURSOR --- */
         #cursor-container {
             position: fixed;
             top: 0;
@@ -130,161 +166,200 @@
             z-index: 9999;
         }
 
-        #cursor-ring {
+        #cursor-sun {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 12px;
+            height: 12px;
+            background: #fff;
             border-radius: 50%;
-            backdrop-filter: blur(2px) brightness(1.2);
-            box-shadow: 0 0 15px rgba(0, 199, 255, 0.2);
+            box-shadow: 0 0 15px #fff;
+            transform: translate(-50%, -50%);
         }
 
-        #cursor-dot {
+        #cursor-glow {
             position: absolute;
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px white;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, rgba(0, 199, 255, 0.4) 0%, rgba(126, 0, 255, 0.2) 60%, transparent 100%);
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .body-hovering #cursor-glow {
+            width: 140px;
+            height: 140px;
+            animation: sun-emanate 2s infinite;
+        }
+
+        @keyframes sun-emanate {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.8;
+                filter: hue-rotate(0deg);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.4;
+                filter: hue-rotate(180deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.4);
+                opacity: 0;
+                filter: hue-rotate(360deg);
+            }
         }
     </style>
 </head>
 
 <body>
     <div id="cursor-container">
-        <div id="cursor-ring"></div>
-        <div id="cursor-dot"></div>
+        <div id="cursor-glow"></div>
+        <div id="cursor-sun"></div>
     </div>
 
-    <div class="header">
-        <h1>Trinity Agentic Map</h1>
-        <p class="subtitle">Cognitive Orchestration Protocol</p>
-    </div>
-
-    <div class="diagram-container">
-        <div class="mermaid" id="main-mermaid">
-            graph TD
-            %% --- SHARED CORE ---
-            subgraph CORE ["Shared Intelligence Core"]
-            direction TB
-            Gov[("The Governor<br />(Execution Orchestrator)")]:::core
-            KB[("Knowledge Base<br />(Vector Context)")]:::core
-            Gemini[("Gemini 1.5 Flash<br />(Vision Mind)")]:::core
-            Credit[("Credit Service<br />(Fuel)")]:::core
-
-            Gov -- "Dispatches" --> Gemini
-            Gov -- "Queries" --> KB
-            Gemini -- "Consumes" --> Credit
-            end
-
-            %% --- ALPHA TIMELINE ---
-            subgraph ALPHA ["Alpha: SolidFusion"]
-            direction TB
-            A_Intent{{"Reliability & Scale"}}:::intent
-            A_Agent[("The Engineer")]:::alpha
-            A_Stack["Material 3 + Riverpod"]:::alpha
-            A_Focus["Clean Architecture"]:::alpha
-
-            A_Intent --> A_Agent
-            A_Agent --> A_Stack
-            A_Stack --> A_Focus
-            end
-
-            %% --- BETA TIMELINE ---
-            subgraph BETA ["Beta: LiquidOpal"]
-            direction TB
-            B_Intent{{"Aesthetics & Vibe"}}:::intent
-            B_Agent[("The Alchemist")]:::beta
-            B_Stack["Glassmorphism + Shaders"]:::beta
-            B_Focus["Fluid Interactions"]:::beta
-
-            B_Intent --> B_Agent
-            B_Agent --> B_Stack
-            B_Stack --> B_Focus
-            end
-
-            %% --- GAMMA TIMELINE ---
-            subgraph GAMMA ["Gamma: ClayMotion"]
-            direction TB
-            G_Intent{{"Play & Novelty"}}:::intent
-            G_Agent[("The Jester")]:::gamma
-            G_Stack["Neumorphism + Physics"]:::gamma
-            G_Focus["Conversational UX"]:::gamma
-
-            G_Intent --> G_Agent
-            G_Agent --> G_Stack
-            G_Stack --> G_Focus
-            end
-
-            %% --- INTERCONNECTIONS ---
-            ALPHA -.-> |"Data Model"| CORE
-            BETA -.-> |"Visual Feedback"| CORE
-            GAMMA -.-> |"Interaction Logic"| CORE
-
-            CORE ==> |"Insights"| ALPHA
-            CORE ==> |"Refinement"| BETA
-            CORE ==> |"Magic"| GAMMA
-
-            %% Styling
-            classDef alpha fill:#1e3a8a22,stroke:#3b82f6,stroke-width:2px,color:#fff;
-            classDef beta fill:#581c8722,stroke:#7E00FF,stroke-width:2px,color:#fff;
-            classDef gamma fill:#7c2d1222,stroke:#FF5100,stroke-width:2px,color:#fff;
-            classDef core fill:#064e3b22,stroke:#1CFF00,stroke-width:3px,color:#fff;
-            classDef intent fill:none,stroke:#86868b,stroke-dasharray: 5 5,color:#86868b;
-
-            linkStyle default stroke:#475569,stroke-width:2px;
+    <div class="main-container">
+        <div class="header">
+            <h1>Trinity Agentic Map</h1>
+            <p class="subtitle">Cognitive Orchestration Protocol</p>
         </div>
-    </div>
 
-    <div class="legend">
-        <div class="legend-item">
-            <div class="dot" style="color:var(--accent-alpha);background:currentColor"></div> Alpha
+        <div class="diagram-container glass">
+            <div class="mermaid" id="main-mermaid">
+                graph TD
+                %% --- SHARED CORE ---
+                subgraph CORE ["Shared Intelligence Core"]
+                direction TB
+                Gov[("The Governor<br />(Execution Orchestrator)")]:::core
+                KB[("Knowledge Base<br />(Vector Context)")]:::core
+                Gemini[("Gemini 1.5 Flash<br />(Vision Mind)")]:::core
+                Credit[("Credit Service<br />(Fuel)")]:::core
+
+                Gov -- "Dispatches" --> Gemini
+                Gov -- "Queries" --> KB
+                Gemini -- "Consumes" --> Credit
+                end
+
+                %% --- ALPHA TIMELINE ---
+                subgraph ALPHA ["Alpha: SolidFusion"]
+                direction TB
+                A_Intent{{"Reliability & Scale"}}:::intent
+                A_Agent[("The Engineer")]:::alpha
+                A_Stack["Material 3 + Riverpod"]:::alpha
+                A_Focus["Clean Architecture"]:::alpha
+
+                A_Intent --> A_Agent
+                A_Agent --> A_Stack
+                A_Stack --> A_Focus
+                end
+
+                %% --- BETA TIMELINE ---
+                subgraph BETA ["Beta: LiquidOpal"]
+                direction TB
+                B_Intent{{"Aesthetics & Vibe"}}:::intent
+                B_Agent[("The Alchemist")]:::beta
+                B_Stack["Glassmorphism + Shaders"]:::beta
+                B_Focus["Fluid Interactions"]:::beta
+
+                B_Intent --> B_Agent
+                B_Agent --> B_Stack
+                B_Stack --> B_Focus
+                end
+
+                %% --- GAMMA TIMELINE ---
+                subgraph GAMMA ["Gamma: ClayMotion"]
+                direction TB
+                G_Intent{{"Play & Novelty"}}:::intent
+                G_Agent[("The Jester")]:::gamma
+                G_Stack["Neumorphism + Physics"]:::gamma
+                G_Focus["Conversational UX"]:::gamma
+
+                G_Intent --> G_Agent
+                G_Agent --> G_Stack
+                G_Stack --> G_Focus
+                end
+
+                %% --- INTERCONNECTIONS ---
+                ALPHA -.-> |"Data Model"| CORE
+                BETA -.-> |"Visual Feedback"| CORE
+                GAMMA -.-> |"Interaction Logic"| CORE
+
+                CORE ==> |"Insights"| ALPHA
+                CORE ==> |"Refinement"| BETA
+                CORE ==> |"Magic"| GAMMA
+
+                %% Styling
+                classDef alpha fill:#1e3a8a22,stroke:#3b82f6,stroke-width:2px,color:#fff;
+                classDef beta fill:#581c8722,stroke:#7E00FF,stroke-width:2px,color:#fff;
+                classDef gamma fill:#7c2d1222,stroke:#FF5100,stroke-width:2px,color:#fff;
+                classDef core fill:#064e3b22,stroke:#1CFF00,stroke-width:3px,color:#fff;
+                classDef intent fill:none,stroke:#86868b,stroke-dasharray: 5 5,color:#86868b;
+
+                linkStyle default stroke:#475569,stroke-width:2px;
+            </div>
         </div>
-        <div class="legend-item">
-            <div class="dot" style="color:var(--accent-beta);background:currentColor"></div> Beta
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="dot" style="color:var(--accent-alpha);background:currentColor"></div> Alpha
+            </div>
+            <div class="legend-item">
+                <div class="dot" style="color:var(--accent-beta);background:currentColor"></div> Beta
+            </div>
+            <div class="legend-item">
+                <div class="dot" style="color:var(--accent-gamma);background:currentColor"></div> Gamma
+            </div>
+            <div class="legend-item">
+                <div class="dot" style="color:var(--accent-core);background:currentColor"></div> Core
+            </div>
         </div>
-        <div class="legend-item">
-            <div class="dot" style="color:var(--accent-gamma);background:currentColor"></div> Gamma
-        </div>
-        <div class="legend-item">
-            <div class="dot" style="color:var(--accent-core);background:currentColor"></div> Core
-        </div>
-    </div>
 
-    <script>
-        mermaid.initialize({
-            startOnLoad: false,
-            theme: 'dark',
-            securityLevel: 'loose',
-            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
-        });
+        <script>
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                securityLevel: 'loose',
+                flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
+            });
 
-        // Ensure rendering
-        window.addEventListener('load', () => {
-            mermaid.init(undefined, ".mermaid");
-        });
+            window.addEventListener('load', () => {
+                mermaid.init(undefined, ".mermaid");
+            });
 
-        // --- SMOOTH CURSOR ---
-        const cursorRing = document.getElementById('cursor-ring');
-        const cursorDot = document.getElementById('cursor-dot');
-        let mouseX = 0, mouseY = 0;
-        let ringX = 0, ringY = 0;
+            // --- THE SUN CURSOR & OPALESCENT LIGHTING ---
+            const sun = document.getElementById('cursor-sun');
+            const glow = document.getElementById('cursor-glow');
+            let mouseX = 0, mouseY = 0;
+            let glowX = 0, glowY = 0;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
 
-        function animateCursor() {
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
-            cursorRing.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
-            cursorDot.style.transform = `translate(${mouseX - 3}px, ${mouseY - 3}px)`;
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-    </script>
+            function animateCursor() {
+                // Smoothing for glow (Sun lag)
+                glowX += (mouseX - glowX) * 0.15;
+                glowY += (mouseY - glowY) * 0.15;
+
+                sun.style.left = `${mouseX}px`;
+                sun.style.top = `${mouseY}px`;
+                glow.style.left = `${glowX}px`;
+                glow.style.top = `${glowY}px`;
+
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+            // Initialize CSS variables for rotating glow
+            CSS.registerProperty?.({
+                name: '--glow-angle',
+                syntax: '<angle>',
+                initialValue: '0deg',
+                inherits: false
+            });
+        </script>
 </body>
 
 </html>

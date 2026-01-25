@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600;800&family=JetBrains+Mono:wght@100;400&display=swap');
 
         :root {
             /* --- XML PALETTE --- */
@@ -20,25 +20,18 @@
             /* Aqua */
             --lev-4: #1CFF00;
             /* Neon Green */
-            --lev-5: #DCFF00;
-            /* Lime */
             --lev-6: #FF5100;
             /* Orange */
-            --lev-7: #000000;
-            /* Black */
             --lev-8: #050505;
-            /* Deep Space (Main BG) */
-            --lev-9: #290808;
-            /* Dark Red-Brown */
+            /* Deep Space */
 
             --bg-color: var(--lev-8);
             --glass-bg: rgba(255, 255, 255, 0.015);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-blur: 24px;
+            --glass-blur: 32px;
 
             --accent-primary: var(--lev-2);
             --accent-secondary: var(--lev-1);
-            --accent-tertiary: var(--lev-6);
             --accent-core: var(--lev-4);
 
             --text-primary: #f8fafc;
@@ -48,77 +41,91 @@
         * {
             box-sizing: border-box;
             cursor: none !important;
-            /* Force custom cursor */
-            transition: all 0.2s ease-in-out;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            font-weight: 100;
             margin: 0;
             padding: 20px;
             overflow-x: hidden;
             background-image:
-                radial-gradient(circle at 0% 0%, rgba(126, 0, 255, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(0, 199, 255, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 0% 0%, rgba(126, 0, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(0, 199, 255, 0.05) 0%, transparent 40%);
             min-height: 100vh;
             scroll-behavior: smooth;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* --- Apple-Style Glassmorphism (@mawtech/glass-ui inspired) --- */
+        .main-container {
+            width: 100%;
+            max-width: 1920px;
+            padding-bottom: 280px;
+        }
+
+        /* --- Level 10 Opalescent Glassmorphism --- */
         .glass {
             background: var(--glass-bg);
             backdrop-filter: blur(var(--glass-blur)) saturate(180%);
             -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 24px;
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease;
+            transition: all 0.6s cubic-bezier(0.2, 0, 0, 1);
         }
 
+        /* Border-Centric Glow */
         .glass::before {
             content: "";
             position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-            pointer-events: none;
+            inset: -2px;
+            background: linear-gradient(var(--glow-angle, 0deg),
+                    var(--accent-primary),
+                    var(--accent-secondary),
+                    var(--accent-core),
+                    var(--accent-primary));
+            border-radius: 26px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            filter: blur(8px);
         }
 
-        /* Iridescent Hover Effect */
-        .glass:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
-            transform: translateY(-2px);
-        }
-
-        .glass:hover::after {
+        /* Reflective Highlight */
+        .glass::after {
             content: "";
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg,
-                    transparent,
-                    var(--lev-2),
-                    var(--lev-1),
-                    var(--lev-3),
-                    transparent);
-            opacity: 0.15;
-            animation: rotate 4s linear infinite;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
             pointer-events: none;
-            z-index: -1;
+            opacity: 0.2;
+            z-index: 0;
         }
 
-        @keyframes rotate {
+        .glass:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 199, 255, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .glass:hover::before {
+            opacity: 0.6;
+            animation: rotate-glow 4s linear infinite;
+        }
+
+        @keyframes rotate-glow {
             from {
-                transform: rotate(0deg);
+                --glow-angle: 0deg;
             }
 
             to {
-                transform: rotate(360deg);
+                --glow-angle: 360deg;
             }
         }
 
@@ -133,7 +140,7 @@
             z-index: 10;
         }
 
-        /* --- Smooth & Refractive Cursor --- */
+        /* --- THE SUN CURSOR --- */
         #cursor-container {
             position: fixed;
             top: 0;
@@ -144,35 +151,54 @@
             z-index: 9999;
         }
 
-        #cursor-ring {
+        #cursor-sun {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 12px;
+            height: 12px;
+            background: #fff;
             border-radius: 50%;
-            transition: width 0.3s, height 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(2px) brightness(1.2);
-            -webkit-backdrop-filter: blur(2px) brightness(1.2);
-            box-shadow: 0 0 15px rgba(0, 199, 255, 0.2);
+            box-shadow: 0 0 15px #fff, 0 0 30px rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            z-index: 100;
         }
 
-        #cursor-dot {
+        #cursor-glow {
             position: absolute;
-            width: 6px;
-            height: 6px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 10px white;
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle,
+                    rgba(0, 199, 255, 0.4) 0%,
+                    rgba(126, 0, 255, 0.2) 60%,
+                    transparent 100%);
+            transform: translate(-50%, -50%);
+            mix-blend-mode: screen;
+            transition: width 0.4s ease, height 0.4s ease;
         }
 
-        .cursor-hover #cursor-ring {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--lev-2);
+        .cursor-hover #cursor-glow {
+            width: 140px;
+            height: 140px;
+            animation: sun-emanate 2s infinite;
+        }
+
+        @keyframes sun-emanate {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.8;
+                filter: hue-rotate(0deg) brightness(1);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.5;
+                filter: hue-rotate(180deg) brightness(1.5);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1.4);
+                opacity: 0;
+                filter: hue-rotate(360deg) brightness(1);
+            }
         }
 
         /* --- Header --- */
@@ -186,11 +212,14 @@
 
         .logo-section h1 {
             margin: 0;
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: -2px;
+            font-size: 3rem;
+            font-weight: 100;
+            letter-spacing: -3px;
+            text-transform: uppercase;
+            font-stretch: extra-condensed;
             background: linear-gradient(to right, #fff, #86868b);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -229,18 +258,126 @@
             text-align: center;
         }
 
+        /* --- Massive Metrics Typography --- */
         .metric-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            font-weight: 100;
+            font-size: clamp(60px, 10vw, 120px);
+            letter-spacing: -8px;
+            font-stretch: extra-condensed;
+            line-height: 0.8;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff 20%, #444 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .metric-label {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        /* --- Orchestrator Panel (Terminal & Artifacts) --- */
+        #orchestrator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            width: 95%;
+            max-width: 1800px;
+            height: 240px;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            transition: transform 0.6s cubic-bezier(0.2, 0, 0, 1);
+            z-index: 5000;
+        }
+
+        #orchestrator.collapsed {
+            transform: translate(-50%, 200px);
+        }
+
+        .orch-toggle {
+            position: absolute;
+            top: -40px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            backdrop-filter: blur(10px);
+            color: var(--text-muted);
+        }
+
+        .orch-toggle:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .panel-terminal {
+            flex: 2.5;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            overflow-y: auto;
+        }
+
+        .panel-artifacts {
+            flex: 1.5;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            border-left: 2px solid var(--lev-2);
+            padding-left: 12px;
+            opacity: 0.8;
+            font-size: 0.8rem;
+        }
+
+        .log-time {
+            color: var(--lev-2);
             font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .artifact-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            font-weight: 100;
+            font-stretch: extra-condensed;
+        }
+
+        .artifact-link:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--lev-2);
+            transform: scale(1.02);
+        }
+
+        .artifact-stamp {
+            font-size: 0.7rem;
+            color: var(--text-muted);
         }
 
         /* --- Tabs --- */
@@ -466,147 +603,161 @@
 </head>
 
 <body>
-    <!-- Custom Cursor -->
+    <!-- Custom Sun Cursor -->
     <div id="cursor-container">
-        <div id="cursor-ring"></div>
-        <div id="cursor-dot"></div>
+        <div id="cursor-glow"></div>
+        <div id="cursor-sun"></div>
     </div>
 
-    <!-- Header -->
-    <div class="header glass reveal">
-        <div class="logo-section">
-            <h1>Trinity Hub <span
-                    style="font-weight: 300; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0;">Protocol
-                    v3.0</span>
-            </h1>
-            <div
-                style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace;">
-                GOVERNOR_NODE_1c648865
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header glass reveal">
+            <div class="logo-section">
+                <h1>Trinity Hub <span
+                        style="font-weight: 300; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0;">Protocol
+                        v3.0</span>
+                </h1>
+                <div
+                    style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace;">
+                    GOVERNOR_NODE_1c648865
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div class="status-pill">
+                    <div class="status-dot"></div>
+                    SYSTEM ACTIVE
+                </div>
+                <div id="sync-time" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">Syncing
+                    artifacts...</div>
             </div>
         </div>
-        <div style="text-align: right;">
-            <div class="status-pill">
-                <div class="status-dot"></div>
-                SYSTEM ACTIVE
+
+        <!-- Metrics -->
+        <div class="metrics-bar glass reveal">
+            <div class="metric-card">
+                <div class="metric-value" id="m-autonomy">--%</div>
+                <div class="metric-label">Autonomy</div>
             </div>
-            <div id="sync-time" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">Syncing
-                artifacts...</div>
-        </div>
-    </div>
-
-    <!-- Metrics -->
-    <div class="metrics-bar glass reveal">
-        <div class="metric-card">
-            <div class="metric-value" id="m-autonomy">--%</div>
-            <div class="metric-label">Autonomy</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-value" id="m-entropy" style="color: #f87171;">--%</div>
-            <div class="metric-label">Entropy</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-value" id="m-strategy" style="color: var(--lev-1);">--</div>
-            <div class="metric-label">Strategy</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-value" id="m-confidence" style="color: var(--lev-2);">Confident</div>
-            <div class="metric-label">Modality</div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <div class="tabs-container glass reveal">
-        <button class="tab-btn active" onclick="switchTab('cortex')">🧠 Cortex</button>
-        <button class="tab-btn" onclick="switchTab('workflow')">🌊 Workflow</button>
-        <button class="tab-btn" onclick="switchTab('trinity')">🔱 Trinity</button>
-        <button class="tab-btn" onclick="switchTab('walkthrough')">📜 Walkthrough</button>
-        <button class="tab-btn" onclick="switchTab('topology')">🌲 Topology</button>
-        <button class="tab-btn" onclick="switchTab('flowchart')">📊 Flowchart</button>
-    </div>
-
-    <!-- Content Panels -->
-    <div class="main-content glass reveal">
-        <!-- Cortex (Tasks) -->
-        <div id="cortex" class="panel active">
-            <div id="cortex-content" class="markdown-body">Fetching latest cognition...</div>
+            <div class="metric-card">
+                <div class="metric-value" id="m-entropy" style="color: #f87171;">--%</div>
+                <div class="metric-label">Entropy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="m-strategy" style="color: var(--lev-1);">--</div>
+                <div class="metric-label">Strategy</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="m-confidence" style="color: var(--lev-2);">Confident</div>
+                <div class="metric-label">Modality</div>
+            </div>
         </div>
 
-        <!-- Workflow -->
-        <div id="workflow" class="panel">
-            <div id="workflow-content" class="markdown-body italic" style="color: var(--text-muted);">Fetching workflow
-                visualization...</div>
+        <!-- Navigation -->
+        <div class="tabs-container glass reveal">
+            <button class="tab-btn active" onclick="switchTab('cortex')">🧠 Cortex</button>
+            <button class="tab-btn" onclick="switchTab('workflow')">🌊 Workflow</button>
+            <button class="tab-btn" onclick="switchTab('trinity')">🔱 Trinity</button>
+            <button class="tab-btn" onclick="switchTab('walkthrough')">📜 Walkthrough</button>
+            <button class="tab-btn" onclick="switchTab('topology')">🌲 Topology</button>
+            <button class="tab-btn" onclick="switchTab('flowchart')">📊 Flowchart</button>
         </div>
 
-        <!-- Trinity -->
-        <div id="trinity" class="panel">
-            <div class="mermaid-container" id="trinity-container">
-                <div class="mermaid" id="trinity-mermaid">
-                    graph TD
-                    subgraph Trinity_Hub
-                    H[Hub Core]
-                    end
-                    H --> Alpha[Alpha Protocol]
-                    H --> Beta[Beta Protocol]
-                    H --> Gamma[Gamma Protocol]
+        <!-- Content Panels -->
+        <div class="main-content glass reveal">
+            <!-- Cortex (Tasks) -->
+            <div id="cortex" class="panel active">
+                <div id="cortex-content" class="markdown-body">Fetching latest cognition...</div>
+            </div>
 
-                    Alpha --> S1[Solid Metrics]
-                    Beta --> S2[Liquid Visuals]
-                    Gamma --> S3[Elastic Logic]
+            <!-- Workflow -->
+            <div id="workflow" class="panel">
+                <div id="workflow-content" class="markdown-body italic" style="color: var(--text-muted);">Fetching
+                    workflow
+                    visualization...</div>
+            </div>
 
-                    classDef default fill:#111,stroke:#333,color:#fff
-                    classDef focus fill:#7E00FF33,stroke:#7E00FF,color:#fff
-                    class H focus
+            <!-- Trinity -->
+            <div id="trinity" class="panel">
+                <div class="mermaid-container" id="trinity-container">
+                    <div class="mermaid" id="trinity-mermaid">
+                        graph TD
+                        subgraph Trinity_Hub
+                        H[Hub Core]
+                        end
+                        H --> Alpha[Alpha Protocol]
+                        H --> Beta[Beta Protocol]
+                        H --> Gamma[Gamma Protocol]
+
+                        Alpha --> S1[Solid Metrics]
+                        Beta --> S2[Liquid Visuals]
+                        Gamma --> S3[Elastic Logic]
+
+                        classDef default fill:#111,stroke:#333,color:#fff
+                        classDef focus fill:#7E00FF33,stroke:#7E00FF,color:#fff
+                        class H focus
+                    </div>
+                </div>
+            </div>
+
+            <!-- Walkthrough -->
+            <div id="walkthrough" class="panel">
+                <div id="walkthrough-content" class="markdown-body">Fetching latest walkthrough...</div>
+            </div>
+
+            <!-- Topology (Tree) -->
+            <div id="topology" class="panel">
+                <div id="tree-container" class="tree-view"></div>
+            </div>
+
+            <!-- Flowchart -->
+            <div id="flowchart" class="panel">
+                <div class="mermaid-container">
+                    <div class="mermaid" id="flowchart-mermaid">
+                        graph TD
+                        A[User Auth] --> B[Hub Command]
+                        B --> C{Strategic Choice}
+                        C -->|Solid| Alpha[Alpha Audit]
+                        C -->|Liquid| Beta[Beta Gen]
+                        C -->|Converged| Gamma[Gamma 360]
+
+                        Alpha --> D[History Sync]
+                        Beta --> D
+                        Gamma --> D
+                        D --> E[Governor Analytics]
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Walkthrough -->
-        <div id="walkthrough" class="panel">
-            <div id="walkthrough-content" class="markdown-body">Fetching latest walkthrough...</div>
-        </div>
+        <div id="tooltip" class="tooltip"></div>
 
-        <!-- Topology (Tree) -->
-        <div id="topology" class="panel">
-            <div id="tree-container" class="tree-view"></div>
-        </div>
-
-        <!-- Flowchart -->
-        <div id="flowchart" class="panel">
-            <div class="mermaid-container">
-                <div class="mermaid" id="flowchart-mermaid">
-                    graph TD
-                    A[User Auth] --> B[Hub Command]
-                    B --> C{Strategic Choice}
-                    C -->|Solid| Alpha[Alpha Audit]
-                    C -->|Liquid| Beta[Beta Gen]
-                    C -->|Converged| Gamma[Gamma 360]
-
-                    Alpha --> D[History Sync]
-                    Beta --> D
-                    Gamma --> D
-                    D --> E[Governor Analytics]
-                </div>
+        <!-- Orchestrator Panel -->
+        <div id="orchestrator" class="glass collapsed">
+            <div class="orch-toggle" onclick="toggleOrchestrator()">▲ COLLAPSE / EXPAND</div>
+            <div class="panel-terminal glass" id="terminal-logs">
+                <div class="log-entry"><span class="log-time">12:21:44</span> <span
+                        style="color:var(--lev-4)">[CORE]</span> Initializing Trinity Protocol v3.0...</div>
+                <div class="log-entry"><span class="log-time">12:21:45</span> <span
+                        style="color:var(--lev-2)">[ALPHA]</span> Synchronizing SolidFusion metrics...</div>
+                <div class="log-entry"><span class="log-time">12:21:46</span> <span
+                        style="color:var(--lev-1)">[BETA]</span> Injecting LiquidOpal visual logic...</div>
+            </div>
+            <div class="panel-artifacts glass" id="artifact-list">
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 700;">ACTIVE
+                    ARTIFACTS</div>
             </div>
         </div>
     </div>
-
-    <div id="tooltip" class="tooltip"></div>
 
     <script src="state.js"></script>
     <script>
         // --- CONFIG & DATA ---
         const FILE_EXPLANATIONS = {
             'lib': 'Source code directory for the Flutter application.',
-            'core': 'Fundamental services, models, and shared logic.',
-            'features': 'Modular business logic organized by prototype protocol.',
             'governor': 'The cognitive brain of the repository and dashboard tools.',
-            'shared': 'Reusable UI components and utility classes.',
-            '.agent': 'Agentic configuration and workflow definitions.',
-            'main.dart': 'Application entry point.',
             'state.js': 'Real-time project telemetry as a JS module.',
             'task.md': 'The current strategic directive and task breakdown.',
-            'workflow.md': 'Visualization of the agentic swarm hierarchy.',
-            'build': 'Compiled artifacts and distribution files.'
+            'workflow.md': 'Visualization of the agentic swarm hierarchy.'
         };
 
         // Initialize Mermaid
@@ -617,6 +768,13 @@
             flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
         });
 
+        function toggleOrchestrator() {
+            const orch = document.getElementById('orchestrator');
+            const toggle = document.querySelector('.orch-toggle');
+            orch.classList.toggle('collapsed');
+            toggle.innerText = orch.classList.contains('collapsed') ? '▲' : '▼';
+        }
+
         // --- UI STATE & ANIMATION ---
         function switchTab(tabId) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -625,10 +783,15 @@
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
 
-            // Re-render mermaid if visible
+            // Re-render mermaid if visible with reset
             if (tabId === 'trinity' || tabId === 'flowchart') {
                 setTimeout(() => {
-                    mermaid.init(undefined, `#${tabId} .mermaid`);
+                    const el = document.querySelector(`#${tabId} .mermaid`);
+                    if (el) {
+                        el.removeAttribute('data-processed');
+                        el.innerHTML = el.getAttribute('data-original-content') || el.innerHTML;
+                        mermaid.init(undefined, el);
+                    }
                 }, 100);
             }
         }
@@ -642,29 +805,32 @@
             });
         }, { threshold: 0.1 });
 
-        // --- CUSTOM CURSOR & REFLECTOR ---
-        const cursorRing = document.getElementById('cursor-ring');
-        const cursorDot = document.getElementById('cursor-dot');
+        // --- THE SUN CURSOR & OPALESCENT LIGHTING ---
+        const sun = document.getElementById('cursor-sun');
+        const glow = document.getElementById('cursor-glow');
         let mouseX = 0, mouseY = 0;
-        let ringX = 0, ringY = 0;
-        let isHovering = false;
+        let glowX = 0, glowY = 0;
 
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
 
-            // Update reflectors (WhispererDeck style light follow)
+            // Update opalescent edge lighting & asymmetric glare
             document.querySelectorAll('.glass').forEach(glass => {
                 const rect = glass.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                glass.style.setProperty('--mouse-x', `${x}%`);
-                glass.style.setProperty('--mouse-y', `${y}%`);
+                if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    glass.style.setProperty('--mouse-x', `${x}%`);
+                    glass.style.setProperty('--mouse-y', `${y}%`);
+                    glass.style.setProperty('--opp-x', `${100 - x}%`);
+                    glass.style.setProperty('--opp-y', `${100 - y}%`);
+                }
             });
 
             // Hover detection
             const hoveredEl = document.elementFromPoint(e.clientX, e.clientY);
-            const clickable = hoveredEl?.closest('button, .tab-btn, .tree-node-content, a');
+            const clickable = hoveredEl?.closest('button, .tab-btn, .tree-node-content, .artifact-link, a');
             if (clickable) {
                 document.body.classList.add('cursor-hover');
             } else {
@@ -673,12 +839,14 @@
         });
 
         function animateCursor() {
-            // Smoothing (Lerp)
-            ringX += (mouseX - ringX) * 0.15;
-            ringY += (mouseY - ringY) * 0.15;
+            // Smoothing for glow (Sun lag)
+            glowX += (mouseX - glowX) * 0.15;
+            glowY += (mouseY - glowY) * 0.15;
 
-            cursorRing.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
-            cursorDot.style.transform = `translate(${mouseX - 3}px, ${mouseY - 3}px)`;
+            sun.style.left = `${mouseX}px`;
+            sun.style.top = `${mouseY}px`;
+            glow.style.left = `${glowX}px`;
+            glow.style.top = `${glowY}px`;
 
             requestAnimationFrame(animateCursor);
         }
@@ -789,17 +957,52 @@
 
                 if (state.workflow) {
                     document.getElementById('workflow-content').innerHTML = marked.parse(state.workflow);
-                    setTimeout(() => mermaid.init(undefined, "#workflow-content .mermaid"), 100);
+                    setTimeout(() => {
+                        const el = document.querySelector("#workflow-content .mermaid");
+                        if (el) {
+                            el.removeAttribute('data-processed');
+                            mermaid.init(undefined, el);
+                        }
+                    }, 100);
                 }
 
                 if (state.trinity_mermaid) {
-                    document.getElementById('trinity-mermaid').innerHTML = state.trinity_mermaid;
+                    const tEl = document.getElementById('trinity-mermaid');
+                    if (!tEl.hasAttribute('data-original-content')) tEl.setAttribute('data-original-content', state.trinity_mermaid);
+                    tEl.innerHTML = state.trinity_mermaid;
+                    tEl.removeAttribute('data-processed');
                     if (document.getElementById('trinity').classList.contains('active')) {
-                        mermaid.init(undefined, "#trinity-mermaid");
+                        mermaid.init(undefined, tEl);
                     }
                 }
 
                 renderTreeView(document.getElementById('tree-container'), state.topology);
+
+                // Populate Artifact List
+                const artContainer = document.getElementById('artifact-list');
+                artContainer.innerHTML = '<div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 700;">ACTIVE ARTIFACTS</div>';
+                const artifacts = [
+                    { name: 'task.md', time: '12:21' },
+                    { name: 'implementation_plan.md', time: '12:15' },
+                    { name: 'glassmorphism_references.md', time: '12:10' },
+                    { name: 'visual_logic_tutorial.html', time: '12:23' }
+                ];
+                artifacts.forEach(art => {
+                    artContainer.innerHTML += `
+                        <a href="${art.name}" class="artifact-link">
+                            <span style="font-size: 0.85rem;">📄 ${art.name}</span>
+                            <span class="artifact-stamp">${art.time}</span>
+                        </a>
+                    `;
+                });
+
+                // Update Terminal Logs (Mock for now, can be state-driven)
+                const logContainer = document.getElementById('terminal-logs');
+                if (logContainer.children.length < 10) {
+                    const now = new Date().toLocaleTimeString();
+                    logContainer.innerHTML += `<div class="log-entry"><span class="log-time">${now}</span> <span style="color:var(--lev-4)">[CORE]</span> State synchronized successfully.</div>`;
+                    logContainer.scrollTop = logContainer.scrollHeight;
+                }
 
                 // Re-observe new elements
                 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
@@ -825,6 +1028,20 @@
         // Auto-refresh using the script re-injection method
         refreshData();
         setInterval(refreshData, 15000);
+        // Initialize CSS variables for rotating glow
+        CSS.registerProperty?.({
+            name: '--glow-angle',
+            syntax: '<angle>',
+            initialValue: '0deg',
+            inherits: false
+        });
+
+        // Initialize collapsed state UI
+        document.addEventListener('DOMContentLoaded', () => {
+            const orch = document.getElementById('orchestrator');
+            const toggle = document.querySelector('.orch-toggle');
+            toggle.innerText = orch.classList.contains('collapsed') ? '▲ EXPAND TERMINAL' : '▼ COLLAPSE TERMINAL';
+        });
     </script>
 </body>
 
