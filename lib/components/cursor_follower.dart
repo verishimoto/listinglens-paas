@@ -47,34 +47,51 @@ class _CursorGlowPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Refractive Mesh
-    // We paint a subtle overlay that simulates the "field" of the cursor
-    final paint = Paint()
+    // 1. Refractive Mesh (Wide Field)
+    final fieldPaint = Paint()
       ..shader = ui.Gradient.radial(
         position,
-        600, // Large radius
+        400,
         [
-          Colors.white.withValues(alpha: 0.05), // Center highlight
-          Colors.cyanAccent.withValues(alpha: 0.02),
-          Colors.purpleAccent.withValues(alpha: 0.01),
-          Colors.transparent
+          Colors.white.withValues(alpha: 0.08),
+          Colors.cyanAccent.withValues(alpha: 0.03),
+          Colors.transparent,
         ],
-        [0.0, 0.3, 0.6, 1.0],
+        [0.0, 0.4, 1.0],
       )
-      ..blendMode = BlendMode.screen; // Additive light
+      ..blendMode = BlendMode.screen;
 
-    canvas.drawCircle(position, 600, paint);
+    canvas.drawCircle(position, 400, fieldPaint);
 
-    // 2. The Core (High Intensity)
+    // 2. The Glass Focus (Reactive Core)
     final corePaint = Paint()
       ..shader = ui.Gradient.radial(
         position,
-        100,
-        [Colors.white.withValues(alpha: 0.1), Colors.transparent],
+        150,
+        [
+          Colors.white.withValues(alpha: 0.15),
+          Colors.white.withValues(alpha: 0.05),
+          Colors.transparent,
+        ],
+        [0.0, 0.2, 1.0],
       )
       ..blendMode = BlendMode.overlay;
 
-    canvas.drawCircle(position, 100, corePaint);
+    canvas.drawCircle(position, 150, corePaint);
+
+    // 3. Specular Highlight (The "Lead")
+    final specularPaint = Paint()
+      ..shader = ui.Gradient.radial(
+        position,
+        40,
+        [
+          Colors.white.withValues(alpha: 0.4),
+          Colors.white.withValues(alpha: 0.0),
+        ],
+      )
+      ..blendMode = BlendMode.plus;
+
+    canvas.drawCircle(position, 40, specularPaint);
   }
 
   @override

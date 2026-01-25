@@ -4,12 +4,13 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
-import '../../core/services/analysis_service.dart';
 import '../../core/data/analysis_result.dart';
-import '../../core/services/history_service.dart';
-import '../../shared/smooth_cursor.dart';
 import '../../core/providers/history_provider.dart';
+import '../../core/providers/analysis_provider.dart';
+import '../../components/glass_scaffold.dart';
+import '../../core/theme/app_theme.dart';
 import '../../shared/glass_container.dart';
+import 'components/opal_gem.dart';
 
 class AlphaDashboard extends ConsumerWidget {
   const AlphaDashboard({super.key});
@@ -43,7 +44,7 @@ class AlphaDashboard extends ConsumerWidget {
 
     // 2. Run Real Analysis
     try {
-      final service = AnalysisService();
+      final service = ref.read(analysisServiceProvider);
       final result = await service.analyzeListingImage(image);
 
       if (context.mounted) {
@@ -51,9 +52,6 @@ class AlphaDashboard extends ConsumerWidget {
 
         // consume credit now that we have a result
         creditService.consumeCredit();
-
-        // Save to History
-        HistoryService().saveAnalysis(result);
 
         // 3. Show Result
         _showAnalysisResult(context, result);
@@ -143,107 +141,85 @@ class AlphaDashboard extends ConsumerWidget {
     final theme = Theme.of(context);
     final credits = ref.watch(creditServiceProvider);
 
-    return SmoothCursor(
-      cursorColor: Colors.black, // Solid/Ink color for Alpha
-      smoothing: 0.15, // Slightly heavier/stable for "Solid" feel
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Alpha Hub'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.notifications_outlined),
-              onPressed: () {},
-            ),
-            const SizedBox(width: 8),
-            CircleAvatar(
-              backgroundColor: theme.colorScheme.primaryContainer,
-              child: Text('A',
-                  style:
-                      TextStyle(color: theme.colorScheme.onPrimaryContainer)),
-            ),
-            const SizedBox(width: 16),
-          ],
-        ),
-        body: Row(
-          children: [
-            NavigationRail(
-              extended: MediaQuery.of(context).size.width > 900,
-              destinations: const [
-                NavigationRailDestination(
-                  icon: Icon(Icons.dashboard_outlined),
-                  selectedIcon: Icon(Icons.dashboard),
-                  label: Text('Overview'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.analytics_outlined),
-                  selectedIcon: Icon(Icons.analytics),
-                  label: Text('Analysis'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.settings_outlined),
-                  selectedIcon: Icon(Icons.settings),
-                  label: Text('Settings'),
-                ),
-              ],
-              selectedIndex: 0,
-              onDestinationSelected: (int index) {},
-            ),
-            const VerticalDivider(thickness: 1, width: 1),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back, Agent.',
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+    return GlassScaffold(
+      body: Row(
+        children: [
+          _buildLiquidRail(context),
+          const VerticalDivider(thickness: 1, width: 1),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Welcome back, Agent.',
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    children: [
+                      const _SummaryCard(
+                        title: 'Listings',
+                        value: '24',
+                        icon: Icons.home_work_outlined,
+                        color: Colors.blue,
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      children: [
-                        const _SummaryCard(
-                          title: 'Listings',
-                          value: '24',
-                          icon: Icons.home_work_outlined,
-                          color: Colors.blue,
-                        ),
-                        const SizedBox(width: 16),
-                        const _SummaryCard(
-                          title: 'Pending',
-                          value: '3',
-                          icon: Icons.pending_actions_outlined,
-                          color: Colors.orange,
-                        ),
-                        const SizedBox(width: 16),
-                        _SummaryCard(
-                          title: 'Credits',
-                          value: '$credits',
-                          icon: Icons.token_outlined,
-                          color: credits > 0 ? Colors.green : Colors.red,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-                    Text(
-                      'Recent Activity',
-                      style: theme.textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 16),
-                    _buildHistoryList(ref, theme),
-                  ],
-                ),
+                      const SizedBox(width: 16),
+                      const _SummaryCard(
+                        title: 'Pending',
+                        value: '3',
+                        icon: Icons.pending_actions_outlined,
+                        color: Colors.orange,
+                      ),
+                      const SizedBox(width: 16),
+                      _SummaryCard(
+                        title: 'Credits',
+                        value: '$credits',
+                        useGem: true,
+                        isActive: credits > 0,
+                        icon: Icons.token_outlined,
+                        color: credits > 0 ? Colors.green : Colors.red,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+                  Text(
+                    'Recent Activity',
+                    style: theme.textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 16),
+                  _buildHistoryList(ref, theme),
+                ],
               ),
             ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _handleNewAnalysis(context, ref),
-          icon: const Icon(Icons.add),
-          label: const Text('New Analysis'),
-        ), // New Analysis
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _handleNewAnalysis(context, ref),
+        backgroundColor: AppTheme.primary,
+        icon: const Icon(Icons.add, color: Colors.black),
+        label:
+            const Text('New Analysis', style: TextStyle(color: Colors.black)),
+      ),
+    );
+  }
+
+  Widget _buildLiquidRail(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      width: MediaQuery.of(context).size.width > 900 ? 200 : 80,
+      color: Colors.white.withValues(alpha: 0.02),
+      child: Column(
+        children: [
+          const SizedBox(height: 40),
+          _RailIcon(Icons.grid_view_rounded, active: true),
+          _RailIcon(Icons.analytics_outlined),
+          _RailIcon(Icons.settings_outlined),
+        ],
       ),
     );
   }
@@ -299,12 +275,16 @@ class _SummaryCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final bool useGem;
+  final bool isActive;
 
   const _SummaryCard({
     required this.title,
     required this.value,
     required this.icon,
     required this.color,
+    this.useGem = false,
+    this.isActive = true,
   });
 
   @override
@@ -315,7 +295,10 @@ class _SummaryCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 28),
+            if (useGem)
+              OpalGem(size: 32, isActive: isActive)
+            else
+              Icon(icon, color: color, size: 28),
             const SizedBox(height: 16),
             Text(
               value,

@@ -44,7 +44,7 @@ function Test-RoutineDue {
         $NextRun = $LastRun.AddMinutes($IntervalMinutes)
         if ((Get-Date) -lt $NextRun) {
             $TimeRemaining = ($NextRun - (Get-Date)).TotalMinutes
-            Log-Message "Routine '$RoutineName' is not due yet. Next run in $([math]::Round($TimeRemaining, 1)) mins."
+            Write-GeminiLog "Routine '$RoutineName' is not due yet. Next run in $([math]::Round($TimeRemaining, 1)) mins."
             return $false
         }
     }
@@ -58,17 +58,17 @@ function Update-RoutineTimestamp {
     Save-State $State
 }
 
-function Log-Message {
+function Write-GeminiLog {
     param ([string]$Message)
     Write-Host "[$((Get-Date).ToString("HF:mm:ss"))] [GEMINI] $Message" -ForegroundColor Cyan
 }
 
-function Run-AutoSave {
-    Log-Message "Starting Heartbeat (Auto-Save)..."
+function Invoke-AutoSave {
+    Write-GeminiLog "Starting Heartbeat (Auto-Save)..."
     
     # Check for changes
-    if ($(git status --porcelain) -eq $null) {
-        Log-Message "No changes to save."
+    if ($null -eq $(git status --porcelain)) {
+        Write-GeminiLog "No changes to save."
         return
     }
 
@@ -79,45 +79,45 @@ function Run-AutoSave {
     $CommitMsg = "Gemini AutoSave: $Timestamp"
     git commit -m "$CommitMsg"
     
-    Log-Message "Work saved: $CommitMsg"
+    Write-GeminiLog "Work saved: $CommitMsg"
 }
 
-function Run-DeepClean {
-    Log-Message "Starting Deep Clean..."
+function Invoke-DeepClean {
+    Write-GeminiLog "Starting Deep Clean..."
 
     # 1. Run Auto-Save first
-    Run-AutoSave
+    Invoke-AutoSave
 
     # 2. Sync with Remote
-    Log-Message "Syncing with remote..."
+    Write-GeminiLog "Syncing with remote..."
     git pull origin main --rebase
     git push origin main
-    Log-Message "Sync complete."
+    Write-GeminiLog "Sync complete."
 
     # 3. Analyze Project
-    Log-Message "Running analysis..."
+    Write-GeminiLog "Running analysis..."
     $AnalysisFile = "analysis_output.txt"
     flutter analyze > $AnalysisFile
     
     # Check for errors in analysis
     if (Select-String -Path $AnalysisFile -Pattern "error •") {
-        Log-Message "CRITICAL: Errors found in analysis. Review $AnalysisFile."
+        Write-GeminiLog "CRITICAL: Errors found in analysis. Review $AnalysisFile."
         # We could notify the agent here if we had a direct hook, 
         # but the file existence serves as the signal.
     }
     else {
-        Log-Message "Analysis passed (no errors)."
+        Write-GeminiLog "Analysis passed (no errors)."
     }
 
     # 4. Resource Optimization (Stub - could kill chrome processes etc)
-    Log-Message "Workspace optimized."
+    Write-GeminiLog "Workspace optimized."
     
     # 5. Clutter Sweep
-    Run-ClutterSweep
+    Invoke-ClutterSweep
 }
 
-function Run-ClutterSweep {
-    Log-Message "Starting Clutter Sweep..."
+function Invoke-ClutterSweep {
+    Write-GeminiLog "Starting Clutter Sweep..."
     
     # Define clutter patterns
     $ClutterPatterns = @(
@@ -133,22 +133,22 @@ function Run-ClutterSweep {
             # Skip if in .git or node_modules to be safe, though unlikely for these extensions
             if ($File.FullName -notmatch "\\.git\\" -and $File.FullName -notmatch "node_modules") {
                 Remove-Item $File.FullName -Force
-                Log-Message "Removed clutter: $($File.Name)"
+                Write-GeminiLog "Removed clutter: $($File.Name)"
                 $Count++
             }
         }
     }
     
     if ($Count -eq 0) {
-        Log-Message "No clutter found."
+        Write-GeminiLog "No clutter found."
     }
     else {
-        Log-Message "Cleaned $Count clutter items."
+        Write-GeminiLog "Cleaned $Count clutter items."
     }
 }
 
 function Start-Watcher {
-    Log-Message "Starting Watcher Agent (Antivirus Mode)..."
+    Write-GeminiLog "Starting Watcher Agent (Antivirus Mode)..."
 
     # 1. Check for Stuck Lock Files
     $LockFiles = @(
@@ -162,9 +162,9 @@ function Start-Watcher {
             $Item = Get-Item $File
             $Age = (Get-Date) - $Item.LastWriteTime
             if ($Age.TotalMinutes -gt 15) {
-                Log-Message "WARNING: Found stale lock file $File ($($Age.TotalMinutes) mins old). PCR (Process-Clear-Restart) initiated."
+                Write-GeminiLog "WARNING: Found stale lock file $File ($($Age.TotalMinutes) mins old). PCR (Process-Clear-Restart) initiated."
                 Remove-Item $File -Force
-                Log-Message "Deleted $File."
+                Write-GeminiLog "Deleted $File."
             }
         }
     }
@@ -174,81 +174,81 @@ function Start-Watcher {
     # checking for processes that are consuming 0 CPU for a long time matching "flutter" could be an option,
     # but for now we look for known "stuck" signatures or just report.
     
-    Log-Message "Scanning for zombie processes..."
+    Write-GeminiLog "Scanning for zombie processes..."
     # In a real environment, we'd check Process-Activity here.
     # For now, just a health check log.
-    Log-Message "System Integrity Normal."
+    Write-GeminiLog "System Integrity Normal."
 
     # 3. Safe Mode Restore
-    Log-Message "Executing Safe Mode Restore..."
+    Write-GeminiLog "Executing Safe Mode Restore..."
     
     # Run flutter clean if things look bad
     if (Test-Path ".dart_tool") {
         # Optional: could check last mod time
     }
     
-    Log-Message "Watcher routine complete."
+    Write-GeminiLog "Watcher routine complete."
 }
 
 function Restore-SafeMode {
-    Log-Message "Running Safe Mode Restore..."
+    Write-GeminiLog "Running Safe Mode Restore..."
     
-    Log-Message "Cleaning..."
+    Write-GeminiLog "Cleaning..."
     cmd /c "flutter clean"
     
-    Log-Message "Fetching dependencies (Safe Mode)..."
+    Write-GeminiLog "Fetching dependencies (Safe Mode)..."
     # we could add a timeout wrapper here if needed
     cmd /c "flutter pub get"
     
-    Log-Message "Restore complete."
+    Write-GeminiLog "Restore complete."
 }
 
-function Run-Antigravity {
-    Log-Message "INITIATING ANTIGRAVITY AUTONOMY (Level 5)..."
+function Invoke-Antigravity {
+    Write-GeminiLog "INITIATING ANTIGRAVITY AUTONOMY (Level 5)..."
     
     # 1. Auto-Save
-    Run-AutoSave
+    Invoke-AutoSave
 
     # 2. Self-Heal Code
-    Log-Message "Running Self-Healing Protocol (dart fix)..."
+    Write-GeminiLog "Running Self-Healing Protocol (dart fix)..."
     # Capture output to avoid cluttering unless needed
-    $FixOutput = cmd /c "dart fix --apply" 2>&1
-    Log-Message "Self-healing complete."
+    cmd /c "dart fix --apply" 2>&1 | Out-Null
+    Write-GeminiLog "Self-healing complete."
 
     # 3. Aggressive Resource Optimization
-    Log-Message "Purging non-essential processes..."
+    Write-GeminiLog "Purging non-essential processes..."
     $Browsers = Get-Process -Name "chrome", "msedge" -ErrorAction SilentlyContinue
     if ($Browsers) {
         Stop-Process -InputObject $Browsers -Force -ErrorAction SilentlyContinue
-        Log-Message "Terminated $($Browsers.Count) browser instances."
+        Write-GeminiLog "Terminated $($Browsers.Count) browser instances."
     }
     else {
-        Log-Message "No target browser processes found."
+        Write-GeminiLog "No target browser processes found."
     }
 
     # 4. Dependency Refresh
-    Log-Message "Refreshing dependencies..."
+    Write-GeminiLog "Refreshing dependencies..."
     cmd /c "flutter pub get"
 
     # 5. Final State Commit
-    if ($(git status --porcelain) -ne $null) {
+    if ($null -ne $(git status --porcelain)) {
         git add .
         git commit -m "Antigravity Autonomy: Self-Heal & Optimization"
-        Log-Message "Antigravity changes committed."
+        Write-GeminiLog "Antigravity changes committed."
     }
     else {
-        Log-Message "No post-fix changes to commit."
+        Write-GeminiLog "No post-fix changes to commit."
     }
 
     # 6. Clutter Sweep
-    Run-ClutterSweep
+    Invoke-ClutterSweep
 
-    Log-Message "Antigravity Routine Complete. System is autonomous."
+    Write-GeminiLog "Antigravity Routine Complete. System is autonomous."
     Update-RoutineTimestamp -RoutineName "Antigravity"
 }
 
-function Run-Backup {
-    Log-Message "Initiating Artifact Backup Protocol..."
+function Invoke-Backup {
+    Write-GeminiLog "Initiating Artifact Backup Protocol..."
     
     $BackupRoot = Join-Path $WorkspaceRoot "backups"
     if (-not (Test-Path $BackupRoot)) { New-Item -ItemType Directory -Path $BackupRoot | Out-Null }
@@ -261,38 +261,38 @@ function Run-Backup {
     # 1. Backup 'Brain' (Knowledge & Plans)
     $BrainPath = "C:\Users\veris\.gemini\antigravity\brain\345fadc8-acdd-4139-9394-ff2b712ce9f7"
     if (Test-Path $BrainPath) {
-        Log-Message "Backing up Brain Artifacts..."
+        Write-GeminiLog "Backing up Brain Artifacts..."
         try {
             Copy-Item -Path "$BrainPath\*" -Destination "$TargetDir\brain" -Recurse -Container -Force
         }
         catch {
-            Log-Message "Warning: Could not fully backup Brain (Permission or Path issue)."
+            Write-GeminiLog "Warning: Could not fully backup Brain (Permission or Path issue)."
         }
     }
     
     # 2. Backup 'Deploy' (Builds)
     $DeployPath = Join-Path $WorkspaceRoot "deploy"
     if (Test-Path $DeployPath) {
-        Log-Message "Backing up Deployment Artifacts..."
+        Write-GeminiLog "Backing up Deployment Artifacts..."
         try {
             Copy-Item -Path $DeployPath -Destination "$TargetDir\deploy" -Recurse -Container -Force
         }
         catch {
-            Log-Message "Warning: Could not fully backup Deploy."
+            Write-GeminiLog "Warning: Could not fully backup Deploy."
         }
     }
 
-    Log-Message "Backup Complete: $TargetDir"
+    Write-GeminiLog "Backup Complete: $TargetDir"
 }
 
-function Run-CognitiveSync {
-    Log-Message "Initiating Cognitive Sync (Memory Palace)..."
+function Invoke-CognitiveSync {
+    Write-GeminiLog "Initiating Cognitive Sync (Memory Palace)..."
     $Generator = Join-Path $WorkspaceRoot "tools\governor\generate_dashboard_data.ps1"
     if (Test-Path $Generator) {
         & $Generator
     }
     else {
-        Log-Message "Error: Data generator not found at $Generator"
+        Write-GeminiLog "Error: Data generator not found at $Generator"
     }
 }
 
@@ -300,24 +300,24 @@ function Run-CognitiveSync {
 
 try {
     switch ($Routine) {
-        "Heartbeat" { Run-AutoSave }
-        "DeepClean" { Run-DeepClean; Run-CognitiveSync }
+        "Heartbeat" { Invoke-AutoSave }
+        "DeepClean" { Invoke-DeepClean; Invoke-CognitiveSync }
         "Watcher" { Start-Watcher }
         "Restore" { Restore-SafeMode }
-        "Antigravity" { Run-Antigravity; Run-CognitiveSync }
-        "Backup" { Run-Backup }
-        "CognitiveSync" { Run-CognitiveSync }
+        "Antigravity" { Invoke-Antigravity; Invoke-CognitiveSync }
+        "Backup" { Invoke-Backup }
+        "CognitiveSync" { Invoke-CognitiveSync }
     }
 }
 catch {
     Write-Error "Gemini Autonomy Error: $_"
     exit 1
 }
-function Run-EmergencyRecovery {
-    Log-Message "IDE Stuck: Initiating Emergency Recovery Routine..."
+function Invoke-EmergencyRecovery {
+    Write-GeminiLog "IDE Stuck: Initiating Emergency Recovery Routine..."
     
     # 1. Kill zombie processes
-    Log-Message "Terminating hung Dart/Flutter processes..."
+    Write-GeminiLog "Terminating hung Dart/Flutter processes..."
     Get-Process -Name "dart", "flutter" -ErrorAction SilentlyContinue | Stop-Process -Force
     
     # 2. Clear stale locks via Watcher logic
@@ -326,5 +326,5 @@ function Run-EmergencyRecovery {
     # 3. Perform Safe Mode Restore (Clean & Pub Get)
     Restore-SafeMode
     
-    Log-Message "Recovery complete. Please restart your IDE or reload the window."
+    Write-GeminiLog "Recovery complete. Please restart your IDE or reload the window."
 }

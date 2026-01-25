@@ -14,7 +14,7 @@ class GlassContainer extends StatelessWidget {
   const GlassContainer({
     super.key,
     required this.child,
-    this.blur = 16,
+    this.blur = 10,
     this.opacity = 0.05,
     this.color = Colors.white,
     this.borderRadius,

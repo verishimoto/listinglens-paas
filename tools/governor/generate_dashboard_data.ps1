@@ -10,8 +10,8 @@
 #>
 
 $WorkspaceRoot = Get-Location
-$TaskFile = Join-Path "C:\Users\veris\.gemini\antigravity\brain\345fadc8-acdd-4139-9394-ff2b712ce9f7" "task.md"
-$OutputFile = Join-Path $WorkspaceRoot "deploy\governor\state.json"
+$TaskFile = "C:\Users\veris\.gemini\antigravity\brain\95b8877a-c087-4ac8-b52f-d66b91d98313\task.md"
+$OutputFile = Join-Path $WorkspaceRoot "lib\governor\state.json"
 $DeployGovernorDir = Join-Path $WorkspaceRoot "deploy\governor"
 
 # Ensure output directory exists

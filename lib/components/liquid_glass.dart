@@ -14,7 +14,7 @@ class LiquidGlass extends StatefulWidget {
   const LiquidGlass({
     super.key,
     required this.child,
-    this.blurSigma = 30.0,
+    this.blurSigma = 12.0,
     this.frostOpacity = 0.05,
     this.borderRadius = 24.0,
     this.hasBorder = true,

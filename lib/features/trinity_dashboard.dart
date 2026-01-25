@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../components/glass_scaffold.dart';
+import '../core/theme/app_theme.dart';
 import 'alpha/alpha_dashboard.dart';
 import 'beta/beta_flow.dart';
 import 'gamma/gamma_input.dart';
@@ -16,13 +17,14 @@ class TrinityDashboard extends StatelessWidget {
           padding: const EdgeInsets.all(40),
           decoration: BoxDecoration(
             // Glassmorphism: "Liquid Glass"
-            color: Colors.white.withValues(alpha: 0.03),
+            color: Colors.white.withValues(alpha: 0.02),
             borderRadius: BorderRadius.circular(40), // 40px Radius (Panel)
-            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            border: Border.all(
+                color: Colors.white.withValues(alpha: 0.15), width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.2),
-                blurRadius: 40,
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 50,
                 spreadRadius: -10,
               ),
             ],
@@ -31,7 +33,7 @@ class TrinityDashboard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Header
-              const Text(
+              Text(
                 'THE TRINITY PROTOCOL',
                 style: TextStyle(
                   fontFamily: 'Inter',
@@ -41,9 +43,9 @@ class TrinityDashboard extends StatelessWidget {
                   color: Colors.white,
                   shadows: [
                     Shadow(
-                      color: Colors.cyanAccent,
-                      blurRadius: 20,
-                      offset: Offset(0, 0),
+                      color: AppTheme.primary,
+                      blurRadius: 25,
+                      offset: const Offset(0, 0),
                     ),
                   ],
                 ),
@@ -67,7 +69,7 @@ class TrinityDashboard extends StatelessWidget {
                   _GlassCard(
                     title: 'ALPHA',
                     subtitle: 'SolidFusion',
-                    color: Colors.cyan,
+                    color: AppTheme.primary,
                     icon: Icons.grid_view_rounded,
                     onTap: () => Navigator.push(
                       context,
@@ -77,7 +79,7 @@ class TrinityDashboard extends StatelessWidget {
                   _GlassCard(
                     title: 'BETA',
                     subtitle: 'LiquidOpal',
-                    color: Colors.purple,
+                    color: AppTheme.secondary,
                     icon: Icons.water_drop_rounded,
                     onTap: () => Navigator.push(
                       context,
@@ -87,8 +89,8 @@ class TrinityDashboard extends StatelessWidget {
                   _GlassCard(
                     title: 'GAMMA',
                     subtitle: 'ClayMotion',
-                    color: Colors.orange,
-                    icon: Icons.interests_rounded, // Squircle-like icon
+                    color: Colors.orangeAccent, // Derived "Clay" tone
+                    icon: Icons.interests_rounded,
                     onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const GammaInput()),
@@ -142,11 +144,12 @@ class _GlassCardState extends State<_GlassCard> {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             // Interaction: Glimmer/Iridescence logic
-            color: widget.color.withValues(alpha: _hovering ? 0.15 : 0.05),
+            color: widget.color.withValues(alpha: _hovering ? 0.12 : 0.04),
             borderRadius: BorderRadius.circular(20), // 20px Radius (Tabs/Cards)
             border: Border.all(
-              color: widget.color.withValues(alpha: _hovering ? 0.6 : 0.2),
-              width: _hovering ? 2 : 1,
+              color: widget.color.withValues(alpha: _hovering ? 0.7 : 0.2),
+              width:
+                  _hovering ? 2 : 1, // Clamped to 2px thickening as requested
             ),
             boxShadow: [
               if (_hovering)

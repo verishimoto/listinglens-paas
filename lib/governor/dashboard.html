@@ -25,6 +25,44 @@
             padding: 20px;
             background-image: radial-gradient(circle at 10% 20%, rgba(34, 211, 238, 0.1) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 20%);
+            cursor: none;
+            /* Hide default cursor */
+            overflow-x: hidden;
+        }
+
+        /* Liquid Glass Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            backdrop-filter: brightness(1.2) saturate(1.2) blur(2px);
+            -webkit-backdrop-filter: brightness(1.2) saturate(1.2) blur(2px);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3), inset 0 0 5px rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #custom-cursor::after {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .cursor-hover {
+            width: 60px !important;
+            height: 60px !important;
+            background-color: rgba(34, 211, 238, 0.05);
+            border-color: rgba(34, 211, 238, 0.6) !important;
         }
 
         /* Glassmorphism Card */
@@ -37,6 +75,9 @@
             padding: 24px;
             margin-bottom: 24px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         h1,
@@ -201,6 +242,7 @@
 </head>
 
 <body>
+    <div id="custom-cursor"></div>
 
     <div class="glass-card">
         <div style="display:flex; align-items:center; justify-content:space-between;">
@@ -310,6 +352,18 @@
             document.getElementById(id).classList.add('active');
             event.target.classList.add('active');
         }
+
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('button, .tab-btn, .tree-node, a').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
 
         // Auto-refresh every 30s
         loadState();

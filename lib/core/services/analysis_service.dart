@@ -2,15 +2,18 @@ import 'dart:convert';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/analysis_result.dart';
+import '../data/knowledge_base.dart';
+import 'history_service.dart';
 
 // TODO: Replace with your actual Gemini API Key or use --dart-define
-const String _kGeminiApiKey = 'AIzaSyBDHfYXGeSP_hbWQJC2ONKk47EaMIAky1k';
+const String _kGeminiApiKey = 'AIzaSyCuiO7c9ioLGjfveFxJLCLyVJqTOdDIYTs';
 
 class AnalysisService {
+  final HistoryService? _historyService;
   late final GenerativeModel _model;
   final bool _hasKey = _kGeminiApiKey != 'YOUR_API_KEY_HERE';
 
-  AnalysisService() {
+  AnalysisService([this._historyService]) {
     if (_hasKey) {
       _model = GenerativeModel(
         model: 'gemini-1.5-flash', // Using Flash for speed/cost
@@ -53,25 +56,42 @@ class AnalysisService {
         return AnalysisResult.error("Failed to parse structured data from AI.");
       }
 
-      return AnalysisResult.fromJson(jsonDecode(jsonString));
+      final result = AnalysisResult.fromJson(jsonDecode(jsonString));
+
+      // 5. Save to History
+      if (_historyService != null) {
+        await _historyService.saveAnalysis(result);
+      }
+
+      return result;
     } catch (e) {
       return AnalysisResult.error(e.toString());
     }
   }
 
   String _buildPrompt() {
+    final rules = KnowledgeBase.designRules
+        .map((r) => "- ${r['id']} (${r['rule']}): ${r['description']}")
+        .join("\n");
+
     return '''
 You are a professional Real Estate Photographer and Listing Auditor. 
 Analyze this listing photo provided.
-Provide a structured JSON response (NO MARKDOWN FORMATTING) with the following fields:
+
+CONSTRAINTS:
+1. Provide a structured JSON response (NO MARKDOWN FORMATTING).
+2. Critically appraise the photo based on: Brightness, vertical lines, clutter, emotional appeal, and dynamic range.
+
+KNOWLEDGE BASE (Apply these theory-based rules where applicable):
+$rules
+
+JSON STRUCTURE:
 - overallScore (0-100)
 - lightingScore (0-100)
 - compositionScore (0-100)
 - clarityScore (0-100)
-- actionableFeedback (Array of strings, specific tips to improve this photo)
+- actionableFeedback (Array of strings. IMPORTANT: If a rule from the knowledge base is violated, cite its ID like [R001] in the feedback string)
 - summary (Short, punchy critique)
-
-Critique based on: Brightness, vertical lines, clutter, emotional appeal, and dynamic range.
 ''';
   }
 

@@ -6,13 +6,20 @@ import 'dart:ui';
 import '../../core/services/credit_service.dart';
 import '../../shared/paywall_modal.dart';
 
-import '../../core/services/analysis_service.dart';
-import '../../core/services/history_service.dart';
 import '../../core/data/analysis_result.dart';
 import '../../shared/smooth_cursor.dart';
+import '../../core/providers/analysis_provider.dart';
 
-class BetaFlow extends ConsumerWidget {
+class BetaFlow extends ConsumerStatefulWidget {
   const BetaFlow({super.key});
+
+  @override
+  ConsumerState<BetaFlow> createState() => _BetaFlowState();
+}
+
+class _BetaFlowState extends ConsumerState<BetaFlow> {
+  int _step = 0; // 0: Idle, 1: Infusing (Loading), 2: Clarified (Result)
+  AnalysisResult? _lastResult;
 
   void _showCinematicNav(BuildContext context) {
     showGeneralDialog(
@@ -26,7 +33,7 @@ class BetaFlow extends ConsumerWidget {
     );
   }
 
-  Future<void> _handleBeginAnalysis(BuildContext context, WidgetRef ref) async {
+  Future<void> _handleBeginAnalysis() async {
     final creditService = ref.read(creditServiceProvider.notifier);
     final hasCredits = ref.read(creditServiceProvider) > 0;
 
@@ -38,130 +45,46 @@ class BetaFlow extends ConsumerWidget {
       return;
     }
 
-    // 1. Pick Image
     final picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image == null) return;
 
-    // Show Loading
-    if (context.mounted) {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: const Center(
-            child: CircularProgressIndicator(color: Colors.cyan),
-          ),
-        ),
-      );
-    }
+    setState(() => _step = 1); // Phase: Infusion
 
     try {
-      final service = AnalysisService();
+      final service = ref.read(analysisServiceProvider);
       final result = await service.analyzeListingImage(image);
 
-      if (context.mounted) {
-        Navigator.pop(context); // Dismiss loading
-        creditService.consumeCredit();
-        HistoryService().saveAnalysis(result);
+      await Future.delayed(const Duration(seconds: 1)); // Cinematic wait
 
-        // Show Beta Result (Glass Modal)
-        _showBetaResult(context, result);
+      if (mounted) {
+        creditService.consumeCredit();
+        setState(() {
+          _lastResult = result;
+          _step = 2; // Phase: Clarification
+        });
       }
     } catch (e) {
-      if (context.mounted) {
-        Navigator.pop(context);
+      setState(() => _step = 0);
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Liquid Intelligence Failed.'),
-            backgroundColor: Colors.black,
-            behavior: SnackBarBehavior.floating,
-          ),
+          const SnackBar(content: Text('Liquid Intelligence Failed.')),
         );
       }
     }
   }
 
-  void _showBetaResult(BuildContext context, AnalysisResult result) {
-    showDialog(
-      context: context,
-      builder: (_) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              width: 500,
-              padding: const EdgeInsets.all(30),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.6),
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('CRYSTAL CLEAR',
-                      style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.5),
-                          letterSpacing: 4)),
-                  const SizedBox(height: 20),
-                  Text('${result.overallScore}',
-                      style: const TextStyle(
-                          color: Colors.cyan,
-                          fontSize: 80,
-                          fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 20),
-                  Text(result.summary,
-                      style: const TextStyle(color: Colors.white),
-                      textAlign: TextAlign.center),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    height: 150,
-                    child: ListView(
-                      children: result.actionableFeedback
-                          .map((e) => Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text("• $e",
-                                    style: TextStyle(
-                                        color: Colors.white
-                                            .withValues(alpha: 0.8))),
-                              ))
-                          .toList(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // LiquidOpal: Dark Mode Only, Neon Gradients, Glass
+  Widget build(BuildContext context) {
     return SmoothCursor(
       cursorColor: Colors.cyanAccent,
-      smoothing: 0.08, // Very fluid/fast for "Liquid" feel
+      smoothing: 0.08,
       child: Scaffold(
         backgroundColor: const Color(0xFF09090b),
         body: Stack(
           children: [
-            // 0. Nav Trigger (Top Right)
-            Positioned(
-              top: 24,
-              right: 24,
-              child: IconButton(
-                onPressed: () => _showCinematicNav(context),
-                icon: const Icon(Icons.menu, color: Colors.white),
-              ),
-            ),
-            // 1. Ambient Background Mesh
+            // Ambient Background
             const Positioned(
               top: -100,
               left: -100,
@@ -173,69 +96,116 @@ class BetaFlow extends ConsumerWidget {
               child: _GlowOrb(color: Colors.cyan, size: 300),
             ),
 
-            // 2. Glass Foreground
             Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                  child: Container(
-                    width: 500,
-                    height: 600,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.05),
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.2),
-                          blurRadius: 40,
-                          spreadRadius: 10,
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        const Spacer(),
-                        const Icon(Icons.auto_awesome,
-                            size: 60, color: Colors.white),
-                        const SizedBox(height: 30),
-                        const Text(
-                          'LIQUID OPAL',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 4,
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(color: Colors.purple, blurRadius: 20),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Aesthetic Intelligence',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white.withValues(alpha: 0.6),
-                            letterSpacing: 2,
-                          ),
-                        ),
-                        const Spacer(),
-                        _GlassButton(
-                          label: "BEGIN ANALYSIS",
-                          onTap: () => _handleBeginAnalysis(context, ref),
-                        ),
-                        const SizedBox(height: 40),
-                      ],
-                    ),
-                  ),
-                ),
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 800),
+                child: _buildStepContent(),
+              ),
+            ),
+
+            // Nav Trigger
+            Positioned(
+              top: 24,
+              right: 24,
+              child: IconButton(
+                onPressed: () => _showCinematicNav(context),
+                icon: const Icon(Icons.menu, color: Colors.white),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildStepContent() {
+    switch (_step) {
+      case 1: // Infusion
+        return Column(
+          key: const ValueKey(1),
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator(color: Colors.cyan),
+            const SizedBox(height: 40),
+            Text(
+              'INFUSING INTELLIGENCE',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.5),
+                letterSpacing: 4,
+                fontFamily: 'Agency FB',
+              ),
+            ),
+          ],
+        );
+      case 2: // Clarification
+        return _buildClarification();
+      default: // Absorption (Idle)
+        return _buildAbsorption();
+    }
+  }
+
+  Widget _buildAbsorption() {
+    return Container(
+      key: const ValueKey(0),
+      width: 500,
+      height: 600,
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.15)),
+      ),
+      child: Column(
+        children: [
+          const Spacer(),
+          const Icon(Icons.auto_awesome, size: 60, color: Colors.white),
+          const SizedBox(height: 30),
+          const Text(
+            'LIQUID OPAL',
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 4,
+              color: Colors.white,
+            ),
+          ),
+          const Spacer(),
+          _GlassButton(
+            label: "BEGIN ABSORPTION",
+            onTap: _handleBeginAnalysis,
+          ),
+          const SizedBox(height: 40),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildClarification() {
+    final result = _lastResult!;
+    return Container(
+      key: const ValueKey(2),
+      width: 500,
+      padding: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: Colors.cyan.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('${result.overallScore}',
+              style: const TextStyle(
+                  color: Colors.cyan,
+                  fontSize: 80,
+                  fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          Text(result.summary,
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center),
+          const SizedBox(height: 40),
+          _GlassButton(
+              label: "DISSOLVE", onTap: () => setState(() => _step = 0)),
+        ],
       ),
     );
   }

@@ -8,6 +8,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 DEPLOY_ROOT = os.path.join(PROJECT_ROOT, "deploy")
 BUILD_OUTPUT = os.path.join(PROJECT_ROOT, "build/web")
+FLUTTER_EXE = r"c:\Users\veris\.gemini\antigravity\scratch\flutter\bin\flutter.bat"
 
 PROTOCOLS = [
     {
@@ -35,7 +36,7 @@ def build_web(target_file, base_href):
         shutil.rmtree(BUILD_OUTPUT)
         
     cmd = [
-        "flutter", "build", "web", 
+        FLUTTER_EXE, "build", "web", 
         "--release", 
         "--base-href", base_href, 
         "--no-tree-shake-icons",

@@ -217,7 +217,7 @@ class _SolidFusionLayoutState extends ConsumerState<SolidFusionLayout> {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: LiquidGlass(
           borderRadius: 40, // Omega: 40px rigidity
-          blurSigma: 20,
+          blurSigma: 10,
           frostOpacity: 0.05,
           hasBorder: true,
           child: Container(

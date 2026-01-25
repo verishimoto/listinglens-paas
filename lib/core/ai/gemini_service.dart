@@ -16,19 +16,21 @@ class GeminiService {
 
   GeminiService(this.apiKey) {
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: 'gemini-1.5-flash-latest',
       apiKey: apiKey,
     );
   }
 
   Future<AuditModel> analyzeListing(XFile imageFile, String userId) async {
     if (apiKey.isEmpty) {
-      throw Exception('Gemini API Key missing. Run with --dart-define=GEMINI_API_KEY=...');
+      throw Exception(
+          'Gemini API Key missing. Run with --dart-define=GEMINI_API_KEY=...');
     }
 
     final imageBytes = await imageFile.readAsBytes();
     final prompt = TextPart(_auditPrompt);
-    final imagePart = DataPart('image/jpeg', imageBytes); // Assuming JPEG for simplicity
+    final imagePart =
+        DataPart('image/jpeg', imageBytes); // Assuming JPEG for simplicity
 
     final response = await _model.generateContent([
       Content.multi([prompt, imagePart])

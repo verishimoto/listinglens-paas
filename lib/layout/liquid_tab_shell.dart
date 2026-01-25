@@ -51,7 +51,7 @@ class _LiquidTabShellState extends State<LiquidTabShell> {
           Positioned.fill(
             child: ClipRRect(
               child: BackdropFilter(
-                filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                filter: ui.ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                 child: Stack(children: [
                   CustomPaint(
                     size: Size.infinite,
