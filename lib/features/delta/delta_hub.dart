@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
-import 'package:listing_lens_paas/theme/app_colors.dart';
+import 'package:listing_lens_paas/core/theme/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DeltaHub extends StatelessWidget {
   const DeltaHub({super.key});
@@ -12,18 +13,21 @@ class DeltaHub extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHubHeader(),
+          const Text("PERFORMANCE HUB",
+              style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 32,
+                  letterSpacing: -1,
+                  color: Colors.white)),
           const SizedBox(height: 48),
           Expanded(
             child: Row(
               children: [
-                // LEFT: Performance Chart
                 Expanded(
                   flex: 3,
                   child: _buildPerformancePanel(),
                 ),
                 const SizedBox(width: 32),
-                // RIGHT: Project Feed
                 Expanded(
                   flex: 2,
                   child: _buildFeedPanel(),
@@ -36,140 +40,54 @@ class DeltaHub extends StatelessWidget {
     );
   }
 
-  Widget _buildHubHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("PERFORMANCE HUB",
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 32,
-                    letterSpacing: -1,
-                    color: Colors.white)),
-            const SizedBox(height: 8),
-            Text("Real-time market velocity and intelligence.",
-                style: TextStyle(color: Colors.white.withValues(alpha: 0.4))),
-          ],
-        ),
-        _buildProfileTile(),
-      ],
-    );
-  }
-
-  Widget _buildProfileTile() {
-    return Row(
-      children: [
-        const Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text("ALEXANDER V.",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                    color: Colors.white)),
-            Text("PRO OPERATIVE",
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 10,
-                    color: AppColors.leverage4)),
-          ],
-        ),
-        const SizedBox(width: 16),
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-                colors: [AppColors.leverage1, AppColors.leverage2]),
-            border: Border.all(color: Colors.white, width: 2),
-            boxShadow: [
-              BoxShadow(
-                  color: AppColors.leverage1.withValues(alpha: 0.3),
-                  blurRadius: 10)
-            ],
-          ),
-          child: const Icon(Icons.person, color: Colors.white),
-        ),
-      ],
-    );
-  }
-
   Widget _buildPerformancePanel() {
     return LiquidGlass(
       borderRadius: 32,
       child: Container(
-        padding: const EdgeInsets.all(32),
+        padding: const EdgeInsets.all(40),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+          border: Border.all(color: Colors.white.withOpacity(0.05)),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("AUDIT VELOCITY",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                        color: Colors.white38,
-                        letterSpacing: 2)),
-                Text("+24% WEEKLY",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 10,
-                        color: AppColors.leverage4)),
-              ],
-            ),
-            const Spacer(),
-            // MOCK BARS
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildBar(0.4),
-                _buildBar(0.6),
-                _buildBar(0.3),
-                _buildBar(0.9),
-                _buildBar(0.5),
-                _buildBar(0.7),
-                _buildBar(0.8),
-              ],
-            ),
+            const Text("PREDICTED SELLABILITY ROI",
+                style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 12,
+                    color: AppTheme.primary,
+                    letterSpacing: 4)),
             const SizedBox(height: 24),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("MON",
-                    style: TextStyle(fontSize: 10, color: Colors.white24)),
-                Text("SUN",
-                    style: TextStyle(fontSize: 10, color: Colors.white24)),
+                Text("92.4",
+                    style: GoogleFonts.outfit(
+                        fontSize: 120,
+                        fontWeight: FontWeight.w100,
+                        color: Colors.white,
+                        letterSpacing: -5)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Text("%",
+                      style: GoogleFonts.outfit(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w200,
+                          color: Colors.white24)),
+                ),
               ],
             ),
+            const SizedBox(height: 12),
+            Text(
+                "*This is a probabilistic model based on heuristic alignment, not a financial guarantee.",
+                textAlign: TextAlign.center,
+                style: GoogleFonts.ebGaramond(
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white24)),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBar(double height) {
-    return Container(
-      width: 24,
-      height: 200 * height,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [
-            Colors.white.withValues(alpha: 0.1),
-            AppColors.leverage2.withValues(alpha: 0.6)
-          ],
-        ),
-        borderRadius: BorderRadius.circular(8),
       ),
     );
   }
@@ -187,9 +105,7 @@ class DeltaHub extends StatelessWidget {
         const SizedBox(height: 24),
         _buildLogItem(
             "ListingLens AI", "Optimized Hero Cover for Protocol 01.", true),
-        _buildLogItem("System", "Deployed Prototype Zeta v1.0.", false),
-        _buildLogItem(
-            "Alexander V.", "Mounted new asset for lifestyle audit.", false),
+        _buildLogItem("System", "Deployed Epsilon v4.0 UI.", false),
       ],
     );
   }
@@ -198,31 +114,26 @@ class DeltaHub extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
-            backgroundColor: isAI
-                ? AppColors.leverage1.withValues(alpha: 0.2)
-                : Colors.white10,
+            backgroundColor:
+                isAI ? AppTheme.primary.withOpacity(0.2) : Colors.white10,
             radius: 12,
             child: Icon(isAI ? Icons.auto_awesome : Icons.person,
                 size: 12, color: Colors.white38),
           ),
           const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(user,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        color: Colors.white38)),
-                Text(msg,
-                    style: const TextStyle(
-                        color: Colors.white70, fontSize: 13, height: 1.4)),
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(user,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: Colors.white38)),
+              Text(msg,
+                  style: const TextStyle(color: Colors.white70, fontSize: 13)),
+            ],
           ),
         ],
       ),

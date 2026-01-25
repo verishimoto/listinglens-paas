@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/components/liquid_glass.dart';
-import 'package:listing_lens_paas/theme/app_colors.dart';
+import 'package:listing_lens_paas/core/theme/app_theme.dart';
 import 'package:listing_lens_paas/features/delta/delta_dashboard.dart';
 import 'package:listing_lens_paas/features/delta/delta_lab.dart';
 import 'package:listing_lens_paas/features/delta/delta_hub.dart';
@@ -13,7 +13,7 @@ class DeltaLayout extends StatefulWidget {
 }
 
 class _DeltaLayoutState extends State<DeltaLayout> {
-  String _activeTab = 'lab'; // lab, hub, dash
+  String _activeTab = 'lab';
   bool _isDark = true;
 
   void _switchTab(String tab) {
@@ -22,96 +22,190 @@ class _DeltaLayoutState extends State<DeltaLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = _isDark ? _buildDarkTheme() : _buildLightTheme();
-
-    return Theme(
-      data: theme,
-      child: Scaffold(
-        backgroundColor: theme.scaffoldBackgroundColor,
-        body: Stack(
-          children: [
-            // 1. BACKGROUND MOTION (Simplified Liquid Engine)
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: RadialGradient(
-                    center: Alignment.topLeft,
-                    radius: 1.5,
-                    colors: [
-                      _isDark
-                          ? AppColors.leverage1.withValues(alpha: 0.1)
-                          : Colors.blue.withValues(alpha: 0.05),
-                      _isDark ? Colors.black : Colors.white,
-                    ],
-                  ),
+    return Scaffold(
+      backgroundColor: const Color(0xFF050505),
+      body: Stack(
+        children: [
+          // 1. FLUID BACKGROUND
+          Positioned.fill(
+            child: AnimatedContainer(
+              duration: const Duration(seconds: 2),
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  center: Alignment.center,
+                  radius: 1.2,
+                  colors: [
+                    _isDark
+                        ? const Color(0xFF1A0B2E)
+                        : Colors.blue.withValues(alpha: 0.1),
+                    _isDark ? Colors.black : Colors.white,
+                  ],
                 ),
               ),
             ),
+          ),
 
-            // 2. MAIN SHELL
-            SafeArea(
-              child: Row(
+          // 2. MAIN CONVERGENCE SHELL
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
                 children: [
-                  // RAIL / SIDEBAR
-                  _buildSidebar(),
-
-                  // CONTENT AREA
+                  _buildEpsilonHeader(),
+                  const SizedBox(height: 40),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: LiquidGlass(
-                        borderRadius: 32,
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 500),
-                          child: _buildActiveContent(),
+                    child: Row(
+                      children: [
+                        _buildEpsilonTabs(),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.05),
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(32),
+                                bottomRight: Radius.circular(32),
+                              ),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.15),
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topRight: Radius.circular(32),
+                                bottomRight: Radius.circular(32),
+                              ),
+                              child: Stack(
+                                children: [
+                                  const Positioned.fill(
+                                    child: LiquidGlass(
+                                      borderRadius: 0,
+                                      blurSigma: 40,
+                                      hasBorder: false,
+                                      child: SizedBox.expand(),
+                                    ),
+                                  ),
+                                  AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 400),
+                                    child: _buildActiveContent(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildSidebar() {
-    return Container(
-      width: 100,
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      child: Column(
+  Widget _buildEpsilonHeader() {
+    return SizedBox(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _SidebarIcon(
-            icon: Icons.science_outlined,
-            label: "LAB",
-            isActive: _activeTab == 'lab',
-            onTap: () => _switchTab('lab'),
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primary, AppTheme.secondary],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    "L",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "LISTINGLENS",
+                    style: const TextStyle(
+                      color: AppTheme.primary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const Text(
+                    "LIQUID GLASS v4.0",
+                    style: TextStyle(
+                      fontSize: 10,
+                      // opacity: 0.5, // This property is not available on TextStyle directly.
+                      color:
+                          Colors.white54, // Using a color with opacity instead.
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          const SizedBox(height: 32),
-          _SidebarIcon(
-            icon: Icons.hub_outlined,
-            label: "HUB",
-            isActive: _activeTab == 'hub',
-            onTap: () => _switchTab('hub'),
-          ),
-          const SizedBox(height: 32),
-          _SidebarIcon(
-            icon: Icons.dashboard_customize_outlined,
-            label: "DASH",
-            isActive: _activeTab == 'dash',
-            onTap: () => _switchTab('dash'),
-          ),
-          const Spacer(),
-          // THEME TOGGLE
           IconButton(
             onPressed: () => setState(() => _isDark = !_isDark),
             icon: Icon(
-                _isDark ? Icons.wb_sunny_outlined : Icons.nightlight_outlined),
-            color: _isDark ? Colors.white30 : Colors.black26,
+              _isDark ? Icons.wb_sunny_outlined : Icons.nightlight_outlined,
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEpsilonTabs() {
+    return Container(
+      width: 280,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.2),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(32),
+          bottomLeft: Radius.circular(32),
+        ),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20),
+        child: Column(
+          children: [
+            _EpsilonTab(
+              title: "Hero Cover",
+              index: 1,
+              isActive: _activeTab == 'lab',
+              onTap: () => _switchTab('lab'),
+            ),
+            _EpsilonTab(
+              title: "Performance Hub",
+              index: 2,
+              isActive: _activeTab == 'hub',
+              onTap: () => _switchTab('hub'),
+            ),
+            _EpsilonTab(
+              title: "Ecosystem Dashboard",
+              index: 3,
+              isActive: _activeTab == 'dash',
+              onTap: () => _switchTab('dash'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -126,31 +220,17 @@ class _DeltaLayoutState extends State<DeltaLayout> {
         return const DeltaLab(key: ValueKey('lab'));
     }
   }
-
-  ThemeData _buildDarkTheme() {
-    return ThemeData.dark().copyWith(
-      scaffoldBackgroundColor: const Color(0xFF050505),
-      primaryColor: AppColors.leverage6,
-    );
-  }
-
-  ThemeData _buildLightTheme() {
-    return ThemeData.light().copyWith(
-      scaffoldBackgroundColor: const Color(0xFFF5F5F7),
-      primaryColor: AppColors.leverage6,
-    );
-  }
 }
 
-class _SidebarIcon extends StatelessWidget {
-  final IconData icon;
-  final String label;
+class _EpsilonTab extends StatelessWidget {
+  final String title;
+  final int index;
   final bool isActive;
   final VoidCallback onTap;
 
-  const _SidebarIcon({
-    required this.icon,
-    required this.label,
+  const _EpsilonTab({
+    required this.title,
+    required this.index,
     required this.isActive,
     required this.onTap,
   });
@@ -159,40 +239,37 @@ class _SidebarIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          LiquidGlass(
-            borderRadius: 16,
-            blurSigma: isActive ? 10 : 0,
-            frostOpacity: isActive ? 0.2 : 0,
-            hasBorder: isActive,
-            isIridescent: isActive,
-            child: Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: isActive
-                    ? Colors.white.withValues(alpha: 0.05)
-                    : Colors.transparent,
-              ),
-              child: Icon(
-                icon,
-                color: isActive ? AppColors.leverage6 : Colors.white38,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 4, right: -1),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          border: isActive
+              ? Border.all(color: Colors.white.withOpacity(0.15))
+              : Border.all(color: Colors.transparent),
+        ),
+        child: Row(
+          children: [
+            Text(
+              "0$index",
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: isActive ? AppTheme.primary : Colors.white24,
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1,
-              color: isActive ? AppColors.leverage6 : Colors.white24,
+            const SizedBox(width: 16),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+                color: isActive ? Colors.white : Colors.white38,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
