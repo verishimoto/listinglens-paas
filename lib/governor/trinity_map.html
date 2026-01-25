@@ -8,15 +8,35 @@
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <style>
         :root {
-            --bg-color: #0b0e14;
+            /* --- XML PALETTE --- */
+            --lev-1: #7E00FF;
+            /* Purple */
+            --lev-2: #00C7FF;
+            /* Cyan */
+            --lev-3: #00FFC8;
+            /* Aqua */
+            --lev-4: #1CFF00;
+            /* Neon Green */
+            --lev-6: #FF5100;
+            /* Orange */
+            --lev-8: #050505;
+            /* Deep Space */
+
+            --bg-color: var(--lev-8);
             --accent-alpha: #3b82f6;
-            --accent-beta: #a855f7;
-            --accent-gamma: #f97316;
-            --accent-core: #10b981;
+            --accent-beta: var(--lev-1);
+            --accent-gamma: var(--lev-6);
+            --accent-core: var(--lev-4);
+
             --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-secondary: #86868b;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            cursor: none !important;
         }
 
         body {
@@ -29,6 +49,9 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(126, 0, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(0, 199, 255, 0.05) 0%, transparent 40%);
         }
 
         .header {
@@ -38,36 +61,42 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 800;
             margin: 0;
-            background: linear-gradient(135deg, #fff 0%, #64748b 100%);
+            background: linear-gradient(135deg, #fff 0%, #86868b 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -2px;
+            letter-spacing: -3px;
         }
 
         .subtitle {
             color: var(--text-secondary);
             font-size: 1.2rem;
             margin-top: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            opacity: 0.8;
         }
 
         .diagram-container {
             width: 100%;
             max-width: 1200px;
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(40px) saturate(150%);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 32px;
+            padding: 60px;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
         }
 
         .legend {
             display: flex;
-            gap: 20px;
-            margin-top: 30px;
+            gap: 32px;
+            margin-top: 40px;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -75,32 +104,66 @@
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 12px;
+            font-size: 0.85rem;
             color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
+            box-shadow: 0 0 10px currentColor;
         }
 
-        .mermaid {
-            display: flex;
-            justify-content: center;
+        /* --- Smooth & Refractive Cursor --- */
+        #cursor-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        #cursor-ring {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            backdrop-filter: blur(2px) brightness(1.2);
+            box-shadow: 0 0 15px rgba(0, 199, 255, 0.2);
+        }
+
+        #cursor-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
         }
     </style>
 </head>
 
 <body>
+    <div id="cursor-container">
+        <div id="cursor-ring"></div>
+        <div id="cursor-dot"></div>
+    </div>
+
     <div class="header">
         <h1>Trinity Agentic Map</h1>
-        <p class="subtitle">The Blueprint of Cognitive Orchestration</p>
+        <p class="subtitle">Cognitive Orchestration Protocol</p>
     </div>
 
     <div class="diagram-container">
-        <div class="mermaid">
+        <div class="mermaid" id="main-mermaid">
             graph TD
             %% --- SHARED CORE ---
             subgraph CORE ["Shared Intelligence Core"]
@@ -164,11 +227,11 @@
             CORE ==> |"Magic"| GAMMA
 
             %% Styling
-            classDef alpha fill:#1e3a8a44,stroke:#3b82f6,stroke-width:2px,color:#fff;
-            classDef beta fill:#581c8744,stroke:#a855f7,stroke-width:2px,color:#fff;
-            classDef gamma fill:#7c2d1244,stroke:#f97316,stroke-width:2px,color:#fff;
-            classDef core fill:#064e3b44,stroke:#10b981,stroke-width:3px,color:#fff;
-            classDef intent fill:none,stroke:#94a3b8,stroke-dasharray: 5 5,color:#cbd5e1;
+            classDef alpha fill:#1e3a8a22,stroke:#3b82f6,stroke-width:2px,color:#fff;
+            classDef beta fill:#581c8722,stroke:#7E00FF,stroke-width:2px,color:#fff;
+            classDef gamma fill:#7c2d1222,stroke:#FF5100,stroke-width:2px,color:#fff;
+            classDef core fill:#064e3b22,stroke:#1CFF00,stroke-width:3px,color:#fff;
+            classDef intent fill:none,stroke:#86868b,stroke-dasharray: 5 5,color:#86868b;
 
             linkStyle default stroke:#475569,stroke-width:2px;
         </div>
@@ -176,30 +239,51 @@
 
     <div class="legend">
         <div class="legend-item">
-            <div class="dot" style="background:var(--accent-alpha)"></div> Alpha Protocol
+            <div class="dot" style="color:var(--accent-alpha);background:currentColor"></div> Alpha
         </div>
         <div class="legend-item">
-            <div class="dot" style="background:var(--accent-beta)"></div> Beta Protocol
+            <div class="dot" style="color:var(--accent-beta);background:currentColor"></div> Beta
         </div>
         <div class="legend-item">
-            <div class="dot" style="background:var(--accent-gamma)"></div> Gamma Protocol
+            <div class="dot" style="color:var(--accent-gamma);background:currentColor"></div> Gamma
         </div>
         <div class="legend-item">
-            <div class="dot" style="background:var(--accent-core)"></div> Shared Core
+            <div class="dot" style="color:var(--accent-core);background:currentColor"></div> Core
         </div>
     </div>
 
     <script>
         mermaid.initialize({
-            startOnLoad: true,
+            startOnLoad: false,
             theme: 'dark',
             securityLevel: 'loose',
-            flowchart: {
-                useMaxWidth: true,
-                htmlLabels: true,
-                curve: 'basis'
-            }
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
         });
+
+        // Ensure rendering
+        window.addEventListener('load', () => {
+            mermaid.init(undefined, ".mermaid");
+        });
+
+        // --- SMOOTH CURSOR ---
+        const cursorRing = document.getElementById('cursor-ring');
+        const cursorDot = document.getElementById('cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+            cursorDot.style.transform = `translate(${mouseX - 3}px, ${mouseY - 3}px)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
     </script>
 </body>
 

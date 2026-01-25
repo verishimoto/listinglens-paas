@@ -4,53 +4,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Governor AI | Strategic Control Room</title>
+    <title>Trinity Control Room | 360 Convergence</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap');
 
         :root {
-            --bg-color: #050505;
-            --glass-bg: rgba(255, 255, 255, 0.03);
+            /* --- XML PALETTE --- */
+            --lev-1: #7E00FF;
+            /* Purple */
+            --lev-2: #00C7FF;
+            /* Cyan */
+            --lev-3: #00FFC8;
+            /* Aqua */
+            --lev-4: #1CFF00;
+            /* Neon Green */
+            --lev-5: #DCFF00;
+            /* Lime */
+            --lev-6: #FF5100;
+            /* Orange */
+            --lev-7: #000000;
+            /* Black */
+            --lev-8: #050505;
+            /* Deep Space (Main BG) */
+            --lev-9: #290808;
+            /* Dark Red-Brown */
+
+            --bg-color: var(--lev-8);
+            --glass-bg: rgba(255, 255, 255, 0.015);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --accent-primary: #22d3ee;
-            /* Alpha Cyan */
-            --accent-secondary: #a855f7;
-            /* Beta Purple */
-            --accent-tertiary: #f97316;
-            /* Gamma Orange */
-            --accent-core: #10b981;
-            /* Core Green */
+            --glass-blur: 24px;
+
+            --accent-primary: var(--lev-2);
+            --accent-secondary: var(--lev-1);
+            --accent-tertiary: var(--lev-6);
+            --accent-core: var(--lev-4);
+
             --text-primary: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-muted: #86868b;
         }
 
         * {
             box-sizing: border-box;
+            cursor: none !important;
+            /* Force custom cursor */
             transition: all 0.2s ease-in-out;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             margin: 0;
             padding: 20px;
             overflow-x: hidden;
             background-image:
-                radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+                radial-gradient(circle at 0% 0%, rgba(126, 0, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(0, 199, 255, 0.1) 0%, transparent 40%);
             min-height: 100vh;
+            scroll-behavior: smooth;
         }
 
-        /* Glassmorphism Classes */
+        /* --- Apple-Style Glassmorphism (@mawtech/glass-ui inspired) --- */
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease;
+        }
+
+        .glass::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+            pointer-events: none;
+        }
+
+        /* Iridescent Hover Effect */
+        .glass:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
+            transform: translateY(-2px);
+        }
+
+        .glass:hover::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg,
+                    transparent,
+                    var(--lev-2),
+                    var(--lev-1),
+                    var(--lev-3),
+                    transparent);
+            opacity: 0.15;
+            animation: rotate 4s linear infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* --- Refraction & Reflector (WhispererDeck style) --- */
+        .reflector {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            mix-blend-mode: soft-light;
+            z-index: 10;
+        }
+
+        /* --- Smooth & Refractive Cursor --- */
+        #cursor-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        #cursor-ring {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transition: width 0.3s, height 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px) brightness(1.2);
+            -webkit-backdrop-filter: blur(2px) brightness(1.2);
+            box-shadow: 0 0 15px rgba(0, 199, 255, 0.2);
+        }
+
+        #cursor-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+        }
+
+        .cursor-hover #cursor-ring {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--lev-2);
         }
 
         /* --- Header --- */
@@ -59,15 +181,15 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 40px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .logo-section h1 {
             margin: 0;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, #fff, var(--text-muted));
+            letter-spacing: -2px;
+            background: linear-gradient(to right, #fff, #86868b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -77,19 +199,20 @@
             align-items: center;
             gap: 8px;
             font-size: 0.8rem;
-            color: var(--accent-core);
-            background: rgba(16, 185, 129, 0.1);
-            padding: 4px 12px;
+            color: var(--lev-4);
+            background: rgba(28, 255, 0, 0.1);
+            padding: 6px 16px;
             border-radius: 100px;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(28, 255, 0, 0.2);
+            font-weight: 600;
         }
 
         .status-dot {
             width: 8px;
             height: 8px;
-            background: var(--accent-core);
+            background: var(--lev-4);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-core);
+            box-shadow: 0 0 12px var(--lev-4);
             animation: pulse 2s infinite;
         }
 
@@ -98,8 +221,8 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
         }
 
         .metric-card {
@@ -107,74 +230,88 @@
         }
 
         .metric-value {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 4px;
         }
 
         .metric-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            font-weight: 600;
         }
 
         /* --- Tabs --- */
         .tabs-container {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            padding: 10px;
-            overflow-x: auto;
+            gap: 8px;
+            margin-bottom: 24px;
+            padding: 12px;
+            border-radius: 24px;
         }
 
         .tab-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid transparent;
+            background: transparent;
+            border: none;
             color: var(--text-muted);
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
-            white-space: nowrap;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         .tab-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             color: #fff;
         }
 
         .tab-btn.active {
-            background: rgba(34, 211, 238, 0.1);
-            border-color: rgba(34, 211, 238, 0.3);
-            color: var(--accent-primary);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         /* --- Content Panels --- */
         .main-content {
-            padding: 30px;
+            padding: 40px;
             min-height: 60vh;
         }
 
         .panel {
             display: none;
-            animation: fadeIn 0.4s ease-out;
         }
 
         .panel.active {
             display: block;
+            animation: slideUp 0.6s cubic-bezier(0.2, 0, 0, 1);
         }
 
-        @keyframes fadeIn {
+        @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px);
             }
 
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        /* --- Scroll Reveal --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* --- View Specific Styling --- */
@@ -210,47 +347,92 @@
             color: var(--accent-primary);
         }
 
-        /* Tree View */
-        .tree-node {
-            padding: 6px 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        /* Tree View (Topology) --- */
+        .tree-view {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.9rem;
-            border-radius: 6px;
         }
 
-        .tree-node:hover {
+        .tree-item {
+            position: relative;
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .tree-indent {
+            width: 24px;
+            height: 100%;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            margin-right: 8px;
+        }
+
+        .tree-toggle {
+            cursor: pointer;
+            width: 20px;
+            text-align: center;
+            margin-right: 4px;
+            user-select: none;
+            opacity: 0.6;
+        }
+
+        .tree-node-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .tree-node-content:hover {
             background: rgba(255, 255, 255, 0.05);
         }
 
-        .tree-icon {
-            width: 18px;
-            opacity: 0.7;
+        .tree-folder {
+            color: var(--lev-2);
+            font-weight: 600;
         }
 
-        .folder {
-            color: var(--accent-primary);
-        }
-
-        .file {
+        .tree-file {
             color: var(--text-muted);
         }
 
+        .tree-info-icon {
+            font-size: 0.7rem;
+            opacity: 0.3;
+            cursor: help;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            padding: 8px 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            z-index: 100;
+            max-width: 250px;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
         /* Mermaid container */
-        .mermaid {
-            background: rgba(255, 255, 255, 0.01);
-            border-radius: 12px;
-            padding: 20px;
+        .mermaid-container {
+            width: 100%;
+            overflow: auto;
+            min-height: 300px;
             display: flex;
             justify-content: center;
         }
 
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -258,12 +440,12 @@
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--glass-border);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         @keyframes pulse {
@@ -273,7 +455,7 @@
 
             50% {
                 opacity: 1;
-                shadow: 0 0 12px var(--accent-core);
+                box-shadow: 0 0 12px var(--accent-core);
             }
 
             100% {
@@ -284,11 +466,18 @@
 </head>
 
 <body>
+    <!-- Custom Cursor -->
+    <div id="cursor-container">
+        <div id="cursor-ring"></div>
+        <div id="cursor-dot"></div>
+    </div>
+
     <!-- Header -->
-    <div class="header glass">
+    <div class="header glass reveal">
         <div class="logo-section">
-            <h1>Memory Palace <span
-                    style="font-weight: 300; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0;">v2.0</span>
+            <h1>Trinity Hub <span
+                    style="font-weight: 300; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0;">Protocol
+                    v3.0</span>
             </h1>
             <div
                 style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace;">
@@ -306,7 +495,7 @@
     </div>
 
     <!-- Metrics -->
-    <div class="metrics-bar glass">
+    <div class="metrics-bar glass reveal">
         <div class="metric-card">
             <div class="metric-value" id="m-autonomy">--%</div>
             <div class="metric-label">Autonomy</div>
@@ -316,17 +505,17 @@
             <div class="metric-label">Entropy</div>
         </div>
         <div class="metric-card">
-            <div class="metric-value" id="m-strategy" style="color: #a78bfa;">--</div>
+            <div class="metric-value" id="m-strategy" style="color: var(--lev-1);">--</div>
             <div class="metric-label">Strategy</div>
         </div>
         <div class="metric-card">
-            <div class="metric-value" id="m-confidence" style="color: #22d3ee;">Confident</div>
+            <div class="metric-value" id="m-confidence" style="color: var(--lev-2);">Confident</div>
             <div class="metric-label">Modality</div>
         </div>
     </div>
 
     <!-- Navigation -->
-    <div class="tabs-container glass">
+    <div class="tabs-container glass reveal">
         <button class="tab-btn active" onclick="switchTab('cortex')">🧠 Cortex</button>
         <button class="tab-btn" onclick="switchTab('workflow')">🌊 Workflow</button>
         <button class="tab-btn" onclick="switchTab('trinity')">🔱 Trinity</button>
@@ -336,7 +525,7 @@
     </div>
 
     <!-- Content Panels -->
-    <div class="main-content glass">
+    <div class="main-content glass reveal">
         <!-- Cortex (Tasks) -->
         <div id="cortex" class="panel active">
             <div id="cortex-content" class="markdown-body">Fetching latest cognition...</div>
@@ -350,11 +539,24 @@
 
         <!-- Trinity -->
         <div id="trinity" class="panel">
-            <div class="mermaid" id="trinity-mermaid">
-                graph TD
-                A[Shared Core] --> B[Alpha]
-                A --> C[Beta]
-                A --> D[Gamma]
+            <div class="mermaid-container" id="trinity-container">
+                <div class="mermaid" id="trinity-mermaid">
+                    graph TD
+                    subgraph Trinity_Hub
+                    H[Hub Core]
+                    end
+                    H --> Alpha[Alpha Protocol]
+                    H --> Beta[Beta Protocol]
+                    H --> Gamma[Gamma Protocol]
+
+                    Alpha --> S1[Solid Metrics]
+                    Beta --> S2[Liquid Visuals]
+                    Gamma --> S3[Elastic Logic]
+
+                    classDef default fill:#111,stroke:#333,color:#fff
+                    classDef focus fill:#7E00FF33,stroke:#7E00FF,color:#fff
+                    class H focus
+                </div>
             </div>
         </div>
 
@@ -365,26 +567,57 @@
 
         <!-- Topology (Tree) -->
         <div id="topology" class="panel">
-            <div id="tree-container" style="display: flex; flex-direction: column; gap: 2px;"></div>
+            <div id="tree-container" class="tree-view"></div>
         </div>
 
         <!-- Flowchart -->
         <div id="flowchart" class="panel">
-            <div class="mermaid">
-                graph LR
-                Plan[Planning] --> Exec[Execution]
-                Exec --> Verify[Verification]
-                Verify --> Plan
-                Notify((Notify User))
-                Verify -.-> Notify
+            <div class="mermaid-container">
+                <div class="mermaid" id="flowchart-mermaid">
+                    graph TD
+                    A[User Auth] --> B[Hub Command]
+                    B --> C{Strategic Choice}
+                    C -->|Solid| Alpha[Alpha Audit]
+                    C -->|Liquid| Beta[Beta Gen]
+                    C -->|Converged| Gamma[Gamma 360]
+
+                    Alpha --> D[History Sync]
+                    Beta --> D
+                    Gamma --> D
+                    D --> E[Governor Analytics]
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Initialize Mermaid
-        mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+    <div id="tooltip" class="tooltip"></div>
 
+    <script src="state.js"></script>
+    <script>
+        // --- CONFIG & DATA ---
+        const FILE_EXPLANATIONS = {
+            'lib': 'Source code directory for the Flutter application.',
+            'core': 'Fundamental services, models, and shared logic.',
+            'features': 'Modular business logic organized by prototype protocol.',
+            'governor': 'The cognitive brain of the repository and dashboard tools.',
+            'shared': 'Reusable UI components and utility classes.',
+            '.agent': 'Agentic configuration and workflow definitions.',
+            'main.dart': 'Application entry point.',
+            'state.js': 'Real-time project telemetry as a JS module.',
+            'task.md': 'The current strategic directive and task breakdown.',
+            'workflow.md': 'Visualization of the agentic swarm hierarchy.',
+            'build': 'Compiled artifacts and distribution files.'
+        };
+
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
+        });
+
+        // --- UI STATE & ANIMATION ---
         function switchTab(tabId) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -394,70 +627,204 @@
 
             // Re-render mermaid if visible
             if (tabId === 'trinity' || tabId === 'flowchart') {
-                mermaid.init();
+                setTimeout(() => {
+                    mermaid.init(undefined, `#${tabId} .mermaid`);
+                }, 100);
             }
         }
 
+        // Scroll Reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // --- CUSTOM CURSOR & REFLECTOR ---
+        const cursorRing = document.getElementById('cursor-ring');
+        const cursorDot = document.getElementById('cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let ringX = 0, ringY = 0;
+        let isHovering = false;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Update reflectors (WhispererDeck style light follow)
+            document.querySelectorAll('.glass').forEach(glass => {
+                const rect = glass.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                glass.style.setProperty('--mouse-x', `${x}%`);
+                glass.style.setProperty('--mouse-y', `${y}%`);
+            });
+
+            // Hover detection
+            const hoveredEl = document.elementFromPoint(e.clientX, e.clientY);
+            const clickable = hoveredEl?.closest('button, .tab-btn, .tree-node-content, a');
+            if (clickable) {
+                document.body.classList.add('cursor-hover');
+            } else {
+                document.body.classList.remove('cursor-hover');
+            }
+        });
+
+        function animateCursor() {
+            // Smoothing (Lerp)
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+
+            cursorRing.style.transform = `translate(${ringX - 20}px, ${ringY - 20}px)`;
+            cursorDot.style.transform = `translate(${mouseX - 3}px, ${mouseY - 3}px)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // --- TOPOLOGY ENGINE ---
+        function getExplanation(name) {
+            const ext = name.split('.').pop();
+            return FILE_EXPLANATIONS[name] || FILE_EXPLANATIONS[ext] || `Artifact: ${name}`;
+        }
+
+        function renderTreeView(container, items) {
+            container.innerHTML = '';
+            const root = { children: {}, name: 'root' };
+
+            // Build tree object
+            items.forEach(item => {
+                const parts = item.path.split('/').filter(p => p);
+                let current = root;
+                parts.forEach((part, index) => {
+                    if (!current.children[part]) {
+                        current.children[part] = {
+                            name: part,
+                            type: (index === parts.length - 1) ? item.type : 'folder',
+                            children: {}
+                        };
+                    }
+                    current = current.children[part];
+                });
+            });
+
+            function createEl(node, depth = 0) {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'tree-item';
+
+                const toggle = document.createElement('span');
+                toggle.className = 'tree-toggle';
+                toggle.innerHTML = node.type === 'folder' ? '▼' : '&nbsp;';
+
+                const content = document.createElement('div');
+                content.className = 'tree-node-content';
+
+                const icon = node.type === 'folder' ? '📁' : '📄';
+                const colorClass = node.type === 'folder' ? 'tree-folder' : 'tree-file';
+
+                content.innerHTML = `
+                    <span style="opacity: 0.7;">${icon}</span>
+                    <span class="${colorClass}">${node.name}</span>
+                    <span class="tree-info-icon" onmouseenter="showTooltip(event, '${getExplanation(node.name)}')" onmouseleave="hideTooltip()">ⓘ</span>
+                `;
+
+                itemEl.appendChild(toggle);
+                itemEl.appendChild(content);
+
+                const childrenContainer = document.createElement('div');
+                childrenContainer.style.paddingLeft = '24px';
+                childrenContainer.style.borderLeft = '1px solid rgba(255,255,255,0.05)';
+                childrenContainer.style.marginLeft = '10px';
+
+                Object.values(node.children).forEach(child => {
+                    childrenContainer.appendChild(createEl(child, depth + 1));
+                });
+
+                toggle.onclick = () => {
+                    const collapsed = childrenContainer.style.display === 'none';
+                    childrenContainer.style.display = collapsed ? 'block' : 'none';
+                    toggle.innerHTML = collapsed ? '▼' : '▶';
+                };
+
+                const fragment = document.createDocumentFragment();
+                fragment.appendChild(itemEl);
+                fragment.appendChild(childrenContainer);
+                return fragment;
+            }
+
+            Object.values(root.children).forEach(child => {
+                container.appendChild(createEl(child));
+            });
+        }
+
+        // --- TOOLTIP ---
+        const tooltip = document.getElementById('tooltip');
+        function showTooltip(e, text) {
+            tooltip.innerText = text;
+            tooltip.style.display = 'block';
+            tooltip.style.left = (e.clientX + 15) + 'px';
+            tooltip.style.top = (e.clientY + 15) + 'px';
+        }
+        function hideTooltip() { tooltip.style.display = 'none'; }
+
+        // --- DATA LOAD ---
         async function loadState() {
             try {
-                const response = await fetch('state.json');
-                const state = await response.json();
+                const state = window.GOVERNOR_STATE;
+                if (!state) return;
 
-                // Update Times & Metrics
                 document.getElementById('sync-time').innerText = "LAST SYNC: " + state.timestamp;
                 document.getElementById('m-autonomy').innerText = state.metrics.autonomy + "%";
                 document.getElementById('m-entropy').innerText = state.metrics.entropy + "%";
                 document.getElementById('m-strategy').innerText = state.metrics.strategy;
                 document.getElementById('m-confidence').innerText = state.metrics.confidence;
 
-                // Render Cortex (Markdown)
-                document.getElementById('cortex-content').innerHTML = marked.parse(state.cognition || "# No Tasks Found");
+                document.getElementById('cortex-content').innerHTML = marked.parse(state.cognition || "# No Tasks");
 
-                // Render Walkthrough (if present in state)
                 if (state.walkthrough) {
                     document.getElementById('walkthrough-content').innerHTML = marked.parse(state.walkthrough);
-                } else {
-                    document.getElementById('walkthrough-content').innerText = "Walkthrough.md not found or synchronizing...";
                 }
 
-                // Render Workflow (if present in state)
                 if (state.workflow) {
                     document.getElementById('workflow-content').innerHTML = marked.parse(state.workflow);
-                    // Re-init mermaid to catch any diagrams in markdown
                     setTimeout(() => mermaid.init(undefined, "#workflow-content .mermaid"), 100);
                 }
 
-                // Render Trinity Map (hardcoded for now or fetchable)
                 if (state.trinity_mermaid) {
                     document.getElementById('trinity-mermaid').innerHTML = state.trinity_mermaid;
+                    if (document.getElementById('trinity').classList.contains('active')) {
+                        mermaid.init(undefined, "#trinity-mermaid");
+                    }
                 }
 
-                // Render Topology
-                const treeContainer = document.getElementById('tree-container');
-                treeContainer.innerHTML = '';
+                renderTreeView(document.getElementById('tree-container'), state.topology);
 
-                state.topology.forEach(node => {
-                    if (node.depth > 3) return;
-                    const el = document.createElement('div');
-                    el.className = 'tree-node';
-                    el.style.marginLeft = (node.depth * 20) + 'px';
-
-                    const icon = node.type === 'folder' ? '📁' : '📄';
-                    const colorClass = node.type === 'folder' ? 'folder' : 'file';
-
-                    el.innerHTML = `<span style="font-size: 1.1rem;">${icon}</span> <span class="${colorClass}">${node.name}</span>`;
-                    treeContainer.appendChild(el);
-                });
+                // Re-observe new elements
+                document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
             } catch (e) {
-                console.error("State fetch failed", e);
-                document.getElementById('sync-time').innerText = "SYNC FAILED: Check console";
+                console.error("State load failed", e);
             }
         }
 
-        // Auto-refresh
-        loadState();
-        setInterval(loadState, 15000);
+        function refreshData() {
+            const oldScript = document.querySelector('script[src^="state.js"]');
+            if (oldScript) oldScript.remove();
+
+            const newScript = document.createElement('script');
+            newScript.src = `state.js?t=${Date.now()}`;
+            newScript.onload = loadState;
+            newScript.onerror = () => {
+                document.getElementById('sync-time').innerText = "SYNC FAILED: state.js not found";
+            };
+            document.body.appendChild(newScript);
+        }
+
+        // Auto-refresh using the script re-injection method
+        refreshData();
+        setInterval(refreshData, 15000);
     </script>
 </body>
 

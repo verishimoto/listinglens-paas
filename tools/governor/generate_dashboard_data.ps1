@@ -6,7 +6,7 @@
 #>
 
 $WorkspaceRoot = (Get-Location).Path
-$OutputFile = Join-Path $WorkspaceRoot "lib\governor\state.json"
+$OutputFile = Join-Path $WorkspaceRoot "lib\governor\state.js"
 
 # Discover Task File
 $TaskFileCandidates = @(
@@ -99,5 +99,6 @@ if (Test-Path $TrinityFile) {
     }
 }
 
-$State | ConvertTo-Json -Depth 5 | Set-Content $OutputFile -Encoding UTF8
+$JsonState = $State | ConvertTo-Json -Depth 5
+"window.GOVERNOR_STATE = $JsonState;" | Set-Content $OutputFile -Encoding UTF8
 Write-Host "Memory Palace Updated: $OutputFile" -ForegroundColor Green
