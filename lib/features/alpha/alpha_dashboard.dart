@@ -153,7 +153,7 @@ class AlphaDashboard extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome back, Agent.',
+                    'Welcome back, Operative.',
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -220,6 +220,17 @@ class AlphaDashboard extends ConsumerWidget {
           _RailIcon(Icons.analytics_outlined),
           _RailIcon(Icons.settings_outlined),
         ],
+      ),
+    );
+  }
+
+  Widget _RailIcon(IconData icon, {bool active = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Icon(
+        icon,
+        color: active ? AppTheme.primary : Colors.white.withValues(alpha: 0.4),
+        size: 28,
       ),
     );
   }

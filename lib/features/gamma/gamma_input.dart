@@ -99,24 +99,20 @@ class _GammaInputState extends ConsumerState<GammaInput>
     }
   }
 
-  Future<void> _handleSculpting(String contextFeedback) async {
+  Future<void> _handleSculpting(XFile image, String contextFeedback) async {
     setState(() {
       _isSculpting = true;
       _sculptedInsight = null;
     });
 
     try {
-      final service = ref.read(analysisServiceProvider);
-      // We'll reuse the model but with a specialized prompt for "Deep Dive"
-      final result = await service.analyzeListingImage(
-        null, // This is tricky since analyzeListingImage expects XFile
-        // For Level 11 simplified: we'll simulate a deep dive response or update service to handle text
-      );
+      // Level 11 Cinematic Simulation: In a real app, this would be a refined Gemini call.
+      await Future.delayed(const Duration(seconds: 1));
 
       if (mounted) {
         setState(() {
           _sculptedInsight =
-              "Deep Dive on '$contextFeedback': Optimize shadows for volume.";
+              "SCULPTED INSIGHT: Focus on rule [R003]. De-cluttering the foreground will enhance the 'Breathing Room' effect.";
           _isSculpting = false;
         });
       }
@@ -125,7 +121,7 @@ class _GammaInputState extends ConsumerState<GammaInput>
     }
   }
 
-  void _showGammaResult(AnalysisResult result) {
+  void _showGammaResult(XFile image, AnalysisResult result) {
     showDialog(
       context: context,
       builder: (_) => Center(
@@ -164,6 +160,44 @@ class _GammaInputState extends ConsumerState<GammaInput>
                 style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.8), fontSize: 18),
               ),
+              const SizedBox(height: 24),
+              const Text("SCULPT FEEDBACK",
+                  style: TextStyle(
+                      fontSize: 10, letterSpacing: 2, color: Colors.cyan)),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.center,
+                children: result.actionableFeedback
+                    .map((tip) => GestureDetector(
+                          onTap: () => _handleSculpting(image, tip),
+                          child: Chip(
+                            label: Text(tip,
+                                style: const TextStyle(
+                                    fontSize: 10, color: Colors.white)),
+                            backgroundColor:
+                                Colors.white.withValues(alpha: 0.1),
+                            side: BorderSide.none,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                          ),
+                        ))
+                    .toList(),
+              ),
+              if (_isSculpting) ...[
+                const SizedBox(height: 16),
+                const LinearProgressIndicator(color: Colors.cyan, minHeight: 1),
+              ],
+              if (_sculptedInsight != null) ...[
+                const SizedBox(height: 16),
+                Text(_sculptedInsight!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Colors.cyan,
+                        fontSize: 13,
+                        fontStyle: FontStyle.italic)),
+              ],
               const SizedBox(height: 30),
               _ClayButton(
                   label: "Thanks!", onTap: () => Navigator.pop(context)),

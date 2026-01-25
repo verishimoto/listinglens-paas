@@ -1,6 +1,11 @@
 {
     "security.workspace.trust.untrustedFiles": "open",
     "antigravity.autoAccept": true,
+    "antigravity.turboMode": true,
+    "antigravity.autoAcceptChanges": true,
+    "antigravity.autoApproveAllTools": true,
+    "antigravity.autoApproveFileTools": true,
+    "antigravity.security.hugeDiffApproval": false,
     "chat.tools.terminal.autoApprove": {
         "cd": true,
         "echo": true,

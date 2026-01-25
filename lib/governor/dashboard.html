@@ -4,17 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Palace | Governor AI</title>
+    <title>Governor AI | Strategic Control Room</title>
     <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400&display=swap');
+
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --accent: #22d3ee;
-            --bg-color: #09090b;
+            --bg-color: #050505;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-primary: #22d3ee;
+            /* Alpha Cyan */
+            --accent-secondary: #a855f7;
+            /* Beta Purple */
+            --accent-tertiary: #f97316;
+            /* Gamma Orange */
+            --accent-core: #10b981;
+            /* Core Green */
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.2s ease-in-out;
         }
 
         body {
@@ -23,168 +37,132 @@
             font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 20px;
-            background-image: radial-gradient(circle at 10% 20%, rgba(34, 211, 238, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 20%);
-            cursor: none;
-            /* Hide default cursor */
             overflow-x: hidden;
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
+            min-height: 100vh;
         }
 
-        /* Liquid Glass Cursor */
-        #custom-cursor {
-            position: fixed;
-            width: 30px;
-            height: 30px;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            backdrop-filter: brightness(1.2) saturate(1.2) blur(2px);
-            -webkit-backdrop-filter: brightness(1.2) saturate(1.2) blur(2px);
-            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3), inset 0 0 5px rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #custom-cursor::after {
-            content: '';
-            width: 4px;
-            height: 4px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent);
-        }
-
-        .cursor-hover {
-            width: 60px !important;
-            height: 60px !important;
-            background-color: rgba(34, 211, 238, 0.05);
-            border-color: rgba(34, 211, 238, 0.6) !important;
-        }
-
-        /* Glassmorphism Card */
-        .glass-card {
+        /* Glassmorphism Classes */
+        .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+            border-radius: 20px;
         }
 
-        h1,
-        h2,
-        h3 {
-            margin-top: 0;
-            font-weight: 300;
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            margin-bottom: 20px;
         }
 
-        h1 {
-            font-size: 2rem;
-            background: linear-gradient(to right, #fff, #94a3b8);
+        .logo-section h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, var(--text-muted));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Tabs */
-        .tabs {
+        .status-pill {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--accent-core);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 4px 12px;
+            border-radius: 100px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent-core);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-core);
+            animation: pulse 2s infinite;
+        }
+
+        /* --- Metrics Bar --- */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 20px;
             margin-bottom: 20px;
+        }
+
+        .metric-card {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- Tabs --- */
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 10px;
+            overflow-x: auto;
         }
 
         .tab-btn {
             background: rgba(255, 255, 255, 0.05);
-            border: none;
-            color: var(--text-secondary);
+            border: 1px solid transparent;
+            color: var(--text-muted);
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
 
         .tab-btn.active {
-            background: var(--accent);
-            color: #000;
-            font-weight: 600;
+            background: rgba(34, 211, 238, 0.1);
+            border-color: rgba(34, 211, 238, 0.3);
+            color: var(--accent-primary);
         }
 
-        .tab-content {
+        /* --- Content Panels --- */
+        .main-content {
+            padding: 30px;
+            min-height: 60vh;
+        }
+
+        .panel {
             display: none;
+            animation: fadeIn 0.4s ease-out;
         }
 
-        .tab-content.active {
+        .panel.active {
             display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Cortex View (Markdown) */
-        #cortex-content {
-            line-height: 1.6;
-            color: #e2e8f0;
-        }
-
-        #cortex-content ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-
-        #cortex-content li {
-            margin-bottom: 8px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        #cortex-content li::before {
-            content: "•";
-            color: var(--accent);
-            position: absolute;
-            left: 0;
-        }
-
-        /* Tree View */
-        .tree-node {
-            padding: 4px 0;
-            font-family: monospace;
-            font-size: 0.9rem;
-        }
-
-        .tree-node.folder {
-            color: var(--accent);
-        }
-
-        .tree-node.file {
-            color: var(--text-secondary);
-        }
-
-        .indent-0 {
-            margin-left: 0px;
-        }
-
-        .indent-1 {
-            margin-left: 20px;
-            border-left: 1px solid var(--glass-border);
-            padding-left: 10px;
-        }
-
-        .indent-2 {
-            margin-left: 40px;
-            border-left: 1px solid var(--glass-border);
-            padding-left: 10px;
-        }
-
-        .indent-3 {
-            margin-left: 60px;
-            border-left: 1px solid var(--glass-border);
-            padding-left: 10px;
         }
 
         @keyframes fadeIn {
@@ -199,175 +177,287 @@
             }
         }
 
-        /* Status Pill */
-        .status-pill {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 99px;
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            font-size: 0.8rem;
-            margin-left: 10px;
-            border: 1px solid rgba(34, 197, 94, 0.3);
+        /* --- View Specific Styling --- */
+
+        /* Markdown rendering */
+        .markdown-body {
+            line-height: 1.7;
+            color: #e2e8f0;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .tabs {
-                overflow-x: auto;
-                padding-bottom: 5px;
-            }
-
-            .tab-btn {
-                white-space: nowrap;
-            }
+        .markdown-body h1,
+        .markdown-body h2 {
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+            margin-top: 30px;
         }
 
-        .metric-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            margin-bottom: 5px;
+        .markdown-body ul {
+            list-style: none;
+            padding-left: 0;
         }
 
-        .metric-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
+        .markdown-body li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .markdown-body li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+        }
+
+        /* Tree View */
+        .tree-node {
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+
+        .tree-node:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tree-icon {
+            width: 18px;
+            opacity: 0.7;
+        }
+
+        .folder {
+            color: var(--accent-primary);
+        }
+
+        .file {
+            color: var(--text-muted);
+        }
+
+        /* Mermaid container */
+        .mermaid {
+            background: rgba(255, 255, 255, 0.01);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--glass-border);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+                shadow: 0 0 12px var(--accent-core);
+            }
+
+            100% {
+                opacity: 0.6;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div id="custom-cursor"></div>
-
-    <div class="glass-card">
-        <div style="display:flex; align-items:center; justify-content:space-between;">
-            <h1>Memory Palace <span class="status-pill" id="status-pill">Active</span></h1>
-            <div style="text-align:right; font-size:0.8rem; color:var(--text-secondary);">
-                <div>GOVERNOR ID: <span style="font-family:monospace;">1c648865</span></div>
-                <div id="timestamp">Syncing...</div>
+    <!-- Header -->
+    <div class="header glass">
+        <div class="logo-section">
+            <h1>Memory Palace <span
+                    style="font-weight: 300; font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0;">v2.0</span>
+            </h1>
+            <div
+                style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace;">
+                GOVERNOR_NODE_1c648865
             </div>
         </div>
-    </div>
-
-    <!-- Heuristics HUD (Prompt 172/192) -->
-    <div class="glass-card"
-        style="display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; gap:20px;">
-        <div style="text-align:center;">
-            <div class="metric-label">AUTONOMY</div>
-            <div class="metric-value" id="score-autonomy">--%</div>
-        </div>
-        <div style="text-align:center;">
-            <div class="metric-label">ENTROPY</div>
-            <div class="metric-value" id="score-entropy" style="color:#f87171;">--%</div>
-        </div>
-        <div style="text-align:center;">
-            <div class="metric-label">STRATEGY</div>
-            <div class="metric-value" id="score-strategy" style="color:#a78bfa;">--</div>
-        </div>
-        <div style="text-align:center;">
-            <div class="metric-label">MODE</div>
-            <div class="metric-value" id="mode-confidence" style="font-size:1.2rem; color:#22d3ee;">--</div>
+        <div style="text-align: right;">
+            <div class="status-pill">
+                <div class="status-dot"></div>
+                SYSTEM ACTIVE
+            </div>
+            <div id="sync-time" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 8px;">Syncing
+                artifacts...</div>
         </div>
     </div>
 
-    <div class="glass-card">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('cortex')">🧠 Cortex (Tasks)</button>
-            <button class="tab-btn" onclick="switchTab('topology')">🌲 Topology (Tree)</button>
-            <button class="tab-btn" onclick="switchTab('flow')">🌊 Flow (Logic)</button>
+    <!-- Metrics -->
+    <div class="metrics-bar glass">
+        <div class="metric-card">
+            <div class="metric-value" id="m-autonomy">--%</div>
+            <div class="metric-label">Autonomy</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="m-entropy" style="color: #f87171;">--%</div>
+            <div class="metric-label">Entropy</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="m-strategy" style="color: #a78bfa;">--</div>
+            <div class="metric-label">Strategy</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-value" id="m-confidence" style="color: #22d3ee;">Confident</div>
+            <div class="metric-label">Modality</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="tabs-container glass">
+        <button class="tab-btn active" onclick="switchTab('cortex')">🧠 Cortex</button>
+        <button class="tab-btn" onclick="switchTab('workflow')">🌊 Workflow</button>
+        <button class="tab-btn" onclick="switchTab('trinity')">🔱 Trinity</button>
+        <button class="tab-btn" onclick="switchTab('walkthrough')">📜 Walkthrough</button>
+        <button class="tab-btn" onclick="switchTab('topology')">🌲 Topology</button>
+        <button class="tab-btn" onclick="switchTab('flowchart')">📊 Flowchart</button>
+    </div>
+
+    <!-- Content Panels -->
+    <div class="main-content glass">
+        <!-- Cortex (Tasks) -->
+        <div id="cortex" class="panel active">
+            <div id="cortex-content" class="markdown-body">Fetching latest cognition...</div>
         </div>
 
-        <!-- Cortex Tab -->
-        <div id="cortex" class="tab-content active">
-            <div id="cortex-content">The Governor is contemplating...</div>
+        <!-- Workflow -->
+        <div id="workflow" class="panel">
+            <div id="workflow-content" class="markdown-body italic" style="color: var(--text-muted);">Fetching workflow
+                visualization...</div>
         </div>
 
-        <!-- Topology Tab -->
-        <div id="topology" class="tab-content">
-            <div id="tree-root"></div>
-        </div>
-
-        <!-- Flow Tab -->
-        <div id="flow" class="tab-content">
-            <div class="mermaid">
+        <!-- Trinity -->
+        <div id="trinity" class="panel">
+            <div class="mermaid" id="trinity-mermaid">
                 graph TD
-                A[Governor] -->|Generates Data| B(state.json)
-                B -->|Reads| C[Memory Palace UI]
-                C -->|Visualizes| D{User}
-                A -->|Maintains| E[Codebase]
-                style A fill:#22d3ee22,stroke:#22d3ee,color:#fff
-                style C fill:#a855f722,stroke:#a855f7,color:#fff
+                A[Shared Core] --> B[Alpha]
+                A --> C[Beta]
+                A --> D[Gamma]
+            </div>
+        </div>
+
+        <!-- Walkthrough -->
+        <div id="walkthrough" class="panel">
+            <div id="walkthrough-content" class="markdown-body">Fetching latest walkthrough...</div>
+        </div>
+
+        <!-- Topology (Tree) -->
+        <div id="topology" class="panel">
+            <div id="tree-container" style="display: flex; flex-direction: column; gap: 2px;"></div>
+        </div>
+
+        <!-- Flowchart -->
+        <div id="flowchart" class="panel">
+            <div class="mermaid">
+                graph LR
+                Plan[Planning] --> Exec[Execution]
+                Exec --> Verify[Verification]
+                Verify --> Plan
+                Notify((Notify User))
+                Verify -.-> Notify
             </div>
         </div>
     </div>
 
     <script>
-        // Init Mermaid
-        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+
+            // Re-render mermaid if visible
+            if (tabId === 'trinity' || tabId === 'flowchart') {
+                mermaid.init();
+            }
+        }
 
         async function loadState() {
             try {
                 const response = await fetch('state.json');
                 const state = await response.json();
 
-                // Update Metadata
-                document.getElementById('timestamp').innerText = "LAST SYNC: " + state.timestamp;
-
-                // Render Metrics
-                if (state.metrics) {
-                    document.getElementById('score-autonomy').innerText = state.metrics.autonomy + "%";
-                    document.getElementById('score-entropy').innerText = state.metrics.entropy + "%";
-                    document.getElementById('score-strategy').innerText = state.metrics.strategy;
-                    document.getElementById('mode-confidence').innerText = state.metrics.confidence;
-                }
+                // Update Times & Metrics
+                document.getElementById('sync-time').innerText = "LAST SYNC: " + state.timestamp;
+                document.getElementById('m-autonomy').innerText = state.metrics.autonomy + "%";
+                document.getElementById('m-entropy').innerText = state.metrics.entropy + "%";
+                document.getElementById('m-strategy').innerText = state.metrics.strategy;
+                document.getElementById('m-confidence').innerText = state.metrics.confidence;
 
                 // Render Cortex (Markdown)
-                document.getElementById('cortex-content').innerHTML = marked.parse(state.cognition);
+                document.getElementById('cortex-content').innerHTML = marked.parse(state.cognition || "# No Tasks Found");
+
+                // Render Walkthrough (if present in state)
+                if (state.walkthrough) {
+                    document.getElementById('walkthrough-content').innerHTML = marked.parse(state.walkthrough);
+                } else {
+                    document.getElementById('walkthrough-content').innerText = "Walkthrough.md not found or synchronizing...";
+                }
+
+                // Render Workflow (if present in state)
+                if (state.workflow) {
+                    document.getElementById('workflow-content').innerHTML = marked.parse(state.workflow);
+                    // Re-init mermaid to catch any diagrams in markdown
+                    setTimeout(() => mermaid.init(undefined, "#workflow-content .mermaid"), 100);
+                }
+
+                // Render Trinity Map (hardcoded for now or fetchable)
+                if (state.trinity_mermaid) {
+                    document.getElementById('trinity-mermaid').innerHTML = state.trinity_mermaid;
+                }
 
                 // Render Topology
-                const treeRoot = document.getElementById('tree-root');
-                treeRoot.innerHTML = '';
+                const treeContainer = document.getElementById('tree-container');
+                treeContainer.innerHTML = '';
+
                 state.topology.forEach(node => {
-                    if (node.depth > 3) return; // Limit depth
-                    const div = document.createElement('div');
-                    div.className = `tree-node ${node.type} indent-${node.depth}`;
-                    div.textContent = (node.type === 'folder' ? '📁 ' : '📄 ') + node.name;
-                    treeRoot.appendChild(div);
+                    if (node.depth > 3) return;
+                    const el = document.createElement('div');
+                    el.className = 'tree-node';
+                    el.style.marginLeft = (node.depth * 20) + 'px';
+
+                    const icon = node.type === 'folder' ? '📁' : '📄';
+                    const colorClass = node.type === 'folder' ? 'folder' : 'file';
+
+                    el.innerHTML = `<span style="font-size: 1.1rem;">${icon}</span> <span class="${colorClass}">${node.name}</span>`;
+                    treeContainer.appendChild(el);
                 });
 
             } catch (e) {
-                console.error("Failed to load state", e);
-                document.getElementById('cortex-content').innerText = "Waiting for Governor Sync... (state.json not found)";
+                console.error("State fetch failed", e);
+                document.getElementById('sync-time').innerText = "SYNC FAILED: Check console";
             }
         }
 
-        function switchTab(id) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        // Custom Cursor Logic
-        const cursor = document.getElementById('custom-cursor');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-        });
-
-        document.querySelectorAll('button, .tab-btn, .tree-node, a').forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
-        });
-
-        // Auto-refresh every 30s
+        // Auto-refresh
         loadState();
-        setInterval(loadState, 30000);
+        setInterval(loadState, 15000);
     </script>
 </body>
 

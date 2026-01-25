@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trinity Protocol | Agentic Architecture</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --accent-alpha: #3b82f6;
+            --accent-beta: #a855f7;
+            --accent-gamma: #f97316;
+            --accent-core: #10b981;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #fff 0%, #64748b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .diagram-container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Trinity Agentic Map</h1>
+        <p class="subtitle">The Blueprint of Cognitive Orchestration</p>
+    </div>
+
+    <div class="diagram-container">
+        <div class="mermaid">
+            graph TD
+            %% --- SHARED CORE ---
+            subgraph CORE ["Shared Intelligence Core"]
+            direction TB
+            Gov[("The Governor<br />(Execution Orchestrator)")]:::core
+            KB[("Knowledge Base<br />(Vector Context)")]:::core
+            Gemini[("Gemini 1.5 Flash<br />(Vision Mind)")]:::core
+            Credit[("Credit Service<br />(Fuel)")]:::core
+
+            Gov -- "Dispatches" --> Gemini
+            Gov -- "Queries" --> KB
+            Gemini -- "Consumes" --> Credit
+            end
+
+            %% --- ALPHA TIMELINE ---
+            subgraph ALPHA ["Alpha: SolidFusion"]
+            direction TB
+            A_Intent{{"Reliability & Scale"}}:::intent
+            A_Agent[("The Engineer")]:::alpha
+            A_Stack["Material 3 + Riverpod"]:::alpha
+            A_Focus["Clean Architecture"]:::alpha
+
+            A_Intent --> A_Agent
+            A_Agent --> A_Stack
+            A_Stack --> A_Focus
+            end
+
+            %% --- BETA TIMELINE ---
+            subgraph BETA ["Beta: LiquidOpal"]
+            direction TB
+            B_Intent{{"Aesthetics & Vibe"}}:::intent
+            B_Agent[("The Alchemist")]:::beta
+            B_Stack["Glassmorphism + Shaders"]:::beta
+            B_Focus["Fluid Interactions"]:::beta
+
+            B_Intent --> B_Agent
+            B_Agent --> B_Stack
+            B_Stack --> B_Focus
+            end
+
+            %% --- GAMMA TIMELINE ---
+            subgraph GAMMA ["Gamma: ClayMotion"]
+            direction TB
+            G_Intent{{"Play & Novelty"}}:::intent
+            G_Agent[("The Jester")]:::gamma
+            G_Stack["Neumorphism + Physics"]:::gamma
+            G_Focus["Conversational UX"]:::gamma
+
+            G_Intent --> G_Agent
+            G_Agent --> G_Stack
+            G_Stack --> G_Focus
+            end
+
+            %% --- INTERCONNECTIONS ---
+            ALPHA -.-> |"Data Model"| CORE
+            BETA -.-> |"Visual Feedback"| CORE
+            GAMMA -.-> |"Interaction Logic"| CORE
+
+            CORE ==> |"Insights"| ALPHA
+            CORE ==> |"Refinement"| BETA
+            CORE ==> |"Magic"| GAMMA
+
+            %% Styling
+            classDef alpha fill:#1e3a8a44,stroke:#3b82f6,stroke-width:2px,color:#fff;
+            classDef beta fill:#581c8744,stroke:#a855f7,stroke-width:2px,color:#fff;
+            classDef gamma fill:#7c2d1244,stroke:#f97316,stroke-width:2px,color:#fff;
+            classDef core fill:#064e3b44,stroke:#10b981,stroke-width:3px,color:#fff;
+            classDef intent fill:none,stroke:#94a3b8,stroke-dasharray: 5 5,color:#cbd5e1;
+
+            linkStyle default stroke:#475569,stroke-width:2px;
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="dot" style="background:var(--accent-alpha)"></div> Alpha Protocol
+        </div>
+        <div class="legend-item">
+            <div class="dot" style="background:var(--accent-beta)"></div> Beta Protocol
+        </div>
+        <div class="legend-item">
+            <div class="dot" style="background:var(--accent-gamma)"></div> Gamma Protocol
+        </div>
+        <div class="legend-item">
+            <div class="dot" style="background:var(--accent-core)"></div> Shared Core
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+
+</html>

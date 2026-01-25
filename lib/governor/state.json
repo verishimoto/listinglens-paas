@@ -1,1621 +1,1564 @@
 {
-  "metrics": {
-    "confidence": "Confident",
-    "entropy": 0.0,
-    "autonomy": 100.0,
-    "strategy": 100.0
-  },
   "status": "Active",
-  "timestamp": "2026-01-25 01:25:05",
-  "cognition": "# Task: API Revision and UI Fixes\r\n\r\n- [x] Research current API implementation and error <!-- id: 0 -->\r\n- [x] Research blur issue in Flutter layouts <!-- id: 1 -->\r\n- [x] Create implementation plan <!-- id: 2 -->\r\n- [x] Update API model and endpoint for Alpha, Beta, Gamma prototypes <!-- id: 3 -->\r\n- [x] Fix blur overlay issue <!-- id: 4 -->\r\n- [x] Implement glassmorphism cursor interaction <!-- id: 5 -->\r\n- [x] Verify changes <!-- id: 6 -->\r\n- [x] Create walkthrough <!-- id: 7 -->\r\n",
   "topology": [
     {
-      "depth": 1,
       "path": "/.agent",
       "name": ".agent",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
-      "path": "/.dart_tool",
-      "name": ".dart_tool",
-      "type": "folder"
-    },
-    {
-      "depth": 1,
       "path": "/.vscode",
       "name": ".vscode",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/android",
       "name": "android",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/backups",
       "name": "backups",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/ios",
       "name": "ios",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/lib",
       "name": "lib",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/linux",
       "name": "linux",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/macos",
       "name": "macos",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/test",
       "name": "test",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/tools",
       "name": "tools",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/web",
       "name": "web",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/windows",
       "name": "windows",
+      "depth": 1,
       "type": "folder"
     },
     {
-      "depth": 1,
       "path": "/.flutter-plugins",
       "name": ".flutter-plugins",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/.flutter-plugins-dependencies",
       "name": ".flutter-plugins-dependencies",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/.gemini_state.json",
       "name": ".gemini_state.json",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/.metadata",
       "name": ".metadata",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/analysis_options.yaml",
       "name": "analysis_options.yaml",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/firebase.json",
       "name": "firebase.json",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/notebooklm_context_injection.md",
       "name": "notebooklm_context_injection.md",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/pubspec.lock",
       "name": "pubspec.lock",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/pubspec.yaml",
       "name": "pubspec.yaml",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 1,
       "path": "/README.md",
       "name": "README.md",
+      "depth": 1,
       "type": "file"
     },
     {
+      "path": "/task.md",
+      "name": "task.md",
       "depth": 1,
+      "type": "file"
+    },
+    {
+      "path": "/walkthrough.md",
+      "name": "walkthrough.md",
+      "depth": 1,
+      "type": "file"
+    },
+    {
       "path": "/WORKFLOW_VISUALIZATION.md",
       "name": "WORKFLOW_VISUALIZATION.md",
+      "depth": 1,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/.agent/workflows",
       "name": "workflows",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/.agent/workflows/gemini_autonomy.md",
       "name": "gemini_autonomy.md",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/.agent/workflows/notebooklm_injector.md",
       "name": "notebooklm_injector.md",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/.agent/workflows/opal_omni_workflow.md",
       "name": "opal_omni_workflow.md",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/.agent/workflows/socratic_iteration.md",
       "name": "socratic_iteration.md",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/.agent/workflows/ux_designer_agent.md",
       "name": "ux_designer_agent.md",
-      "type": "file"
-    },
-    {
-      "depth": 2,
-      "path": "/.dart_tool/dartpad",
-      "name": "dartpad",
-      "type": "folder"
-    },
-    {
-      "depth": 2,
-      "path": "/.dart_tool/extension_discovery",
-      "name": "extension_discovery",
-      "type": "folder"
-    },
-    {
-      "depth": 2,
-      "path": "/.dart_tool/hooks_runner",
-      "name": "hooks_runner",
-      "type": "folder"
-    },
-    {
-      "depth": 2,
-      "path": "/.dart_tool/package_config.json",
-      "name": "package_config.json",
-      "type": "file"
-    },
-    {
-      "depth": 2,
-      "path": "/.dart_tool/package_graph.json",
-      "name": "package_graph.json",
-      "type": "file"
-    },
-    {
-      "depth": 2,
-      "path": "/.dart_tool/version",
-      "name": "version",
-      "type": "file"
-    },
-    {
       "depth": 3,
-      "path": "/.dart_tool/dartpad/web_plugin_registrant.dart",
-      "name": "web_plugin_registrant.dart",
       "type": "file"
     },
     {
-      "depth": 3,
-      "path": "/.dart_tool/extension_discovery/vs_code.json",
-      "name": "vs_code.json",
-      "type": "file"
-    },
-    {
-      "depth": 3,
-      "path": "/.dart_tool/hooks_runner/objective_c",
-      "name": "objective_c",
-      "type": "folder"
-    },
-    {
-      "depth": 3,
-      "path": "/.dart_tool/hooks_runner/shared",
-      "name": "shared",
-      "type": "folder"
-    },
-    {
-      "depth": 4,
-      "path": "/.dart_tool/hooks_runner/objective_c/6782ff62a082d25dd9788598e67912e5",
-      "name": "6782ff62a082d25dd9788598e67912e5",
-      "type": "folder"
-    },
-    {
-      "depth": 4,
-      "path": "/.dart_tool/hooks_runner/objective_c/8e04c28b4433e6c12c82b92d4bcab349",
-      "name": "8e04c28b4433e6c12c82b92d4bcab349",
-      "type": "folder"
-    },
-    {
-      "depth": 4,
-      "path": "/.dart_tool/hooks_runner/shared/objective_c",
-      "name": "objective_c",
-      "type": "folder"
-    },
-    {
-      "depth": 2,
       "path": "/.vscode/launch.json",
       "name": "launch.json",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/.vscode/settings.json",
       "name": "settings.json",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/android/.gradle",
       "name": ".gradle",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/android/app",
       "name": "app",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/android/gradle",
       "name": "gradle",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/android/gradle.properties",
       "name": "gradle.properties",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/android/gradlew",
       "name": "gradlew",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/android/gradlew.bat",
       "name": "gradlew.bat",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/android/local.properties",
       "name": "local.properties",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/android/settings.gradle",
       "name": "settings.gradle",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/android/.gradle/7.6.3",
       "name": "7.6.3",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/android/.gradle/vcs-1",
       "name": "vcs-1",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/.gradle/7.6.3/checksums",
       "name": "checksums",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/.gradle/7.6.3/dependencies-accessors",
       "name": "dependencies-accessors",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/.gradle/7.6.3/fileChanges",
       "name": "fileChanges",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/.gradle/7.6.3/fileHashes",
       "name": "fileHashes",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/.gradle/7.6.3/vcsMetadata",
       "name": "vcsMetadata",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/.gradle/7.6.3/gc.properties",
       "name": "gc.properties",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/android/.gradle/vcs-1/gc.properties",
       "name": "gc.properties",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/android/app/src",
       "name": "src",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/android/app/google-services.json",
       "name": "google-services.json",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/android/app/src/debug",
       "name": "debug",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/app/src/main",
       "name": "main",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/app/src/profile",
       "name": "profile",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/android/gradle/wrapper",
       "name": "wrapper",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/android/gradle/wrapper/gradle-wrapper.jar",
       "name": "gradle-wrapper.jar",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/android/gradle/wrapper/gradle-wrapper.properties",
       "name": "gradle-wrapper.properties",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/backups/ListingLens_Artifacts_20260124_030531",
       "name": "ListingLens_Artifacts_20260124_030531",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/backups/analysis_final.txt",
       "name": "analysis_final.txt",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/backups/analysis_log.txt",
       "name": "analysis_log.txt",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/backups/analysis.txt",
       "name": "analysis.txt",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/backups/ListingLens_Artifacts_20260124_030531/brain",
       "name": "brain",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/ios/Flutter",
       "name": "Flutter",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/ios/Runner",
       "name": "Runner",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/ios/Runner.xcodeproj",
       "name": "Runner.xcodeproj",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/ios/Runner.xcworkspace",
       "name": "Runner.xcworkspace",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/ios/RunnerTests",
       "name": "RunnerTests",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Flutter/ephemeral",
       "name": "ephemeral",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Flutter/AppFrameworkInfo.plist",
       "name": "AppFrameworkInfo.plist",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Flutter/Debug.xcconfig",
       "name": "Debug.xcconfig",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Flutter/flutter_export_environment.sh",
       "name": "flutter_export_environment.sh",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Flutter/Generated.xcconfig",
       "name": "Generated.xcconfig",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Flutter/Release.xcconfig",
       "name": "Release.xcconfig",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Flutter/ephemeral/flutter_lldb_helper.py",
       "name": "flutter_lldb_helper.py",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Flutter/ephemeral/flutter_lldbinit",
       "name": "flutter_lldbinit",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner/Assets.xcassets",
       "name": "Assets.xcassets",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner/Base.lproj",
       "name": "Base.lproj",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner/AppDelegate.swift",
       "name": "AppDelegate.swift",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner/GeneratedPluginRegistrant.h",
       "name": "GeneratedPluginRegistrant.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner/GeneratedPluginRegistrant.m",
       "name": "GeneratedPluginRegistrant.m",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner/Info.plist",
       "name": "Info.plist",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner/Runner-Bridging-Header.h",
       "name": "Runner-Bridging-Header.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner/Assets.xcassets/AppIcon.appiconset",
       "name": "AppIcon.appiconset",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner/Assets.xcassets/LaunchImage.imageset",
       "name": "LaunchImage.imageset",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner/Base.lproj/LaunchScreen.storyboard",
       "name": "LaunchScreen.storyboard",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner/Base.lproj/Main.storyboard",
       "name": "Main.storyboard",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner.xcodeproj/project.xcworkspace",
       "name": "project.xcworkspace",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner.xcodeproj/xcshareddata",
       "name": "xcshareddata",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner.xcodeproj/project.pbxproj",
       "name": "project.pbxproj",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner.xcodeproj/project.xcworkspace/xcshareddata",
       "name": "xcshareddata",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
       "name": "contents.xcworkspacedata",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner.xcodeproj/xcshareddata/xcschemes",
       "name": "xcschemes",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner.xcworkspace/xcshareddata",
       "name": "xcshareddata",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/ios/Runner.xcworkspace/contents.xcworkspacedata",
       "name": "contents.xcworkspacedata",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist",
       "name": "IDEWorkspaceChecks.plist",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings",
       "name": "WorkspaceSettings.xcsettings",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/ios/RunnerTests/RunnerTests.swift",
       "name": "RunnerTests.swift",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/lib/components",
       "name": "components",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/lib/core",
       "name": "core",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/lib/features",
       "name": "features",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/lib/governor",
       "name": "governor",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/lib/layout",
       "name": "layout",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/lib/shared",
       "name": "shared",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/lib/theme",
       "name": "theme",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/lib/app.dart",
       "name": "app.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/lib/firebase_options.dart",
       "name": "firebase_options.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/lib/main_alpha.dart",
       "name": "main_alpha.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/lib/main_beta.dart",
       "name": "main_beta.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/lib/main_gamma.dart",
       "name": "main_gamma.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/lib/main.dart",
       "name": "main.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/antigravity_background.dart",
       "name": "antigravity_background.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/cursor_follower.dart",
       "name": "cursor_follower.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/dark_mode_toggle.dart",
       "name": "dark_mode_toggle.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/glass_scaffold.dart",
       "name": "glass_scaffold.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/liquid_checkbox.dart",
       "name": "liquid_checkbox.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/liquid_glass.dart",
       "name": "liquid_glass.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/reflector_card.dart",
       "name": "reflector_card.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/components/repulsion_background.dart",
       "name": "repulsion_background.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/core/ai",
       "name": "ai",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/core/data",
       "name": "data",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/core/models",
       "name": "models",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/core/providers",
       "name": "providers",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/core/services",
       "name": "services",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/core/theme",
       "name": "theme",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/lib/core/ai/gemini_service.dart",
       "name": "gemini_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/data/analysis_result.dart",
       "name": "analysis_result.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/data/knowledge_base.dart",
       "name": "knowledge_base.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/models/audit_model.dart",
       "name": "audit_model.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/models/listing.dart",
       "name": "listing.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/providers/analysis_provider.dart",
       "name": "analysis_provider.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/providers/history_provider.dart",
       "name": "history_provider.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/services/analysis_service.dart",
       "name": "analysis_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/services/auth_service.dart",
       "name": "auth_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/services/credit_service.dart",
       "name": "credit_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/services/firestore_service.dart",
       "name": "firestore_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/services/gemini_service.dart",
       "name": "gemini_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/services/history_service.dart",
       "name": "history_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/services/listing_service.dart",
       "name": "listing_service.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/core/theme/app_theme.dart",
       "name": "app_theme.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/features/alpha",
       "name": "alpha",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/features/auth",
       "name": "auth",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/features/beta",
       "name": "beta",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/features/gamma",
       "name": "gamma",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/features/hub",
       "name": "hub",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/features/lab",
       "name": "lab",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/features/trinity_dashboard.dart",
       "name": "trinity_dashboard.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/alpha/components",
       "name": "components",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/lib/features/alpha/alpha_dashboard.dart",
       "name": "alpha_dashboard.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/auth/auth_gate.dart",
       "name": "auth_gate.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/beta/beta_flow.dart",
       "name": "beta_flow.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/beta/beta_time_stream.dart",
       "name": "beta_time_stream.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/gamma/gamma_input.dart",
       "name": "gamma_input.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/hub/auth_wrapper.dart",
       "name": "auth_wrapper.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/hub/hub_layout.dart",
       "name": "hub_layout.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/hub/hub_view.dart",
       "name": "hub_view.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/lab/audit_report_page.dart",
       "name": "audit_report_page.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/lab/drag_drop_zone.dart",
       "name": "drag_drop_zone.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/features/lab/lab_view.dart",
       "name": "lab_view.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/governor/dashboard.html",
       "name": "dashboard.html",
+      "depth": 3,
       "type": "file"
     },
     {
+      "path": "/lib/governor/state.json",
+      "name": "state.json",
       "depth": 3,
+      "type": "file"
+    },
+    {
+      "path": "/lib/governor/trinity_map.html",
+      "name": "trinity_map.html",
+      "depth": 3,
+      "type": "file"
+    },
+    {
       "path": "/lib/layout/glass_tab_bar.dart",
       "name": "glass_tab_bar.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/layout/liquid_tab_shell.dart",
       "name": "liquid_tab_shell.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/layout/meniscus_tab.dart",
       "name": "meniscus_tab.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/layout/solid_fusion_layout.dart",
       "name": "solid_fusion_layout.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/shared/theme",
       "name": "theme",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/lib/shared/glass_container.dart",
       "name": "glass_container.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/shared/paywall_modal.dart",
       "name": "paywall_modal.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/shared/refractive_cursor.dart",
       "name": "refractive_cursor.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/shared/smooth_cursor.dart",
       "name": "smooth_cursor.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/lib/shared/theme/obsidian_theme.dart",
       "name": "obsidian_theme.dart",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/theme/app_colors.dart",
       "name": "app_colors.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/theme/app_theme.dart",
       "name": "app_theme.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/lib/theme/fluid_background.dart",
       "name": "fluid_background.dart",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/linux/flutter",
       "name": "flutter",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/linux/CMakeLists.txt",
       "name": "CMakeLists.txt",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/linux/main.cc",
       "name": "main.cc",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/linux/my_application.cc",
       "name": "my_application.cc",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/linux/my_application.h",
       "name": "my_application.h",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/linux/flutter/ephemeral",
       "name": "ephemeral",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/linux/flutter/CMakeLists.txt",
       "name": "CMakeLists.txt",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/linux/flutter/generated_plugin_registrant.cc",
       "name": "generated_plugin_registrant.cc",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/linux/flutter/generated_plugin_registrant.h",
       "name": "generated_plugin_registrant.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/linux/flutter/generated_plugins.cmake",
       "name": "generated_plugins.cmake",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/linux/flutter/ephemeral/.plugin_symlinks",
       "name": ".plugin_symlinks",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/macos/Flutter",
       "name": "Flutter",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/macos/Runner",
       "name": "Runner",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/macos/Runner.xcodeproj",
       "name": "Runner.xcodeproj",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/macos/Runner.xcworkspace",
       "name": "Runner.xcworkspace",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/macos/RunnerTests",
       "name": "RunnerTests",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Flutter/ephemeral",
       "name": "ephemeral",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Flutter/Flutter-Debug.xcconfig",
       "name": "Flutter-Debug.xcconfig",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Flutter/Flutter-Release.xcconfig",
       "name": "Flutter-Release.xcconfig",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Flutter/GeneratedPluginRegistrant.swift",
       "name": "GeneratedPluginRegistrant.swift",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Flutter/ephemeral/flutter_export_environment.sh",
       "name": "flutter_export_environment.sh",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Flutter/ephemeral/Flutter-Generated.xcconfig",
       "name": "Flutter-Generated.xcconfig",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/Assets.xcassets",
       "name": "Assets.xcassets",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/Base.lproj",
       "name": "Base.lproj",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/Configs",
       "name": "Configs",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/AppDelegate.swift",
       "name": "AppDelegate.swift",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/DebugProfile.entitlements",
       "name": "DebugProfile.entitlements",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/Info.plist",
       "name": "Info.plist",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/MainFlutterWindow.swift",
       "name": "MainFlutterWindow.swift",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner/Release.entitlements",
       "name": "Release.entitlements",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner/Assets.xcassets/AppIcon.appiconset",
       "name": "AppIcon.appiconset",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner/Base.lproj/MainMenu.xib",
       "name": "MainMenu.xib",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner/Configs/AppInfo.xcconfig",
       "name": "AppInfo.xcconfig",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner/Configs/Debug.xcconfig",
       "name": "Debug.xcconfig",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner/Configs/Release.xcconfig",
       "name": "Release.xcconfig",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner/Configs/Warnings.xcconfig",
       "name": "Warnings.xcconfig",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner.xcodeproj/project.xcworkspace",
       "name": "project.xcworkspace",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner.xcodeproj/xcshareddata",
       "name": "xcshareddata",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner.xcodeproj/project.pbxproj",
       "name": "project.pbxproj",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner.xcodeproj/project.xcworkspace/xcshareddata",
       "name": "xcshareddata",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner.xcodeproj/xcshareddata/xcschemes",
       "name": "xcschemes",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner.xcworkspace/xcshareddata",
       "name": "xcshareddata",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/macos/Runner.xcworkspace/contents.xcworkspacedata",
       "name": "contents.xcworkspacedata",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/macos/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist",
       "name": "IDEWorkspaceChecks.plist",
+      "depth": 4,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/macos/RunnerTests/RunnerTests.swift",
       "name": "RunnerTests.swift",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/test/alpha_test.dart",
       "name": "alpha_test.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/test/beta_test.dart",
       "name": "beta_test.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/test/gamma_test.dart",
       "name": "gamma_test.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/test/widget_test.dart",
       "name": "widget_test.dart",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/tools/governor",
       "name": "governor",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/tools/gemini_manager.ps1",
       "name": "gemini_manager.ps1",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/tools/start_autonomy.ps1",
       "name": "start_autonomy.ps1",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/tools/governor/generate_dashboard_data.ps1",
       "name": "generate_dashboard_data.ps1",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/web/icons",
       "name": "icons",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/web/favicon.png",
       "name": "favicon.png",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/web/index.html",
       "name": "index.html",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/web/manifest.json",
       "name": "manifest.json",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/web/icons/Icon-192.png",
       "name": "Icon-192.png",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/web/icons/Icon-512.png",
       "name": "Icon-512.png",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/web/icons/Icon-maskable-192.png",
       "name": "Icon-maskable-192.png",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/web/icons/Icon-maskable-512.png",
       "name": "Icon-maskable-512.png",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 2,
       "path": "/windows/flutter",
       "name": "flutter",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/windows/runner",
       "name": "runner",
+      "depth": 2,
       "type": "folder"
     },
     {
-      "depth": 2,
       "path": "/windows/CMakeLists.txt",
       "name": "CMakeLists.txt",
+      "depth": 2,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/flutter/ephemeral",
       "name": "ephemeral",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/windows/flutter/CMakeLists.txt",
       "name": "CMakeLists.txt",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/flutter/generated_plugin_registrant.cc",
       "name": "generated_plugin_registrant.cc",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/flutter/generated_plugin_registrant.h",
       "name": "generated_plugin_registrant.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/flutter/generated_plugins.cmake",
       "name": "generated_plugins.cmake",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/windows/flutter/ephemeral/.plugin_symlinks",
       "name": ".plugin_symlinks",
+      "depth": 4,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/resources",
       "name": "resources",
+      "depth": 3,
       "type": "folder"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/CMakeLists.txt",
       "name": "CMakeLists.txt",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/flutter_window.cpp",
       "name": "flutter_window.cpp",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/flutter_window.h",
       "name": "flutter_window.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/main.cpp",
       "name": "main.cpp",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/resource.h",
       "name": "resource.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/runner.exe.manifest",
       "name": "runner.exe.manifest",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/Runner.rc",
       "name": "Runner.rc",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/utils.cpp",
       "name": "utils.cpp",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/utils.h",
       "name": "utils.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/win32_window.cpp",
       "name": "win32_window.cpp",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 3,
       "path": "/windows/runner/win32_window.h",
       "name": "win32_window.h",
+      "depth": 3,
       "type": "file"
     },
     {
-      "depth": 4,
       "path": "/windows/runner/resources/app_icon.ico",
       "name": "app_icon.ico",
+      "depth": 4,
       "type": "file"
     }
-  ]
+  ],
+  "timestamp": "2026-01-25 10:56:33",
+  "metrics": {
+    "entropy": 0.2,
+    "strategy": 85.5,
+    "autonomy": 85.7,
+    "confidence": "Confident"
+  },
+  "trinity_mermaid": "graph TD\r\n            %% --- SHARED CORE ---\r\n            subgraph CORE [\"Shared Intelligence Core\"]\r\n            direction TB\r\n            Gov[(\"The Governor<br />(Execution Orchestrator)\")]:::core\r\n            KB[(\"Knowledge Base<br />(Vector Context)\")]:::core\r\n            Gemini[(\"Gemini 1.5 Flash<br />(Vision Mind)\")]:::core\r\n            Credit[(\"Credit Service<br />(Fuel)\")]:::core\r\n\r\n            Gov -- \"Dispatches\" --> Gemini\r\n            Gov -- \"Queries\" --> KB\r\n            Gemini -- \"Consumes\" --> Credit\r\n            end\r\n\r\n            %% --- ALPHA TIMELINE ---\r\n            subgraph ALPHA [\"Alpha: SolidFusion\"]\r\n            direction TB\r\n            A_Intent{{\"Reliability & Scale\"}}:::intent\r\n            A_Agent[(\"The Engineer\")]:::alpha\r\n            A_Stack[\"Material 3 + Riverpod\"]:::alpha\r\n            A_Focus[\"Clean Architecture\"]:::alpha\r\n\r\n            A_Intent --> A_Agent\r\n            A_Agent --> A_Stack\r\n            A_Stack --> A_Focus\r\n            end\r\n\r\n            %% --- BETA TIMELINE ---\r\n            subgraph BETA [\"Beta: LiquidOpal\"]\r\n            direction TB\r\n            B_Intent{{\"Aesthetics & Vibe\"}}:::intent\r\n            B_Agent[(\"The Alchemist\")]:::beta\r\n            B_Stack[\"Glassmorphism + Shaders\"]:::beta\r\n            B_Focus[\"Fluid Interactions\"]:::beta\r\n\r\n            B_Intent --> B_Agent\r\n            B_Agent --> B_Stack\r\n            B_Stack --> B_Focus\r\n            end\r\n\r\n            %% --- GAMMA TIMELINE ---\r\n            subgraph GAMMA [\"Gamma: ClayMotion\"]\r\n            direction TB\r\n            G_Intent{{\"Play & Novelty\"}}:::intent\r\n            G_Agent[(\"The Jester\")]:::gamma\r\n            G_Stack[\"Neumorphism + Physics\"]:::gamma\r\n            G_Focus[\"Conversational UX\"]:::gamma\r\n\r\n            G_Intent --> G_Agent\r\n            G_Agent --> G_Stack\r\n            G_Stack --> G_Focus\r\n            end\r\n\r\n            %% --- INTERCONNECTIONS ---\r\n            ALPHA -.-> |\"Data Model\"| CORE\r\n            BETA -.-> |\"Visual Feedback\"| CORE\r\n            GAMMA -.-> |\"Interaction Logic\"| CORE\r\n\r\n            CORE ==> |\"Insights\"| ALPHA\r\n            CORE ==> |\"Refinement\"| BETA\r\n            CORE ==> |\"Magic\"| GAMMA\r\n\r\n            %% Styling\r\n            classDef alpha fill:#1e3a8a44,stroke:#3b82f6,stroke-width:2px,color:#fff;\r\n            classDef beta fill:#581c8744,stroke:#a855f7,stroke-width:2px,color:#fff;\r\n            classDef gamma fill:#7c2d1244,stroke:#f97316,stroke-width:2px,color:#fff;\r\n            classDef core fill:#064e3b44,stroke:#10b981,stroke-width:3px,color:#fff;\r\n            classDef intent fill:none,stroke:#94a3b8,stroke-dasharray: 5 5,color:#cbd5e1;\r\n\r\n            linkStyle default stroke:#475569,stroke-width:2px;",
+  "cognition": "# Task: Dashboard & Trinity Logic Repair\r\n\r\n- [x] Research current `dashboard.html` and `trinity_agentic_map.html` <!-- id: 10 -->\r\n- [x] Create enhanced `lib/governor/trinity_map.html` with new logics <!-- id: 11 -->\r\n- [x] Update `lib/governor/dashboard.html` with Workflow, Walkthrough, and Trinity tabs <!-- id: 12 -->\r\n- [x] Refactor `tools/governor/generate_dashboard_data.ps1` for multi-artifact sync <!-- id: 13 -->\r\n- [x] Copy latest `walkthrough.md` and `task.md` to project root for dashboard visibility <!-- id: 14 -->\r\n- [x] Verify final dashboard rendering and metrics <!-- id: 15 -->\r\n- [ ] Final UI Polish (optional) <!-- id: 16 -->\r\n",
+  "workflow": "# Agentic Workflow Visualization\r\n\r\nThis document visualizes the \"Opal\" agentic team workflow for ListingLens PaaS.\r\n\r\n**Note:** This visualization is available as a standalone \"Control Room\" tool.\r\nTo launch the dashboard, run:\r\n`flutter run -t lib/main_dashboard.dart`\r\n\r\n## The Opal Team Structure\r\n\r\n```mermaid\r\ngraph TD\r\n    %% Styling\r\n    classDef user fill:#f9f,stroke:#333,stroke-width:2px;\r\n    classDef dev fill:#e1f5fe,stroke:#01579b,stroke-width:2px;\r\n    classDef detective fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px;\r\n    classDef watcher fill:#f3e5f5,stroke:#4a148c,stroke-width:2px;\r\n    classDef storage fill:#fff3e0,stroke:#e65100,stroke-width:2px;\r\n\r\n    User((User)):::user\r\n    \r\n    subgraph \"The Opal Team\"\r\n        AG[Antigravity<br/>(The Developer)]:::dev\r\n        DT[NotebookLM<br/>(The Detective)]:::detective\r\n        IJ[Injector Agent<br/>(The Watcher/Reviewer)]:::watcher\r\n    end\r\n\r\n    Repo[(ListingLens Repo)]:::storage\r\n\r\n    %% Flows\r\n    User -->|\"/socratic_iteration\"| DT\r\n    User -->|Direct Code Reqs| AG\r\n    \r\n    DT -->|Strategic Insights<br/>(Report)| User\r\n    DT -->|New Tasks| AG\r\n    \r\n    AG -->|Writes Code| Repo\r\n    \r\n    Repo -->|Trigger Review| IJ\r\n    \r\n    IJ -- \"/notebooklm_injector\" -->|Clean & Commit| Repo\r\n    IJ -->|Context Injection| DT\r\n    \r\n    %% Loop\r\n    DT -.->|Socratic Feedback Loop| AG\r\n```\r\n\r\n## Slash Commands\r\n\r\nUse these commands in the chat to activate specific agent routines:\r\n\r\n| Command | Agent | Function |\r\n| :--- | :--- | :--- |\r\n| **/notebooklm_injector** | **The Watcher** | Runs the `clean -> commit -> save project > save > inject` pipeline. Ensures the codebase is stable and prepares context for NotebookLM. |\r\n| **/socratic_iteration** | **The Detective** | Synchronizes the \"Detective\" (NotebookLM) with the \"Developer\" (Antigravity). Use this when strategic adjustments are needed. |\r\n\r\n## Role Descriptions\r\n\r\n- **Antigravity (The Developer)**: Handles direct coding, implementation plans, and immediate problem-solving.\r\n- **NotebookLM (The Detective)**: External strategic intelligence. Analyzes the codebase context and user prompts to find logic gaps (\"missing points\").\r\n- **Injector (The Watcher)**: The \"Control Room\" agent. automates the hygiene of the repo (cleaning, committing) and ensures the Detective has the latest evidence (context injection).\r\n",
+  "walkthrough": "# Dashboard & Trinity Enhancement Walkthrough\r\n\r\n## Objective\r\n\r\nRepair and enhance the cognitive artifacts for ListingLens PaaS to ensure proper dashboard, tree, and flowchart viewing, merging workflows and trinity logic.\r\n\r\n## Changes\r\n\r\n### 1. New Trinity Agentic Map\r\n\r\n- **File**: `lib/governor/trinity_map.html`\r\n- **Logic**: Visualizes the Shared Intelligence Core (Governor, Gemini, KB, Credit) and the Three Protocol Timelines (Alpha, Beta, Gamma).\r\n- **Tech**: Mermaid.js with custom dark-themed styling.\r\n\r\n### 2. Enhanced Memory Palace Dashboard\r\n\r\n- **File**: `lib/governor/dashboard.html`\r\n- **Tabs**:\r\n  - **Cortex**: Dynamic task list from `task.md`.\r\n  - **Workflow**: Agentic team structure from `WORKFLOW_VISUALIZATION.md`.\r\n  - **Trinity**: Interactive agentic map.\r\n  - **Walkthrough**: Integrated technical summaries.\r\n  - **Topology**: Improved project tree view with icons.\r\n  - **Flowchart**: System logic overview.\r\n- **Design**: High-density glassmorphism with liquid cyan/purple accents.\r\n\r\n### 3. Unified Sync Engine\r\n\r\n- **File**: `tools/governor/generate_dashboard_data.ps1`\r\n- **Updates**:\r\n  - Auto-discovers `task.md` across project and brain directories.\r\n  - Extracts Mermaid diagrams from HTML files.\r\n  - Bundles all markdown artifacts into `state.json` for zero-latency dashboard rendering.\r\n\r\n## Verification\r\n\r\n1. Run `pwsh -File tools/governor/generate_dashboard_data.ps1`.\r\n2. Open `lib/governor/dashboard.html` in a browser.\r\n3. Switch through all tabs to verify rendering.\r\n\r\n![Dashboard Preview](file:///c:/Users/veris/.gemini/antigravity/scratch/listing_lens_paas/lib/governor/dashboard.html)\r\n"
 }

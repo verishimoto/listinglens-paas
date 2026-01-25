@@ -37,7 +37,10 @@ class GlassContainer extends StatelessWidget {
             color: color.withValues(alpha: opacity),
             borderRadius: radius,
             border: border ??
-                Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                Border.all(
+                  color: Colors.white.withValues(alpha: 0.15),
+                  width: 1.5,
+                ),
             gradient: gradient,
           ),
           child: child,
