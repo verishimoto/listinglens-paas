@@ -96,15 +96,20 @@
             filter: blur(8px);
         }
 
-        /* Reflective Highlight */
+        /* Reflective Highlight (Reactive Glare) */
         .glass::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.2) 0%, transparent 60%);
             pointer-events: none;
-            opacity: 0.2;
+            opacity: 0;
             z-index: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .glass:hover::after {
+            opacity: 1;
         }
 
         .glass:hover {
@@ -140,7 +145,7 @@
             z-index: 10;
         }
 
-        /* --- THE SUN CURSOR --- */
+        /* --- THE REFRACTIVE CURSOR --- */
         #cursor-container {
             position: fixed;
             top: 0;
@@ -151,55 +156,26 @@
             z-index: 9999;
         }
 
-        #cursor-sun {
+        #cursor-refractive {
             position: absolute;
-            width: 12px;
-            height: 12px;
-            background: #fff;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            box-shadow: 0 0 15px #fff, 0 0 30px rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             transform: translate(-50%, -50%);
+            pointer-events: none;
             z-index: 100;
         }
 
-        #cursor-glow {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background: radial-gradient(circle,
-                    rgba(0, 199, 255, 0.4) 0%,
-                    rgba(126, 0, 255, 0.2) 60%,
-                    transparent 100%);
-            transform: translate(-50%, -50%);
-            mix-blend-mode: screen;
-            transition: width 0.4s ease, height 0.4s ease;
+        .cursor-hover #cursor-refractive {
+            width: 100px;
+            height: 100px;
+            border-color: rgba(255, 255, 255, 0.3);
+            transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
         }
 
-        .cursor-hover #cursor-glow {
-            width: 140px;
-            height: 140px;
-            animation: sun-emanate 2s infinite;
-        }
-
-        @keyframes sun-emanate {
-            0% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0.8;
-                filter: hue-rotate(0deg) brightness(1);
-            }
-
-            50% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.5;
-                filter: hue-rotate(180deg) brightness(1.5);
-            }
-
-            100% {
-                transform: translate(-50%, -50%) scale(1.4);
-                opacity: 0;
-                filter: hue-rotate(360deg) brightness(1);
-            }
-        }
 
         /* --- Header --- */
         .header {
@@ -212,15 +188,12 @@
 
         .logo-section h1 {
             margin: 0;
-            font-size: 3rem;
+            font-size: 2.2rem;
             font-weight: 100;
-            letter-spacing: -3px;
+            letter-spacing: -2px;
             text-transform: uppercase;
             font-stretch: extra-condensed;
-            background: linear-gradient(to right, #fff, #86868b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #fff;
         }
 
         .status-pill {
@@ -262,16 +235,13 @@
         .metric-value {
             font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
             font-weight: 100;
-            font-size: clamp(60px, 10vw, 120px);
-            letter-spacing: -8px;
+            font-size: clamp(40px, 8vw, 85px);
+            letter-spacing: -4px;
             font-stretch: extra-condensed;
             line-height: 0.8;
             margin-bottom: 12px;
             text-transform: uppercase;
-            background: linear-gradient(to bottom, #fff 20%, #444 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #fff;
         }
 
         .metric-label {
@@ -603,10 +573,9 @@
 </head>
 
 <body>
-    <!-- Custom Sun Cursor -->
+    <!-- Refractive Blur Cursor -->
     <div id="cursor-container">
-        <div id="cursor-glow"></div>
-        <div id="cursor-sun"></div>
+        <div id="cursor-refractive"></div>
     </div>
 
     <div class="main-container">
@@ -805,17 +774,15 @@
             });
         }, { threshold: 0.1 });
 
-        // --- THE SUN CURSOR & OPALESCENT LIGHTING ---
-        const sun = document.getElementById('cursor-sun');
-        const glow = document.getElementById('cursor-glow');
+        // --- THE REFRACTIVE CURSOR & GLARE LOGIC ---
+        const cursor = document.getElementById('cursor-refractive');
         let mouseX = 0, mouseY = 0;
-        let glowX = 0, glowY = 0;
 
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
 
-            // Update opalescent edge lighting & asymmetric glare
+            // Update opalescent edge lighting & white glare
             document.querySelectorAll('.glass').forEach(glass => {
                 const rect = glass.getBoundingClientRect();
                 if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
@@ -823,8 +790,6 @@
                     const y = ((e.clientY - rect.top) / rect.height) * 100;
                     glass.style.setProperty('--mouse-x', `${x}%`);
                     glass.style.setProperty('--mouse-y', `${y}%`);
-                    glass.style.setProperty('--opp-x', `${100 - x}%`);
-                    glass.style.setProperty('--opp-y', `${100 - y}%`);
                 }
             });
 
@@ -839,15 +804,10 @@
         });
 
         function animateCursor() {
-            // Smoothing for glow (Sun lag)
-            glowX += (mouseX - glowX) * 0.15;
-            glowY += (mouseY - glowY) * 0.15;
-
-            sun.style.left = `${mouseX}px`;
-            sun.style.top = `${mouseY}px`;
-            glow.style.left = `${glowX}px`;
-            glow.style.top = `${glowY}px`;
-
+            if (cursor) {
+                cursor.style.left = `${mouseX}px`;
+                cursor.style.top = `${mouseY}px`;
+            }
             requestAnimationFrame(animateCursor);
         }
         animateCursor();
