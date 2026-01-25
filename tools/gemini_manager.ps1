@@ -259,7 +259,7 @@ function Run-Backup {
     New-Item -ItemType Directory -Path $TargetDir | Out-Null
     
     # 1. Backup 'Brain' (Knowledge & Plans)
-    $BrainPath = "C:\Users\veris\.gemini\antigravity\brain\a6599345-759b-407b-be2b-e5efb7e859dc"
+    $BrainPath = "C:\Users\veris\.gemini\antigravity\brain\345fadc8-acdd-4139-9394-ff2b712ce9f7"
     if (Test-Path $BrainPath) {
         Log-Message "Backing up Brain Artifacts..."
         try {

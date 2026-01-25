@@ -1,0 +1,52 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Trinity Hub (Main)",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--web-port",
+                "3000"
+            ]
+        },
+        {
+            "name": "Alpha Prototype",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_alpha.dart",
+            "args": [
+                "--web-port",
+                "3001"
+            ]
+        },
+        {
+            "name": "Beta Prototype",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_beta.dart",
+            "args": [
+                "--web-port",
+                "3002"
+            ]
+        },
+        {
+            "name": "Gamma Prototype",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_gamma.dart",
+            "args": [
+                "--web-port",
+                "3003"
+            ]
+        },
+        {
+            "name": "Smoke Test",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/widget_test.dart",
+            "args": []
+        }
+    ]
+}
