@@ -29,8 +29,7 @@ class EpsilonApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: AppColors.backgroundDark,
-        fontFamily:
-            'SF Pro Display', // Ensure fonts are added in pubspec if needed, or it will fallback
+        // fontFamily: 'SF Pro Display',
         useMaterial3: true,
       ),
       home: const EpsilonShell(),
