@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Simple Riverpod provider for credits
-final creditServiceProvider = StateNotifierProvider<CreditService, int>((ref) {
-  return CreditService();
-});
+// Modern Riverpod 2.0+ pattern
+final creditServiceProvider =
+    NotifierProvider<CreditService, int>(CreditService.new);
 
-class CreditService extends StateNotifier<int> {
-  // Start with 2 free credits for testing
-  CreditService() : super(2);
+class CreditService extends Notifier<int> {
+  @override
+  int build() {
+    return 2; // Initial state (free credits)
+  }
 
   bool get hasCredits => state > 0;
 

@@ -76,4 +76,16 @@ class AppColors {
 
   // 'primary'
   static const Color primary = leverage6; // Orange as primary
+
+  // ===========================================================================
+  // RECOVERED MISSING GETTERS (From @current_problems)
+  // ===========================================================================
+
+  static const Color mellowOrange = leverage6;
+  static const Color mellowCyan = leverage2;
+  static const Color textMute = Color(0x99FFFFFF); // Muted text
+  static const Color textMain = leverage15; // Main text
+  static const Color crystalSurface = surfaceGlassDark;
+  static const Color structureColor = leverage8;
+  static const Color appleGreen = leverage4;
 }

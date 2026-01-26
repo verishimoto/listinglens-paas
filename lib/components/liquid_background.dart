@@ -1,5 +1,5 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:liquid_glass_renderer/liquid_glass_renderer.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
 
 class LiquidBackground extends StatefulWidget {
@@ -29,72 +29,99 @@ class _LiquidBackgroundState extends State<LiquidBackground>
 
   @override
   Widget build(BuildContext context) {
-    // Using LiquidGlassRenderer for the blobs if possible, or sticking to
-    // standard gradients if performance is too heavy.
-    // Given the README, LiquidGlass works best *over* content.
-    // Ideally, we put the gradients BEHIND the glass layer.
-
     return Container(
       color: AppColors.backgroundDark, // #050505
       child: Stack(
         children: [
-          // 1. Base Gradients (The "Liquid" Sources)
+          // Blob 1: Cyan
           AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
               return Positioned(
                 top: -100 + (_controller.value * 50),
                 left: -100 + (_controller.value * 100),
-                child: Container(
+                child: _buildBlob(
                   width: 600,
                   height: 600,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        AppColors.leverage2, // Cyan
-                        Colors.transparent,
-                      ],
-                      radius: 0.6,
-                    ),
-                  ),
+                  color: AppColors.leverage2, // Cyan
+                  radius: 0.6,
                 ),
               );
             },
           ),
+          // Blob 2: Orange
           AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
               return Positioned(
                 bottom: -150 + (_controller.value * 80),
                 right: -150 + ((1 - _controller.value) * 120),
-                child: Container(
+                child: _buildBlob(
                   width: 550,
                   height: 550,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        AppColors.leverage6, // Orange
-                        Colors.transparent,
-                      ],
-                      radius: 0.65,
-                    ),
-                  ),
+                  color: AppColors.leverage6, // Orange
+                  radius: 0.65,
+                ),
+              );
+            },
+          ),
+          // Blob 3: Purple accent
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Positioned(
+                top: 200,
+                right: 200 + (_controller.value * 40),
+                child: _buildBlob(
+                  width: 400,
+                  height: 400,
+                  color: AppColors.leverage1, // Purple
+                  radius: 0.7,
                 ),
               );
             },
           ),
 
-          // 2. The Liquid Glass Layer - Applied over the blobs to distort them?
-          // Or strictly used for UI panels?
-          // Based on "For the effect to be visible, you must place your glass widget on top of other content."
-          // We will use this in the EpsilonShell for panels, not necessarily the background itself.
-          // But we can add a subtle glass distortion over the background if desired.
+          // The Diffuser (Global Blur)
+          // This creates the "Fluid" mix of the blobs behind everything
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
 
-          // For now, let's keep the background as just the blurred blobs
-          // to save GPU for the interactive UI elements.
+          // Noise Overlay (Optional Texture)
+          Positioned.fill(
+            child: Opacity(
+              opacity: 0.03,
+              child: IgnorePointer(
+                child: Container(
+                  color: Colors.white, // Placeholder for actual noise image
+                ),
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBlob(
+      {required double width,
+      required double height,
+      required Color color,
+      required double radius}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [color, color.withValues(alpha: 0.0)],
+          stops: [0.2, 1.0],
+          radius: radius,
+        ),
       ),
     );
   }
