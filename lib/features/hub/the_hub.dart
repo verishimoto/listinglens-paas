@@ -7,9 +7,34 @@ class TheHub extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final assets = [
-      {"rank": "#1", "name": "Leo Cyber-Zodiac Elite", "score": "99.1"},
-      {"rank": "#2", "name": "Kinetic Flow Abstract", "score": "96.4"},
-      {"rank": "#3", "name": "Brazilian Grit Heritage", "score": "94.2"},
+      {
+        "rank": "#1",
+        "name": "Cyber-Zodiac 3D Kit",
+        "score": "99.1",
+        "platform": "Creative Market",
+        "status": "Elite"
+      },
+      {
+        "rank": "#2",
+        "name": "Boho Wedding Planner",
+        "score": "96.4",
+        "platform": "Etsy",
+        "status": "Trending"
+      },
+      {
+        "rank": "#3",
+        "name": "Glitch Textures V2",
+        "score": "94.2",
+        "platform": "Gumroad",
+        "status": "Solid"
+      },
+      {
+        "rank": "#4",
+        "name": "Notion Life OS",
+        "score": "88.5",
+        "platform": "Notion",
+        "status": "Optimize"
+      },
     ];
 
     return Column(

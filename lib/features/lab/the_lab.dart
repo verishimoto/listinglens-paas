@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
+import 'package:listing_lens_paas/features/lab/the_arena.dart';
+import 'package:listing_lens_paas/features/lab/the_fingerprint.dart';
 
 class TheLab extends StatelessWidget {
-  const TheLab({super.key});
+  final VoidCallback? onAnalyze;
+  const TheLab({super.key, this.onAnalyze});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class TheLab extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: onAnalyze,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withValues(alpha: 0.1),
                     padding: const EdgeInsets.symmetric(
@@ -144,6 +147,14 @@ class TheLab extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // v1.3 THE FINGERPRINT (Integrity Scan)
+              const TheFingerprint(),
+
+              const SizedBox(height: 24),
+
+              // v1.2 THE ARENA (Competitor Simulation)
+              const TheArena(),
             ],
           ),
         ),

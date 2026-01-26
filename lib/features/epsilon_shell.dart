@@ -17,6 +17,16 @@ class EpsilonShell extends StatefulWidget {
 class _EpsilonShellState extends State<EpsilonShell> {
   String _view = 'lab'; // 'lab', 'hub', 'archives'
   int _activeStage = 0;
+  LiquidState _liquidState = LiquidState.idle;
+
+  void _triggerAnalysis() async {
+    setState(() => _liquidState = LiquidState.analyzing);
+    // Simulate Analysis (Game Theory: Delay creates anticipation)
+    await Future.delayed(const Duration(seconds: 2));
+    setState(() => _liquidState = LiquidState.success);
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() => _liquidState = LiquidState.idle);
+  }
 
   final List<Map<String, dynamic>> _stages = [
     {
@@ -58,7 +68,7 @@ class _EpsilonShellState extends State<EpsilonShell> {
       body: Stack(
         children: [
           // 1. Global Liquid Background
-          const Positioned.fill(child: LiquidBackground()),
+          Positioned.fill(child: LiquidBackground(currentState: _liquidState)),
 
           // 2. Main Content
           Positioned.fill(
@@ -107,7 +117,7 @@ class _EpsilonShellState extends State<EpsilonShell> {
                                   child: KeyedSubtree(
                                     key: ValueKey(_view),
                                     child: _view == 'lab'
-                                        ? const TheLab()
+                                        ? TheLab(onAnalyze: _triggerAnalysis)
                                         : (_view == 'hub'
                                             ? const TheHub()
                                             : const Archives()),
