@@ -8,6 +8,8 @@ class AnalysisResult {
   final int clarityScore;
   final List<String> actionableFeedback;
   final String summary;
+  final double confidenceInterval; // Epsilon: Integrity Check (0.0 - 1.0)
+  final String reasoning; // Epsilon: "Why we predict a win" (Dossier logic)
 
   AnalysisResult({
     required this.id,
@@ -19,6 +21,9 @@ class AnalysisResult {
     required this.clarityScore,
     required this.actionableFeedback,
     required this.summary,
+    this.confidenceInterval = 0.95,
+    this.reasoning =
+        "Based on heuristic evaluation of lighting and composition rules.",
   });
 
   factory AnalysisResult.fromJson(Map<String, dynamic> json) {
@@ -34,6 +39,8 @@ class AnalysisResult {
       clarityScore: json['clarityScore'] ?? 0,
       actionableFeedback: List<String>.from(json['actionableFeedback'] ?? []),
       summary: json['summary'] ?? '',
+      confidenceInterval: (json['confidenceInterval'] ?? 0.85).toDouble(),
+      reasoning: json['reasoning'] ?? "Automated heuristic analysis.",
     );
   }
 
@@ -48,6 +55,8 @@ class AnalysisResult {
       'clarityScore': clarityScore,
       'actionableFeedback': actionableFeedback,
       'summary': summary,
+      'confidenceInterval': confidenceInterval,
+      'reasoning': reasoning,
     };
   }
 

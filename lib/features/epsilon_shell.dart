@@ -5,6 +5,8 @@ import 'package:listing_lens_paas/components/liquid_background.dart';
 import 'package:listing_lens_paas/layout/gluesystem.dart';
 import 'package:listing_lens_paas/features/lab/the_lab.dart';
 import 'package:listing_lens_paas/features/hub/the_hub.dart';
+import 'package:listing_lens_paas/components/sun_cursor.dart';
+import 'package:listing_lens_paas/features/lab/opal_audit_result.dart';
 import 'package:listing_lens_paas/features/archives/archives.dart';
 
 class EpsilonShell extends StatefulWidget {
@@ -33,110 +35,145 @@ class _EpsilonShellState extends State<EpsilonShell> {
       "id": 1,
       "title": "Hero Cover",
       "subtitle": "Primary Impact",
-      "cleared": false
+      "cleared": false,
+      "imagePath": "C:\\Users\\veris\\.gemini\\antigravity\\brain\\417cda50-6209-449e-adee-488612bd2286\\uploaded_media_0_1769527676670.png"
     },
     {
       "id": 2,
       "title": "Flat Proof",
       "subtitle": "Quality QA",
-      "cleared": false
+      "cleared": false,
+      "imagePath": "C:\\Users\\veris\\.gemini\\antigravity\\brain\\417cda50-6209-449e-adee-488612bd2286\\uploaded_media_1_1769527676670.png"
     },
     {
       "id": 3,
       "title": "Video Retention",
       "subtitle": "Motion SEO",
-      "cleared": false
+      "cleared": false,
+      "imagePath": "C:\\Users\\veris\\.gemini\\antigravity\\brain\\417cda50-6209-449e-adee-488612bd2286\\uploaded_media_3_1769527676670.png" // Using the 4th/video-like file if applicable
     },
     {
       "id": 4,
       "title": "Lifestyle Fit",
       "subtitle": "Social Proof",
-      "cleared": false
+      "cleared": false,
+      "imagePath": "C:\\Users\\veris\\.gemini\\antigravity\\brain\\417cda50-6209-449e-adee-488612bd2286\\uploaded_media_2_1769527676670.png"
     },
     {
       "id": 5,
       "title": "Tech Spec",
       "subtitle": "Data Integrity",
-      "cleared": false
+      "cleared": false,
+      "imagePath": null
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
-      body: Stack(
-        children: [
-          // 1. Global Liquid Background
-          Positioned.fill(child: LiquidBackground(currentState: _liquidState)),
+    return SunCursor(
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundDark,
+        body: Stack(
+          children: [
+            // 1. Global Liquid Background
+            Positioned.fill(child: LiquidBackground(currentState: _liquidState)),
 
-          // 2. Main Content
-          Positioned.fill(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  children: [
-                    _buildHeader(),
-                    const SizedBox(height: 24),
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // SIDEBAR
-                          SizedBox(
-                            width: 300,
-                            child: ListView.builder(
-                              itemCount: _stages.length,
-                              itemBuilder: (context, index) {
-                                final s = _stages[index];
-                                return GlueSystem.sidebarItem(
-                                  isActive:
-                                      _activeStage == index && _view == 'lab',
-                                  title: s['title'],
-                                  subtitle: s['subtitle'],
-                                  isCleared: s['cleared'],
-                                  onTap: () {
-                                    setState(() {
-                                      _activeStage = index;
-                                      _view = 'lab';
-                                    });
+            // 2. Main Content (Constrained Max Width)
+            Positioned.fill(
+              child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 1400),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      children: [
+                        _buildHeader(),
+                        const SizedBox(height: 24),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // SIDEBAR
+                              SizedBox(
+                                width: 300,
+                                child: ListView.builder(
+                                  itemCount: _stages.length,
+                                  itemBuilder: (context, index) {
+                                    final s = _stages[index];
+                                    return GlueSystem.sidebarItem(
+                                      isActive: _activeStage == index &&
+                                          _view == 'lab',
+                                      title: s['title'],
+                                      subtitle: s['subtitle'],
+                                      isCleared: s['cleared'],
+                                      onTap: () {
+                                        setState(() {
+                                          _activeStage = index;
+                                          _view = 'lab';
+                                        });
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ),
-                          ),
+                                ),
+                              ),
 
-                          // CONTENT GLASS PANEL
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12),
-                              child: _buildGlassPanel(
-                                child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 400),
-                                  child: KeyedSubtree(
-                                    key: ValueKey(_view),
-                                    child: _view == 'lab'
-                                        ? TheLab(onAnalyze: _triggerAnalysis)
-                                        : (_view == 'hub'
-                                            ? const TheHub()
-                                            : const Archives()),
+                              // CONTENT GLASS PANEL
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 12),
+                                  child: _buildGlassPanel(
+                                    child: AnimatedSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 400),
+                                      child: KeyedSubtree(
+                                        key: ValueKey(_view + _liquidState.toString()),
+                                        child: _view == 'lab'
+                                            ? (_liquidState == LiquidState.success || _liquidState == LiquidState.analyzing // Just for demo, usually success only
+                                                ? (_liquidState == LiquidState.analyzing
+                                                  ? TheLab(
+                                                      stageData: _stages[_activeStage],
+                                                      onAnalyze: _triggerAnalysis,
+                                                      isAnalyzing: true,
+                                                    )
+                                                    : OpalAuditResult(
+                                                      stageData: _stages[_activeStage],
+                                                      onNext: () {
+                                                        setState(() {
+                                                          if (_activeStage < _stages.length - 1) {
+                                                            _activeStage++;
+                                                            _liquidState = LiquidState.idle;
+                                                          }
+                                                        });
+                                                      },
+                                                    )
+                                                )
+                                                : TheLab(
+                                                    stageData: _stages[_activeStage],
+                                                    onAnalyze: _triggerAnalysis,
+                                                  )
+                                              )
+                                            : (_view == 'hub'
+                                                ? const TheHub()
+                                                : const Archives()),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildFooter(),
+                      ],
                     ),
-                    const SizedBox(height: 24),
-                    _buildFooter(),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -266,20 +303,33 @@ class _EpsilonShellState extends State<EpsilonShell> {
           ],
         ),
         const SizedBox(height: 8),
-        Container(
-          height: 6,
-          decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
-              borderRadius: BorderRadius.circular(3)),
-          child: Row(
-            children: [
-              Container(
-                  width: 20,
-                  decoration: BoxDecoration(
-                      color: AppColors.leverage6,
-                      borderRadius: BorderRadius.circular(3))),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 6,
+              width: 100,
+              decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(3)),
+              child: Row(
+                children: [
+                  Container(
+                      width: 20,
+                      decoration: BoxDecoration(
+                          color: AppColors.leverage6,
+                          borderRadius: BorderRadius.circular(3))),
+                ],
+              ),
+            ),
+            const Text(
+                "Powered by MellowPen Studio | mellowpen.studio@gmail.com",
+                style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textMute,
+                    letterSpacing: 1.0)),
+          ],
         ),
       ],
     );

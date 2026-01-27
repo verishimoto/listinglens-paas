@@ -61,10 +61,11 @@ class _GemPainter extends CustomPainter {
       double angle = (i * 45) * math.pi / 180 + (rotation * 0.2);
       double x = center.dx + radius * math.cos(angle);
       double y = center.dy + radius * math.sin(angle);
-      if (i == 0)
+      if (i == 0) {
         path.moveTo(x, y);
-      else
+      } else {
         path.lineTo(x, y);
+      }
     }
     path.close();
 

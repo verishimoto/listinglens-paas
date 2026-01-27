@@ -1,1 +1,37 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"listinglens-paas","appId":"1:453535154350:android:a2a07ccc0cdbd97e82ad3f","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"listinglens-paas","configurations":{"android":"1:453535154350:android:a2a07ccc0cdbd97e82ad3f","ios":"1:453535154350:ios:448c139932d99c7382ad3f","web":"1:453535154350:web:844d5d613818e19e82ad3f"}}}}}}
+{
+    "hosting": {
+        "public": "build/web",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "rewrites": [
+            {
+                "source": "**",
+                "destination": "/index.html"
+            }
+        ]
+    },
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "listinglens-paas",
+                    "appId": "1:453535154350:android:a2a07ccc0cdbd97e82ad3f",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "listinglens-paas",
+                    "configurations": {
+                        "android": "1:453535154350:android:a2a07ccc0cdbd97e82ad3f",
+                        "ios": "1:453535154350:ios:448c139932d99c7382ad3f",
+                        "web": "1:453535154350:web:844d5d613818e19e82ad3f"
+                    }
+                }
+            }
+        }
+    }
+}

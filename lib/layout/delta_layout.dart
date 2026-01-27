@@ -132,20 +132,20 @@ class _DeltaLayoutState extends State<DeltaLayout> {
                 ),
               ),
               const SizedBox(width: 16),
-              Column(
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     "LISTINGLENS",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppTheme.primary,
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 2,
                     ),
                   ),
-                  const Text(
+                  Text(
                     "LIQUID GLASS v4.0",
                     style: TextStyle(
                       fontSize: 10,

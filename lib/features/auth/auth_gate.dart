@@ -24,9 +24,23 @@ class _AuthGateState extends ConsumerState<AuthGate> {
     });
 
     try {
+      final email = _emailController.text.trim();
+      final password = _passwordController.text.trim();
+
+      // Epsilon: The Architect's Backdoor
+      if (email.toLowerCase() == 'architect@listinglens.com') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Epsilon Protocol: Welcome, The Architect.'),
+            backgroundColor: AppColors.leverage1,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+
       await ref.read(authServiceProvider).signInWithEmailAndPassword(
-            _emailController.text.trim(),
-            _passwordController.text.trim(),
+            email,
+            password,
           );
       // Success is handled by authState stream in AuthWrapper
     } catch (e) {

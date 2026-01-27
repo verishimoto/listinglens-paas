@@ -71,7 +71,7 @@ class TrinityDashboard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _TierBadge(label: 'FREE AGENT', color: AppTheme.primary),
+          const _TierBadge(label: 'FREE AGENT', color: AppTheme.primary),
           const SizedBox(width: 16),
           _GlassButtonSmall(label: 'UPGRADE TO PRO', onTap: () {}),
           const SizedBox(width: 16),

@@ -13,10 +13,14 @@ class AnalysisService {
   late final GenerativeModel _model;
   final bool _hasKey = _kGeminiApiKey != 'YOUR_API_KEY_HERE';
 
+  // Epsilon: Token Recycling (Memory Palace Cache)
+  final Map<int, AnalysisResult> _memoryPalaceCache = {};
+
   AnalysisService([this._historyService]) {
     if (_hasKey) {
       _model = GenerativeModel(
-        model: 'gemini-1.5-flash', // Using Flash for speed/cost
+        model:
+            'gemini-1.5-pro', // Upgraded to Pro for Deep Reasoning (Epsilon Request)
         apiKey: _kGeminiApiKey,
       );
     }
@@ -33,8 +37,19 @@ class AnalysisService {
     }
 
     try {
-      // 2. Prepare the Image
       final imageBytes = await imageFile.readAsBytes();
+
+      // Epsilon: Integrity Hash / Token Recycling
+      // Using simple hash code of bytes for MVP cache key
+      // In production, use SHA-256
+      final integrityHash = Object.hashAll(imageBytes);
+
+      if (_memoryPalaceCache.containsKey(integrityHash)) {
+        // [MEMORY PALACE] Return cached thought pattern (Token Recycled)
+        return _memoryPalaceCache[integrityHash]!;
+      }
+
+      // 2. Prepare the Image
       final content = [
         Content.multi([
           TextPart(_buildPrompt()),
@@ -58,6 +73,9 @@ class AnalysisService {
 
       final result = AnalysisResult.fromJson(jsonDecode(jsonString));
 
+      // [MEMORY PALACE] Store thought pattern
+      _memoryPalaceCache[integrityHash] = result;
+
       // 5. Save to History
       if (_historyService != null) {
         await _historyService.saveAnalysis(result);
@@ -75,12 +93,14 @@ class AnalysisService {
         .join("\n");
 
     return '''
-You are a professional Real Estate Photographer and Listing Auditor. 
+You are a professional Real Estate Photographer and Listing Auditor (Epsilon Protocol). 
 Analyze this listing photo provided.
 
 CONSTRAINTS:
 1. Provide a structured JSON response (NO MARKDOWN FORMATTING).
 2. Critically appraise the photo based on: Brightness, vertical lines, clutter, emotional appeal, and dynamic range.
+3. Be EXTREMELY specific in the "reasoning" field. Explain the "Why".
+4. Epsilon Tier Check: For "Free Tier" users, be concise. For "Architect", be verbose.
 
 KNOWLEDGE BASE (Apply these theory-based rules where applicable):
 $rules
@@ -90,6 +110,8 @@ JSON STRUCTURE:
 - lightingScore (0-100)
 - compositionScore (0-100)
 - clarityScore (0-100)
+- confidenceInterval (0.0 to 1.0) - How certain are you of this assessment?
+- reasoning (String) - Detailed explanation of the prediction. Why is this a win or loss?
 - actionableFeedback (Array of strings. IMPORTANT: If a rule from the knowledge base is violated, cite its ID like [R001] in the feedback string)
 - summary (Short, punchy critique)
 ''';
