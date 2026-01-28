@@ -53,32 +53,39 @@ class _RefractiveCursorWrapperState extends State<RefractiveCursorWrapper> {
                 final double size = isHovering ? 28.0 : 14.0;
                 final double offset = size / 2;
 
-                return Positioned(
+                return AnimatedPositioned(
+                  duration:
+                      const Duration(milliseconds: 100), // "Mass" lag of 100ms
+                  curve: Curves.easeOutCubic,
                   left: _position.dx - offset,
                   top: _position.dy - offset,
                   child: IgnorePointer(
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      curve: Curves.easeOutCubic,
+                    child: Container(
                       width: size,
                       height: size,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: Colors.white, // Pure light source
                         boxShadow: [
                           if (isHovering)
                             BoxShadow(
-                              color: AppColors.leverage1.withValues(alpha: 0.4),
-                              blurRadius: 16,
-                              spreadRadius: 2,
+                              color: AppColors.leverage1.withValues(alpha: 0.5),
+                              blurRadius: 24,
+                              spreadRadius: 4,
                             ),
-                          // Subtle inner glow for refraction feel
+                          // Core "Photon" Glow
                           BoxShadow(
                             color: Colors.white.withValues(alpha: 0.8),
-                            blurRadius: 4,
-                            spreadRadius: -2,
+                            blurRadius: 8,
+                            spreadRadius: 1,
                           ),
                         ],
+                      ),
+                      // "Photon" Blend Mode: Interacts with surface like light
+                      foregroundDecoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        backgroundBlendMode: BlendMode.overlay,
+                        color: Colors.white.withValues(alpha: 0.5),
                       ),
                     ),
                   ),

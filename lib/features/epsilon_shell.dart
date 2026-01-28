@@ -1,10 +1,10 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
-import 'package:listing_lens_paas/features/lab/the_lab.dart';
+
 import 'package:listing_lens_paas/features/hub/the_hub.dart';
 import 'package:listing_lens_paas/features/shared/visual_flux/liquid_glass_card.dart';
 import 'package:listing_lens_paas/features/shared/visual_flux/refractive_cursor_wrapper.dart';
+import 'package:listing_lens_paas/features/shared/visual_flux/iridescent_border.dart';
 
 // --- SOLID FUSION SHELL (Lighter, Web-Optimized) ---
 class EpsilonShell extends StatefulWidget {
@@ -43,9 +43,10 @@ class _EpsilonShellState extends State<EpsilonShell> {
     return Container(
       width: 260,
       decoration: BoxDecoration(
-        color: const Color(0xFF0A0A0C).withOpacity(0.9),
+        color: const Color(0xFF0A0A0C).withValues(alpha: 0.9),
         border: Border(
-          right: BorderSide(color: Colors.white.withOpacity(0.08), width: 1.5),
+          right: BorderSide(
+              color: Colors.white.withValues(alpha: 0.08), width: 1.5),
         ),
       ),
       child: Column(
@@ -65,7 +66,7 @@ class _EpsilonShellState extends State<EpsilonShell> {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                            color: AppColors.leverage2.withOpacity(0.5),
+                            color: AppColors.leverage2.withValues(alpha: 0.5),
                             blurRadius: 10)
                       ]),
                 ),
@@ -91,7 +92,7 @@ class _EpsilonShellState extends State<EpsilonShell> {
             margin: const EdgeInsets.all(24),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white.withOpacity(0.1)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -119,7 +120,9 @@ class _EpsilonShellState extends State<EpsilonShell> {
           border: active
               ? Border(left: BorderSide(color: AppColors.leverage2, width: 3))
               : null,
-          color: active ? Colors.white.withOpacity(0.05) : Colors.transparent,
+          color: active
+              ? Colors.white.withValues(alpha: 0.05)
+              : Colors.transparent,
         ),
         child: Text(
           label.toUpperCase(),
@@ -159,8 +162,13 @@ class _EpsilonShellState extends State<EpsilonShell> {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 24, 24, 24),
-      child: LiquidGlassCard(
-        child: content,
+      // MOCK: Integration of the full "Visual Flux" stack
+      // 1. Iridescent Border (Outer Shell)
+      // 2. Liquid Glass Card (Inner Physics)
+      child: IridescentBorder(
+        child: LiquidGlassCard(
+          child: content,
+        ),
       ),
     );
   }

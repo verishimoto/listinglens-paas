@@ -37,10 +37,12 @@ class _LiquidGlassCardState extends State<LiquidGlassCard>
       reverseDuration: const Duration(milliseconds: 150),
     );
 
+    // Hydration Physics: Scale 1.02 (Pressure)
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.02).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
+    // Hydration Physics: Lift -4.0 (Buoyancy)
     _liftAnimation = Tween<double>(begin: 0.0, end: -4.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
@@ -66,21 +68,16 @@ class _LiquidGlassCardState extends State<LiquidGlassCard>
 
   @override
   Widget build(BuildContext context) {
-    // VISUAL TOKENS from Whisperer Deck Recon
-    final Color borderColor = _isHovering
-        ? Colors.white.withValues(alpha: 0.35)
-        : Colors.white.withValues(alpha: 0.15);
-
+    // VISUAL FLUX TOKENS
     // The Deep Purple Glow found in recon: rgba(168,85,247,0.15)
-    // AppColors.leverage1 is 0xFF7E00FF (Indigo). We approximate the recon purple.
+    // AppColors.leverage1 is 0xFF7E00FF (Indigo).
     final Color glowColor =
-        AppColors.leverage1.withValues(alpha: _isHovering ? 0.25 : 0.0);
+        AppColors.leverage1.withValues(alpha: _isHovering ? 0.3 : 0.0);
 
     return MouseRegion(
       onEnter: _onEnter,
       onExit: _onExit,
-      cursor: SystemMouseCursors
-          .click, // Will be overridden by custom cursor logic later
+      cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.onTap,
         child: AnimatedBuilder(
@@ -95,7 +92,13 @@ class _LiquidGlassCardState extends State<LiquidGlassCard>
                   height: widget.height,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: borderColor, width: 1.5),
+                    // Iridescent Border (Simulated via simple border for now,
+                    // full gradient implementation would require CustomPainter)
+                    border: Border.all(
+                        color: _isHovering
+                            ? Colors.white.withValues(alpha: 0.5)
+                            : Colors.white.withValues(alpha: 0.15),
+                        width: 1.5),
                     // Glass Background Gradient
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
@@ -106,10 +109,11 @@ class _LiquidGlassCardState extends State<LiquidGlassCard>
                       ],
                     ),
                     boxShadow: [
-                      // Deep Ambient Shadow
+                      // Deep Ambient Shadow (Hydrated Depth)
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        blurRadius: 48,
+                        color: Colors.black
+                            .withValues(alpha: _isHovering ? 0.4 : 0.2),
+                        blurRadius: _isHovering ? 48 : 24,
                         offset: const Offset(0, 16),
                       ),
                       // Iridescent Glow (Reactive)
@@ -122,18 +126,53 @@ class _LiquidGlassCardState extends State<LiquidGlassCard>
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
-                    child: BackdropFilter(
-                      // "Liquid" Blur + Saturation
-                      filter: ImageFilter.compose(
-                        outer: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                        inner: ColorFilter.mode(
-                            Colors.white.withValues(alpha: 0.1),
-                            BlendMode.overlay), // Saturation hack
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(24.0),
-                        child: widget.child,
-                      ),
+                    child: Stack(
+                      children: [
+                        // 1. Backdrop Filter (The Liquid)
+                        BackdropFilter(
+                          filter: ImageFilter.compose(
+                            outer: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                            inner: ColorFilter.matrix([
+                              // Saturation matrix (approx 1.5x)
+                              1.5, 0, 0, 0, 0,
+                              0, 1.5, 0, 0, 0,
+                              0, 0, 1.5, 0, 0,
+                              0, 0, 0, 1, 0,
+                            ]),
+                          ),
+                          child: Container(
+                            foregroundDecoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.02),
+                            ),
+                            padding: const EdgeInsets.all(24.0),
+                            child: widget.child,
+                          ),
+                        ),
+
+                        // 2. REFRACTION GLARE (The Sheen)
+                        // A subtle white gradient that washes over the surface on hover
+                        if (_isHovering)
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeOut,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Colors.white.withValues(alpha: 0.2),
+                                      Colors.transparent,
+                                      Colors.transparent,
+                                    ],
+                                    stops: const [0.0, 0.4, 1.0],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 ),
