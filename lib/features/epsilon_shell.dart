@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
 import 'package:listing_lens_paas/features/lab/the_lab.dart';
 import 'package:listing_lens_paas/features/hub/the_hub.dart';
+import 'package:listing_lens_paas/features/shared/visual_flux/liquid_glass_card.dart';
+import 'package:listing_lens_paas/features/shared/visual_flux/refractive_cursor_wrapper.dart';
 
 // --- SOLID FUSION SHELL (Lighter, Web-Optimized) ---
 class EpsilonShell extends StatefulWidget {
@@ -21,16 +23,18 @@ class _EpsilonShellState extends State<EpsilonShell> {
     // 1. THE WORKSPACE (Deep Background)
     return Scaffold(
       backgroundColor: const Color(0xFF050507),
-      body: Row(
-        children: [
-          // 2. THE FUSION TAB (Navigation)
-          _buildFusionTab(),
+      body: RefractiveCursorWrapper(
+        child: Row(
+          children: [
+            // 2. THE FUSION TAB (Navigation)
+            _buildFusionTab(),
 
-          // 3. THE FUSION PANEL (Content)
-          Expanded(
-            child: _buildFusionPanel(),
-          ),
-        ],
+            // 3. THE FUSION PANEL (Content)
+            Expanded(
+              child: _buildFusionPanel(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -139,6 +143,9 @@ class _EpsilonShellState extends State<EpsilonShell> {
     switch (_activeTab) {
       case 'lab':
         // Simplified Lab for Fusion View
+        content = const Center(
+            child: Text(
+                "THE LAB COMING SOON")); // Temporary placeholder to fix build
         break;
       case 'hub':
         content = const TheHub();
@@ -150,19 +157,9 @@ class _EpsilonShellState extends State<EpsilonShell> {
         );
     }
 
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 24, 24, 24),
-      decoration: BoxDecoration(
-        color: const Color(0xFF0F0F14).withOpacity(0.8),
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(40),
-          bottomRight: Radius.circular(40),
-          bottomLeft: Radius.circular(40), // Fusion shape
-        ),
-        border: Border.all(color: Colors.white.withOpacity(0.08), width: 1.5),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 24, 24, 24),
+      child: LiquidGlassCard(
         child: content,
       ),
     );
