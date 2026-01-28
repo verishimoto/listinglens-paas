@@ -10,7 +10,7 @@ class TheArena extends StatefulWidget {
 
 class _TheArenaState extends State<TheArena> {
   double _userPrice = 25.0;
-  double _competitorPrice = 22.0;
+  final double _competitorPrice = 22.0;
   double _winProbability = 0.45; // 45% chance initially
 
   void _calculateWinProb() {

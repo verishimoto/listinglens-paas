@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:listing_lens_paas/theme/app_colors.dart';
-import 'dart:ui';
 
 class SunCursor extends StatefulWidget {
   final Widget child;

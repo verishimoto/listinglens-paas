@@ -270,7 +270,7 @@ class _TheLabState extends State<TheLab> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "PRO TIP: ${_platform}",
+                              "PRO TIP: $_platform",
                               style: TextStyle(
                                 color: AppColors.leverage2, // Cyan
                                 fontSize: 10,
