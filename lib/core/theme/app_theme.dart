@@ -23,33 +23,38 @@ class AppTheme {
         onSurface: Colors.white,
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.outfit(
-          fontSize: 72,
-          fontWeight: FontWeight.w900,
-          letterSpacing: -0.05,
+        // Ultra Condensed Display (Numbers & Huge Text)
+        displayLarge: GoogleFonts.antonio(
+          fontSize: 80,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -1.0,
           color: Colors.white,
+          height: 0.9,
         ),
-        displayMedium: GoogleFonts.outfit(
+        displayMedium: GoogleFonts.antonio(
           fontSize: 48,
-          fontWeight: FontWeight.w900,
-          letterSpacing: -0.04,
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.5,
           color: Colors.white,
         ),
-        headlineMedium: GoogleFonts.outfit(
-          fontSize: 18,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 2,
-          color: primary,
+        // Logic & Titles (San Francisco / Inter)
+        headlineMedium: GoogleFonts.inter(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          letterSpacing: -0.5, // Tighter for SF feel
+          color: cyan,
         ),
-        bodyLarge: GoogleFonts.ebGaramond(
-          fontSize: 18,
-          height: 1.6,
-          color: Colors.white70,
-        ),
-        bodyMedium: GoogleFonts.ebGaramond(
+        // UI Text
+        bodyLarge: GoogleFonts.inter(
           fontSize: 16,
-          height: 1.6,
-          color: Colors.white60,
+          fontWeight: FontWeight.w400,
+          color: Colors.white.withValues(alpha: 0.9),
+          letterSpacing: -0.2,
+        ),
+        bodyMedium: GoogleFonts.inter(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.white.withValues(alpha: 0.6),
         ),
       ),
     );

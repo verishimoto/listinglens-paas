@@ -92,8 +92,7 @@ class _DragDropZoneState extends State<DragDropZone>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        Colors.white.withValues(
-                            alpha: _dragging
+                        Colors.white.withValues(alpha: _dragging
                                 ? 0.1
                                 : 0.05 + (_breathingController.value * 0.02)),
                         Colors.transparent,

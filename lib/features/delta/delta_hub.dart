@@ -46,7 +46,7 @@ class DeltaHub extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(40),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -117,7 +117,7 @@ class DeltaHub extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundColor:
-                isAI ? AppTheme.primary.withOpacity(0.2) : Colors.white10,
+                isAI ? AppTheme.primary.withValues(alpha: 0.2) : Colors.white10,
             radius: 12,
             child: Icon(isAI ? Icons.auto_awesome : Icons.person,
                 size: 12, color: Colors.white38),

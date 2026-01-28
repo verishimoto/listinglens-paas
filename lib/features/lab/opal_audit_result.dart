@@ -36,8 +36,8 @@ class OpalAuditResult extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.05)),
+                        border:
+                            Border.all(color: Colors.white.withValues(alpha: 0.05)),
                       ),
                       child: stageData['imagePath'] != null
                           ? Stack(
@@ -86,12 +86,13 @@ class OpalAuditResult extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("DOPAMINE SCORE",
-                                style: TextStyle(
-                                    fontFamily: 'SF Pro Display',
-                                    color: AppColors.leverage2, // Cyan
-                                    fontSize: 10,
-                                    letterSpacing: 2.0,
-                                    fontWeight: FontWeight.w900)),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium!
+                                    .copyWith(
+                                        fontSize: 14,
+                                        letterSpacing: 1.0,
+                                        fontWeight: FontWeight.w700)),
                             const SizedBox(height: 4),
                             // Gradient Text
                             ShaderMask(
@@ -101,12 +102,13 @@ class OpalAuditResult extends StatelessWidget {
                                   AppColors.leverage3
                                 ],
                               ).createShader(bounds),
-                              child: const Text("A-",
-                                  style: TextStyle(
-                                      fontSize: 56,
-                                      fontWeight: FontWeight.w900,
-                                      color: Colors.white, // Masked
-                                      height: 1.0)),
+                              child: Text("A-",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge!
+                                      .copyWith(
+                                          fontSize: 120, // Enormous
+                                          height: 0.9)),
                             ),
                           ],
                         ),
@@ -125,12 +127,10 @@ class OpalAuditResult extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                                color:
-                                    AppColors.leverage2.withValues(alpha: 0.3)),
+                                color: AppColors.leverage2.withValues(alpha: 0.3)),
                             boxShadow: [
                               BoxShadow(
-                                  color: AppColors.leverage2
-                                      .withValues(alpha: 0.1),
+                                  color: AppColors.leverage2.withValues(alpha: 0.1),
                                   blurRadius: 20,
                                   spreadRadius: 2)
                             ],
@@ -146,8 +146,7 @@ class OpalAuditResult extends StatelessWidget {
                               Text("/100",
                                   style: TextStyle(
                                       fontFamily: 'SF Pro Display',
-                                      color:
-                                          Colors.white.withValues(alpha: 0.5),
+                                      color: Colors.white.withValues(alpha: 0.5),
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold)),
                             ],

@@ -91,8 +91,7 @@ class _LiquidGlassState extends State<LiquidGlass>
                       end: Alignment.bottomRight,
                       colors: widget.isIridescent
                           ? [
-                              Colors.white.withValues(
-                                  alpha: 0.4 *
+                              Colors.white.withValues(alpha: 0.4 *
                                       (0.8 +
                                           0.2 *
                                               _controller.value)), // Breathing
@@ -101,8 +100,7 @@ class _LiquidGlassState extends State<LiquidGlass>
                               Colors.white.withValues(alpha: 0.1),
                             ]
                           : [
-                              Colors.white.withValues(
-                                  alpha: (widget.frostOpacity + 0.05) *
+                              Colors.white.withValues(alpha: (widget.frostOpacity + 0.05) *
                                       (0.9 + 0.1 * _controller.value)),
                               Colors.white
                                   .withValues(alpha: widget.frostOpacity),
@@ -120,8 +118,7 @@ class _LiquidGlassState extends State<LiquidGlass>
                     boxShadow: widget.isIridescent
                         ? [
                             BoxShadow(
-                              color: Colors.blue.withValues(
-                                  alpha: 0.1 + (0.05 * _controller.value)),
+                              color: Colors.blue.withValues(alpha: 0.1 + (0.05 * _controller.value)),
                               blurRadius: 10 + (5 * _controller.value),
                               spreadRadius: -2,
                             ),
@@ -195,8 +192,7 @@ class _LiquidGlassState extends State<LiquidGlass>
                               BorderRadius.circular(widget.borderRadius),
                           boxShadow: [
                         BoxShadow(
-                          color: Colors.purple.withValues(
-                              alpha: 0.1 + (0.1 * _controller.value)),
+                          color: Colors.purple.withValues(alpha: 0.1 + (0.1 * _controller.value)),
                           blurRadius: 20 + (10 * _controller.value),
                           spreadRadius: 2,
                         ),

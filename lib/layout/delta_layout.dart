@@ -175,12 +175,12 @@ class _DeltaLayoutState extends State<DeltaLayout> {
     return Container(
       width: 280,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.black.withValues(alpha: 0.2),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(32),
           bottomLeft: Radius.circular(32),
         ),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 20, left: 20),
@@ -243,10 +243,10 @@ class _EpsilonTab extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 4, right: -1),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white.withOpacity(0.05) : Colors.transparent,
+          color: isActive ? Colors.white.withValues(alpha: 0.05) : Colors.transparent,
           borderRadius: const BorderRadius.all(Radius.circular(16)),
           border: isActive
-              ? Border.all(color: Colors.white.withOpacity(0.15))
+              ? Border.all(color: Colors.white.withValues(alpha: 0.15))
               : Border.all(color: Colors.transparent),
         ),
         child: Row(
